@@ -51,8 +51,8 @@ export default function Home() {
           </h2>
           <p className="text-muted text-sm mt-1">
             {t(
-              '5 AI health prompts — copy, paste into ChatGPT or Claude, and get a personal coach.',
-              '5 prompts de salud con IA — copia, pega en ChatGPT o Claude, y ten un coach personal.'
+              '6 AI health prompts — copy, paste into ChatGPT or Claude, and get a personal coach.',
+              '6 prompts de salud con IA — copia, pega en ChatGPT o Claude, y ten un coach personal.'
             )}
           </p>
         </div>

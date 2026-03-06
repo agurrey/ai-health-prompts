@@ -17,11 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Hormesis — Free Daily Dumbbell Workout + AI Health Coach",
   description:
-    "Small dose, big adaptation. Free daily dumbbell workout generator + 5 AI health prompts for training, nutrition, sleep, back pain, and CrossFit. No login. No paywall.",
+    "Small dose, big adaptation. Free daily dumbbell workout generator + 6 AI health prompts for training, nutrition, sleep, back pain, CrossFit, and pelvic floor. No login. No paywall.",
   openGraph: {
     title: "Hormesis — Free Daily Dumbbell Workout + AI Health Coach",
     description:
-      "Small dose, big adaptation. Free daily workout + 5 AI health prompts. No login. No paywall.",
+      "Small dose, big adaptation. Free daily workout + 6 AI health prompts. No login. No paywall.",
     type: "website",
   },
   twitter: {

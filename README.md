@@ -1,4 +1,4 @@
-# AI Health Prompts — 5-Module System
+# AI Health Prompts — 6-Module System
 
 Free, open-source system prompts for AI-assisted health coaching. Drop any of them into ChatGPT, Claude, or DeepSeek.
 
@@ -13,6 +13,7 @@ Built by a personal trainer with 5+ years of experience in functional movement a
 | **Dumbbell Home Training** | [dumbbell_home_training.md](dumbbell_home_training.md) | Full-body training with 2 pairs of dumbbells. 5 movement patterns, 7-step progression ladder, Phase 1-4. |
 | **Whole Food Nutrition** | [whole_food_nutrition.md](whole_food_nutrition.md) | Zero ultra-processed eating framework. NOVA classification, plate model, transition system, budget strategies. |
 | **Sleep Optimization** | [sleep_optimization.md](sleep_optimization.md) | Evidence-based sleep protocol. Circadian rhythm, environment, breathing techniques, Phase 1-4 implementation. |
+| **Pelvic Floor Health** | [pelvic_floor_health.md](pelvic_floor_health.md) | Pelvic floor protocol for all genders. Hypertonic vs hypotonic screening, breathing-PF piston, Kegels + reverse Kegels, postpartum, athletes, men's health. |
 
 ## How to Use
 
@@ -29,6 +30,7 @@ Each module works standalone, but they cross-reference each other when relevant 
 - **Anyone** who wants to eat better without counting calories
 - **People** who know they sleep badly but don't know where to start
 - **CrossFit athletes** who want intelligent periodized programming
+- **Anyone** with pelvic floor concerns — postpartum, desk workers, athletes, men post-surgery
 
 ## Design Principles
 
@@ -52,6 +54,8 @@ These prompts distill methodology from:
 - Kelly Starrett — *Becoming a Supple Leopard* (mobility, movement quality)
 - NOVA Classification — ultra-processed food framework
 - NASM — corrective exercise methodology
+- Julie Wiebe PT — *Piston Science* (diaphragm-pelvic floor coordination)
+- NICE NG210 — pelvic floor dysfunction clinical guidelines
 
 ## Disclaimer
 

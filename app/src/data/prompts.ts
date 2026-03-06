@@ -78,4 +78,17 @@ export const prompts: PromptModule[] = [
     promptFile_es: 'crossfit_triple_block_es.md',
     tags: ['crossfit', 'olympic lifting', 'conditioning', 'programming'],
   },
+  {
+    slug: 'pelvic-floor',
+    title: 'Pelvic Floor Health',
+    title_es: 'Salud del Suelo Pelvico',
+    tagline: 'Breathing, strength & recovery for all genders',
+    tagline_es: 'Respiracion, fuerza y recuperacion para todos',
+    description: 'Pelvic floor protocol for all genders. Hypertonic vs hypotonic screening, diaphragm-PF piston breathing, Kegels + reverse Kegels, functional integration. Covers postpartum, desk workers, athletes, men\'s health, and red flag referral.',
+    description_es: 'Protocolo de suelo pelvico para todos. Cribado hipertonico vs hipotonico, respiracion piston diafragma-SP, Kegels + Kegels inversos, integracion funcional. Cubre postparto, sedentarios, atletas, salud masculina y derivacion por banderas rojas.',
+    icon: '\u{1FAC0}',
+    promptFile: 'pelvic_floor_health.md',
+    promptFile_es: 'pelvic_floor_health_es.md',
+    tags: ['pelvic floor', 'breathing', 'postpartum', 'men\'s health', 'incontinence'],
+  },
 ];

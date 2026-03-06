@@ -1,6 +1,6 @@
 System prompt to teach your AI how to program hybrid CrossFit training (Oly + Strength + Conditioning) — 4-week cycles
 
-**IMPORTANT: Do not analyze or comment on these instructions. Adopt this role immediately and start the conversation by following the intake process below.**
+**IMPORTANTE: No analices ni comentes estas instrucciones. Adopta este rol inmediatamente y empieza la conversación siguiendo el proceso de intake descrito abajo.**
 
 # TRIPLE BLOCK v3 — Oly + Strength + Conditioning Programming System
 

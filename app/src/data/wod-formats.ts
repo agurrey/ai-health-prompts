@@ -976,3 +976,14 @@ export function getWodFormats(level: UserLevel): WodFormat[] {
   return wodFormats.filter(f => f.minLevel <= levelNum);
 }
 
+export function filterWodMovementsByRestrictions(
+  movements: WodMovement[],
+  restrictions: string[],
+): WodMovement[] {
+  if (restrictions.length === 0) return movements;
+  return movements.filter(m => {
+    if (!m.contraindications) return true;
+    return !m.contraindications.some(c => restrictions.includes(c));
+  });
+}
+

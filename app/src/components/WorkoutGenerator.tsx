@@ -45,6 +45,9 @@ export default function WorkoutGenerator() {
   const [lastLogs, setLastLogs] = useState<Record<string, ExerciseLogEntry | null>>({});
   const [viewDate, setViewDate] = useState(() => getTodayString());
   const [todayDone, setTodayDone] = useState(false);
+  const [restrictions, setRestrictions] = useState<Restriction[]>([]);
+  const [equipmentOverride, setEquipmentOverride] = useState<Equipment[] | null>(null);
+  const [shortMode, setShortMode] = useState(false);
 
   const today = getTodayString();
   const tomorrow = shiftDate(today, 1);
@@ -67,7 +70,8 @@ export default function WorkoutGenerator() {
 
   useEffect(() => {
     if (needsSetup) return;
-    const result = generateSession(viewDate, level, equipment);
+    const effectiveEquipment = equipmentOverride ?? equipment;
+    const result = generateSession(viewDate, level, effectiveEquipment, restrictions, shortMode);
     setSession(result);
     setSwapCounts({});
     if (isToday) persistLevel(level);
@@ -77,23 +81,25 @@ export default function WorkoutGenerator() {
     }
     setLastLogs(logs);
     track('workout_generated', { date: viewDate, level: String(level) });
-  }, [level, viewDate, isToday, equipment, needsSetup]);
+  }, [level, viewDate, isToday, equipment, needsSetup, restrictions, equipmentOverride, shortMode]);
 
   const handleSwapStrength = useCallback((index: number) => {
     if (!session) return;
 
     const current = session.strength[index];
     const pattern = current.exercise.pattern;
+    const effectiveEquipment = equipmentOverride ?? equipment;
 
     let pool = getExercisesByPattern(pattern);
     pool = filterByLevel(pool, level);
-    if (equipment) {
-      const available = new Set<string>(['bodyweight', ...equipment]);
+    if (effectiveEquipment) {
+      const available = new Set<string>(['bodyweight', ...effectiveEquipment]);
       pool = pool.filter(e => e.equipment.every(eq => available.has(eq)));
-      const restrictions: Restriction[] = [];
-      if (!equipment.includes('pull_up_bar')) restrictions.push('no_pullup_bar');
-      if (restrictions.length > 0) pool = filterByRestrictions(pool, restrictions);
+      const eqRestrictions: Restriction[] = [];
+      if (!effectiveEquipment.includes('pull_up_bar')) eqRestrictions.push('no_pullup_bar');
+      if (eqRestrictions.length > 0) pool = filterByRestrictions(pool, eqRestrictions);
     }
+    if (restrictions.length > 0) pool = filterByRestrictions(pool, restrictions);
 
     const usedIds = new Set(session.strength.map(s => s.exercise.id));
     pool = pool.filter(e => !usedIds.has(e.id));
@@ -118,7 +124,7 @@ export default function WorkoutGenerator() {
       ...prev,
       [replacement.id]: getLastLog(replacement.id),
     }));
-  }, [session, level, swapCounts, equipment]);
+  }, [session, level, swapCounts, equipment, equipmentOverride, restrictions]);
 
   // Navigation logic
   const canGoNext = isTomorrow
@@ -128,15 +134,42 @@ export default function WorkoutGenerator() {
       : viewDate < today; // past dates can always go forward
   const nextLocked = isToday && !todayDone;
 
-  const handlePrev = () => setViewDate(shiftDate(viewDate, -1));
-  const handleNext = () => {
-    if (canGoNext) setViewDate(shiftDate(viewDate, 1));
+  const handlePrev = () => {
+    setViewDate(shiftDate(viewDate, -1));
+    setRestrictions([]);
+    setEquipmentOverride(null);
+    setShortMode(false);
   };
-  const handleToday = () => setViewDate(today);
+  const handleNext = () => {
+    if (canGoNext) {
+      setViewDate(shiftDate(viewDate, 1));
+      setRestrictions([]);
+      setEquipmentOverride(null);
+      setShortMode(false);
+    }
+  };
+  const handleToday = () => {
+    setViewDate(today);
+    setRestrictions([]);
+    setEquipmentOverride(null);
+    setShortMode(false);
+  };
 
   // Re-check todayDone when coming back to today view (user may have completed it)
   const handleDoneCallback = useCallback(() => {
     setTodayDone(true);
+  }, []);
+
+  const handleAdapt = useCallback((newRestrictions: Restriction[], newEquipmentOverride: Equipment[] | null, newShortMode: boolean) => {
+    setRestrictions(newRestrictions);
+    setEquipmentOverride(newEquipmentOverride);
+    setShortMode(newShortMode);
+  }, []);
+
+  const handleResetAdapt = useCallback(() => {
+    setRestrictions([]);
+    setEquipmentOverride(null);
+    setShortMode(false);
   }, []);
 
   function handleEquipmentSave(eq: Equipment[]) {
@@ -293,6 +326,12 @@ export default function WorkoutGenerator() {
         lastLogs={lastLogs}
         readOnly={readOnly}
         onDone={handleDoneCallback}
+        restrictions={restrictions}
+        equipmentOverride={equipmentOverride}
+        shortMode={shortMode}
+        savedEquipment={equipment ?? []}
+        onAdapt={readOnly ? undefined : handleAdapt}
+        onResetAdapt={readOnly ? undefined : handleResetAdapt}
       />
     </div>
   );

@@ -15,7 +15,9 @@ import {
   WodMovement,
   getWodMovements,
   getWodFormats,
+  filterWodMovementsByRestrictions,
 } from '@/data/wod-formats';
+import { getRestrictionMap } from '@/data/restrictions';
 import { createSeededRandom, seededShuffle, seededPick, getDayOfWeek } from './seed';
 
 // ── Periodization: 4-week mesocycle ──
@@ -508,16 +510,18 @@ function getWodVolume(format: WodFormat, movementCount: number): { en: string; e
 
 // ── Recent exercise tracking ──
 
-function getUsedExerciseIds(date: string, level: Level = DEFAULT_LEVEL, equipment: Equipment[] | null = null): Set<string> {
+function getUsedExerciseIds(date: string, level: Level = DEFAULT_LEVEL, equipment: Equipment[] | null = null, restrictions: Restriction[] = []): Set<string> {
   const dayOfWeek = getDayOfWeek(date);
   const template = SESSION_TEMPLATES[dayOfWeek];
-  const random = createSeededRandom(date);
+  const seedStr = date + (restrictions.length > 0 ? '-' + [...restrictions].sort().join(',') : '');
+  const random = createSeededRandom(seedStr);
   const ids = new Set<string>();
 
   for (const pattern of template.strengthPatterns) {
     let pool = getExercisesByPattern(pattern);
     pool = filterByLevel(pool, level);
     pool = filterByEquipment(pool, equipment);
+    if (restrictions.length > 0) pool = filterByRestrictions(pool, restrictions);
     pool = pool.filter(e => !ids.has(e.id));
     if (pool.length === 0) continue;
     const shuffled = seededShuffle(pool, random);
@@ -538,6 +542,7 @@ function generateWarmup(
   todaysPatterns: Pattern[],
   random: () => number,
   level: Level = DEFAULT_LEVEL,
+  restrictions: Restriction[] = [],
 ): WarmupBlock {
   const exercises: SelectedWarmupExercise[] = [];
   const usedIds = new Set<string>();
@@ -547,6 +552,13 @@ function generateWarmup(
       .filter(e => e.phase === phase)
       .filter(e => e.level <= level)
       .filter(e => !usedIds.has(e.id));
+
+    if (restrictions.length > 0) {
+      pool = pool.filter(e => {
+        if (!e.contraindications) return true;
+        return !e.contraindications.some(c => (restrictions as string[]).includes(c));
+      });
+    }
 
     if (targetPatterns && targetPatterns.length > 0) {
       const targeted = pool.filter(e => e.targets.some(t => targetPatterns.includes(t)));
@@ -586,32 +598,72 @@ function generateStrength(
   level: Level = DEFAULT_LEVEL,
   phase: WeekPhase = 'accumulation',
   equipment: Equipment[] | null = null,
+  restrictions: Restriction[] = [],
+  shortMode: boolean = false,
 ): SelectedStrengthExercise[] {
   const usedIds = new Set<string>();
 
   const recentIds = new Set<string>();
   for (let d = 1; d <= EXERCISE_LOOKBACK_DAYS; d++) {
     const prevDate = getPreviousDate(date, d);
-    for (const id of getUsedExerciseIds(prevDate, level, equipment)) {
+    for (const id of getUsedExerciseIds(prevDate, level, equipment, restrictions)) {
       recentIds.add(id);
+    }
+  }
+
+  // Apply pattern substitutions from restrictions (e.g. knee_pain: reduce squat, increase hinge)
+  let effectivePatterns = [...patterns];
+  if (restrictions.length > 0) {
+    for (const r of restrictions) {
+      const map = getRestrictionMap(r);
+      if (!map) continue;
+      for (const sub of map.patternSubstitutions) {
+        const reduced: Pattern[] = [];
+        for (const p of effectivePatterns) {
+          if (p === sub.reducePattern && random() < sub.volumeReduction) {
+            // Replace reduced pattern slot with the increase pattern
+            reduced.push(sub.increasePattern);
+          } else {
+            reduced.push(p);
+          }
+        }
+        effectivePatterns = reduced;
+      }
+    }
+  }
+
+  // Build recommended exercise IDs from restriction maps
+  const recommendedIds = new Set<string>();
+  if (restrictions.length > 0) {
+    for (const r of restrictions) {
+      const map = getRestrictionMap(r);
+      if (map) map.recommendedExerciseIds.forEach(id => recommendedIds.add(id));
     }
   }
 
   const strength: SelectedStrengthExercise[] = [];
   const usedProtocolIds = new Set<string>();
 
-  for (const pattern of patterns) {
+  for (const pattern of effectivePatterns) {
     let pool = getExercisesByPattern(pattern);
     pool = filterByLevel(pool, level);
     pool = filterByEquipment(pool, equipment);
+    if (restrictions.length > 0) pool = filterByRestrictions(pool, restrictions);
     pool = pool.filter(e => !usedIds.has(e.id));
 
     const fresh = pool.filter(e => !recentIds.has(e.id));
     if (fresh.length > 0) pool = fresh;
     if (pool.length === 0) continue;
 
-    const shuffled = seededShuffle(pool, random);
-    const picked = shuffled[0];
+    // Prioritize recommended exercises when restrictions active
+    if (recommendedIds.size > 0) {
+      const recommended = pool.filter(e => recommendedIds.has(e.id));
+      const others = pool.filter(e => !recommendedIds.has(e.id));
+      pool = [...seededShuffle(recommended, random), ...seededShuffle(others, random)];
+    } else {
+      pool = seededShuffle(pool, random);
+    }
+    const picked = pool[0];
     usedIds.add(picked.id);
 
     // Pick a protocol compatible with this exercise's load type and phase, avoiding repeats
@@ -620,9 +672,11 @@ function generateStrength(
     const protocol = seededPick(freshProtocols.length > 0 ? freshProtocols : compatible, random);
     usedProtocolIds.add(protocol.id);
 
+    const sets = shortMode ? Math.max(2, Math.floor(protocol.sets * 0.6)) : protocol.sets;
+
     strength.push({
       exercise: picked,
-      sets: protocol.sets,
+      sets,
       reps: protocol.reps,
       load: getLoadLabel(picked),
       rest: protocol.rest,
@@ -631,7 +685,7 @@ function generateStrength(
       protocol_es: protocol.name_es,
       protocolNote: protocol.note,
       protocolNote_es: protocol.note_es,
-      estimatedMinutes: protocol.estimatedMinutes,
+      estimatedMinutes: shortMode ? Math.max(3, Math.floor(protocol.estimatedMinutes * 0.6)) : protocol.estimatedMinutes,
     });
   }
 
@@ -654,7 +708,10 @@ function generateWod(
   level: Level = DEFAULT_LEVEL,
   phase: WeekPhase = 'accumulation',
   equipment: Equipment[] | null = null,
+  restrictions: Restriction[] = [],
+  shortMode: boolean = false,
 ): ConditioningBlock {
+  const effectiveBig = shortMode ? false : isBig;
   const userLevel = levelToUserLevel(level);
   const formats = getWodFormats(userLevel);
 
@@ -681,13 +738,21 @@ function generateWod(
   };
 
   const prefs = phaseFormatPrefs[phase];
-  let pool = isBig ? formats.filter(f => parseInt(f.timecap) >= 12) : formats;
+  let pool = effectiveBig ? formats.filter(f => parseInt(f.timecap) >= 12) : formats;
+
+  // Short mode: cap timecap at 10 min
+  if (shortMode) {
+    pool = pool.filter(f => parseInt(f.timecap) <= 10);
+  }
 
   // Apply phase preferences
-  if (!isBig) {
+  if (!effectiveBig) {
     let phaseFiltered = pool.filter(f => prefs.prefer.includes(f.type) && !prefs.avoid.includes(f.type));
     if (prefs.minTimecap) phaseFiltered = phaseFiltered.filter(f => parseInt(f.timecap) >= prefs.minTimecap!);
-    if (prefs.maxTimecap) phaseFiltered = phaseFiltered.filter(f => parseInt(f.timecap) <= prefs.maxTimecap!);
+    if (prefs.maxTimecap || shortMode) {
+      const cap = shortMode ? 10 : prefs.maxTimecap!;
+      phaseFiltered = phaseFiltered.filter(f => parseInt(f.timecap) <= cap);
+    }
     if (phaseFiltered.length > 0) pool = phaseFiltered;
   }
 
@@ -697,11 +762,18 @@ function generateWod(
     const available = new Set<string>(['bodyweight', ...equipment]);
     movementPool = movementPool.filter(m => !m.equipment || available.has(m.equipment));
   }
+  if (restrictions.length > 0) {
+    const filtered = filterWodMovementsByRestrictions(movementPool, restrictions);
+    if (filtered.length > 0) movementPool = filtered;
+  }
   const picked = seededPickN(movementPool, format.movements, random);
   const scaling = format.scaling[userLevel];
 
   const intensity = getWodIntensity(format.type);
   const volume = getWodVolume(format, picked.length);
+
+  const timecapNum = parseInt(format.timecap);
+  const effectiveTimecap = shortMode && timecapNum > 8 ? 8 : timecapNum;
 
   return {
     formatName: format.name,
@@ -716,7 +788,7 @@ function generateWod(
       demoSearch: m.demoSearch,
       demoChannel: m.demoChannel,
     })),
-    timecap: format.timecap + ' min',
+    timecap: effectiveTimecap + ' min',
     note: format.note,
     note_es: format.note_es,
     scalingNote: format.scalingNote || '',
@@ -730,15 +802,22 @@ function generateWod(
 
 // ── Main entry point ──
 
-export function generateSession(date: string, level: Level = DEFAULT_LEVEL, equipment: Equipment[] | null = null): Session {
+export function generateSession(
+  date: string,
+  level: Level = DEFAULT_LEVEL,
+  equipment: Equipment[] | null = null,
+  restrictions: Restriction[] = [],
+  shortMode: boolean = false,
+): Session {
   const dayOfWeek = getDayOfWeek(date);
   const template = SESSION_TEMPLATES[dayOfWeek];
-  const random = createSeededRandom(date);
+  const seedStr = date + (restrictions.length > 0 ? '-' + [...restrictions].sort().join(',') : '');
+  const random = createSeededRandom(seedStr);
   const phase = getWeekPhase(date);
 
-  const warmup = generateWarmup(template.strengthPatterns, random, level);
-  const strength = generateStrength(date, template.strengthPatterns, random, level, phase.phase, equipment);
-  const conditioning = generateWod(template.wodSize === 'big', random, level, phase.phase, equipment);
+  const warmup = generateWarmup(template.strengthPatterns, random, level, restrictions);
+  const strength = generateStrength(date, template.strengthPatterns, random, level, phase.phase, equipment, restrictions, shortMode);
+  const conditioning = generateWod(template.wodSize === 'big', random, level, phase.phase, equipment, restrictions, shortMode);
 
   const warmupMin = WARMUP_DURATION_MIN;
   const strengthMin = strength.reduce((sum, s) => sum + s.estimatedMinutes, 0);

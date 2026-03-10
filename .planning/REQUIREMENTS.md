@@ -100,13 +100,13 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| XP-01 | Phase 1 | Pending |
-| XP-02 | Phase 1 | Pending |
-| XP-03 | Phase 1 | Pending |
-| XP-04 | Phase 1 | Pending |
-| XP-05 | Phase 1 | Pending |
-| XP-06 | Phase 1 | Pending |
-| XP-07 | Phase 1 | Pending |
+| XP-01 | Phase 1 | Complete |
+| XP-02 | Phase 1 | Complete |
+| XP-03 | Phase 1 | Complete |
+| XP-04 | Phase 1 | Complete |
+| XP-05 | Phase 1 | Complete |
+| XP-06 | Phase 1 | Complete |
+| XP-07 | Phase 1 | Complete |
 | XP-08 | Phase 1 | Complete |
 | ACH-01 | Phase 1 | Complete |
 | ACH-02 | Phase 1 | Complete |

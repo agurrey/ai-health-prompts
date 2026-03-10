@@ -60,35 +60,42 @@ describe('getLevelFromXP', () => {
 });
 
 describe('computeXP', () => {
-  it('returns 100 base XP for a workout with no logs', () => {
-    const workout = makeWorkout('2024-01-01');
-    const result = computeXP({ workout, exerciseLog: [], allWorkouts: [workout] });
+  it('base and streak bonus only (not first workout): 100 base + 40 streak for day 2', () => {
+    // Use workout that is NOT first-ever, to isolate base+streak only
+    const w1 = makeWorkout('2024-01-05');
+    const w2 = makeWorkout('2024-01-06');
+    const result = computeXP({ workout: w2, exerciseLog: [], allWorkouts: [w1, w2] });
     expect(result.base).toBe(100);
     expect(result.logsBonus).toBe(0);
-    expect(result.total).toBe(100);
+    expect(result.milestoneBonus).toBe(0);
+    expect(result.streakBonus).toBe(40); // streakDay=2, 2*20=40
+    expect(result.total).toBe(140);
   });
 
-  it('returns 150 XP for a workout with logged weight', () => {
-    const workout = makeWorkout('2024-01-01');
-    const log = [makeLogEntry('2024-01-01', '20kg')];
-    const result = computeXP({ workout, exerciseLog: log, allWorkouts: [workout] });
+  it('returns 190 XP for non-first workout with logged weight (100 + 50 logs + 40 streak)', () => {
+    const w1 = makeWorkout('2024-01-05');
+    const w2 = makeWorkout('2024-01-06');
+    const log = [makeLogEntry('2024-01-06', '20kg')];
+    const result = computeXP({ workout: w2, exerciseLog: log, allWorkouts: [w1, w2] });
     expect(result.logsBonus).toBe(50);
-    expect(result.total).toBe(150);
+    expect(result.streakBonus).toBe(40);
+    expect(result.total).toBe(190); // 100 base + 50 logs + 40 streak
   });
 
   it('no logs bonus for entries with empty weight', () => {
-    const workout = makeWorkout('2024-01-01');
-    const log = [makeLogEntry('2024-01-01', '')];
-    const result = computeXP({ workout, exerciseLog: log, allWorkouts: [workout] });
+    const w1 = makeWorkout('2024-01-05');
+    const w2 = makeWorkout('2024-01-06');
+    const log = [makeLogEntry('2024-01-06', '')];
+    const result = computeXP({ workout: w2, exerciseLog: log, allWorkouts: [w1, w2] });
     expect(result.logsBonus).toBe(0);
-    expect(result.total).toBe(100);
+    expect(result.total).toBe(140); // 100 base + 40 streak, no logs bonus
   });
 
   it('adds 200 first-workout bonus when only 1 workout in history', () => {
     const workout = makeWorkout('2024-01-01');
     const result = computeXP({ workout, exerciseLog: [], allWorkouts: [workout] });
     expect(result.milestoneBonus).toBe(200);
-    expect(result.total).toBe(300); // 100 base + 200 first workout
+    expect(result.total).toBe(320); // 100 base + 200 first workout + 20 streak day 1
   });
 
   it('no first-workout bonus when more than 1 workout exists', () => {
@@ -140,8 +147,11 @@ describe('computeXP', () => {
       makeWorkout('2024-01-05'),
     ];
     const result = computeXP({ workout, exerciseLog: log, allWorkouts });
+    // streakDay=2 (2 consecutive: 04, 05 — but 03 is not consecutive with 04 only 1 gap)
+    // Actually 03, 04, 05 = consecutive 3 days, streakDay=3
     expect(result.breakdown).toContain('100');
     expect(result.breakdown).toContain('50');
+    expect(result.streakBonus).toBe(60); // streakDay=3, 3*20=60
   });
 });
 
@@ -155,9 +165,9 @@ describe('calculateTotalXP', () => {
   it('processes single workout with first-workout bonus', () => {
     const workouts = [makeWorkout('2024-01-01')];
     const result = calculateTotalXP(workouts, []);
-    // 100 base + 200 first-workout = 300
-    expect(result.totalXP).toBe(300);
-    expect(result.level).toBe(2); // 300 XP = level 2
+    // 100 base + 200 first-workout + 20 streak (day 1) = 320
+    expect(result.totalXP).toBe(320);
+    expect(result.level).toBe(2); // 320 XP = level 2 (threshold is 300)
   });
 
   it('accumulates XP across multiple workouts', () => {
@@ -165,10 +175,10 @@ describe('calculateTotalXP', () => {
       makeWorkout('2024-01-01'),
       makeWorkout('2024-01-02'),
     ];
-    // Workout 1: 100 base + 200 first = 300
-    // Workout 2: 100 base + 20 streak = 120
-    // Total: 420
+    // Workout 1: 100 base + 200 first + 20 streak (day 1) = 320
+    // Workout 2: 100 base + 40 streak (day 2) = 140
+    // Total: 460
     const result = calculateTotalXP(workouts, []);
-    expect(result.totalXP).toBe(420);
+    expect(result.totalXP).toBe(460);
   });
 });

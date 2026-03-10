@@ -46,8 +46,8 @@
 
 ### Auth & Sync
 
-- [ ] **AUTH-01**: User can join community via anonymous Supabase session (zero-friction)
-- [ ] **AUTH-02**: User can upgrade to email/magic link to claim username and public profile
+- [x] **AUTH-01**: User can join community via anonymous Supabase session (zero-friction)
+- [x] **AUTH-02**: User can upgrade to email/magic link to claim username and public profile
 - [ ] **AUTH-03**: Supabase client dynamically imported only when user opts in (~45KB)
 
 - [x] **SYNC-01**: Workout data syncs to Supabase with last-write-wins strategy
@@ -57,7 +57,7 @@
 
 ### Community
 
-- [ ] **COM-01**: User can set username when upgrading to public profile
+- [x] **COM-01**: User can set username when upgrading to public profile
 - [ ] **COM-02**: Weekly leaderboard shows top 20 in user's XP league (workouts/week, Mon-Sun)
 - [ ] **COM-03**: Leaderboard has 4 leagues: Bronze (level 1-3), Silver (4-6), Gold (7-10), Platinum (11+)
 - [ ] **COM-04**: Activity feed shows public workout completions, achievements, and PRs
@@ -126,14 +126,14 @@
 | PRF-03 | Phase 2 | Complete |
 | PRF-04 | Phase 2 | Complete |
 | PRF-05 | Phase 2 | Complete |
-| AUTH-01 | Phase 3 | Pending |
-| AUTH-02 | Phase 3 | Pending |
+| AUTH-01 | Phase 3 | Complete |
+| AUTH-02 | Phase 3 | Complete |
 | AUTH-03 | Phase 3 | Pending |
 | SYNC-01 | Phase 3 | Complete |
 | SYNC-02 | Phase 3 | Complete |
 | SYNC-03 | Phase 3 | Complete |
 | SYNC-04 | Phase 3 | Pending |
-| COM-01 | Phase 3 | Pending |
+| COM-01 | Phase 3 | Complete |
 | COM-02 | Phase 3 | Pending |
 | COM-03 | Phase 3 | Pending |
 | COM-04 | Phase 3 | Pending |

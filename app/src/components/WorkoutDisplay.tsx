@@ -1,13 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Session } from '@/lib/generator';
 import type { Restriction, Equipment } from '@/data/exercises';
 import { useI18n } from '@/lib/i18n';
-import { isWorkoutDone, markWorkoutDone } from '@/lib/storage';
-import type { ExerciseLogEntry } from '@/lib/storage';
+import { isWorkoutDone, markWorkoutDone, getXP, addXP, getAchievements, addAchievement, getPersonalRecords, getStreak, loadData } from '@/lib/storage';
+import type { ExerciseLogEntry, PersonalRecord } from '@/lib/storage';
+import { computeXP, getLevelFromXP, type XPGain } from '@/lib/gamification';
+import { checkAchievements, ACHIEVEMENTS } from '@/lib/achievements';
+import { exercises } from '@/data/exercises';
 import ExerciseLogPanel from './ExerciseLogPanel';
 import AdaptPanel from './AdaptPanel';
+import XPGainToast from './XPGainToast';
+import AchievementToast, { type ToastItem } from './AchievementToast';
 
 const YTIcon = () => (
   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -53,6 +58,10 @@ interface WorkoutDisplayProps {
   onResetAdapt?: () => void;
 }
 
+type ToastQueueItem =
+  | { type: 'xp'; gain: XPGain }
+  | { type: 'achievement-pr'; item: ToastItem };
+
 export default function WorkoutDisplay({
   session,
   onSwapStrength,
@@ -69,6 +78,7 @@ export default function WorkoutDisplay({
   const { t, lang } = useI18n();
   const [done, setDone] = useState(false);
   const [showLog, setShowLog] = useState(false);
+  const [toastQueue, setToastQueue] = useState<ToastQueueItem[]>([]);
 
   const isAdapted = restrictions.length > 0 || equipmentOverride !== null || shortMode;
 
@@ -76,6 +86,67 @@ export default function WorkoutDisplay({
     setDone(isWorkoutDone(session.date));
     setShowLog(false);
   }, [session.date]);
+
+  const handleWorkoutComplete = useCallback((prCount: number, newPRs: PersonalRecord[]) => {
+    // 1. Mark workout done
+    markWorkoutDone(session.date, session.strength[0]?.exercise.level ?? 2, lang === 'es' ? session.sessionType_es : session.sessionType);
+
+    // 2. Compute XP (load fresh data after markWorkoutDone persisted the workout)
+    const { xp: currentXP } = getXP();
+    const freshData = loadData();
+    const gain = computeXP({
+      workout: { date: session.date, level: session.strength[0]?.exercise.level ?? 2, sessionType: session.sessionType, completedAt: Date.now() },
+      exerciseLog: freshData.exerciseLog.filter(e => e.date === session.date),
+      allWorkouts: freshData.completedWorkouts,
+      prCount,
+    });
+
+    // 3. Persist XP
+    const newTotalXP = currentXP + gain.total;
+    const newLevel = getLevelFromXP(newTotalXP);
+    addXP(gain.total, newLevel);
+
+    // 4. Check achievements
+    const streak = getStreak();
+    const allAchievements = getAchievements();
+    const allWorkoutsNow = loadData().completedWorkouts;
+    const allLogNow = loadData().exerciseLog;
+    const workoutsWithLogs = allWorkoutsNow.filter(w =>
+      allLogNow.some(e => e.date === w.date && e.weight && e.weight.trim() !== '')
+    ).length;
+    const newAchievementIds = checkAchievements({
+      completedWorkouts: allWorkoutsNow,
+      exerciseLog: allLogNow,
+      unlockedIds: allAchievements.map(a => a.id),
+      currentStreak: streak.current,
+      totalPRs: getPersonalRecords().length,
+      xpLevel: newLevel,
+      workoutsWithLogs,
+      completedAt: Date.now(),
+      isAdapted: restrictions.length > 0 || equipmentOverride !== null || shortMode,
+    });
+    for (const id of newAchievementIds) {
+      addAchievement(id);
+    }
+
+    // 5. Queue toasts
+    const toastsToShow: ToastQueueItem[] = [];
+    toastsToShow.push({ type: 'xp', gain });
+    for (const pr of newPRs) {
+      const ex = exercises.find(e => e.id === pr.exerciseId);
+      if (ex) toastsToShow.push({ type: 'achievement-pr', item: { type: 'pr', pr, exerciseName: ex.name } });
+    }
+    for (const id of newAchievementIds) {
+      const ach = ACHIEVEMENTS.find(a => a.id === id);
+      if (ach) toastsToShow.push({ type: 'achievement-pr', item: { type: 'achievement', achievement: ach } });
+    }
+    setToastQueue(toastsToShow);
+
+    // 6. Update UI state
+    setDone(true);
+    setShowLog(false);
+    onDone?.();
+  }, [session, lang, restrictions, equipmentOverride, shortMode, onDone]);
 
   return (
     <div className="font-mono text-sm leading-relaxed space-y-6">
@@ -278,14 +349,31 @@ export default function WorkoutDisplay({
         <ExerciseLogPanel
           date={session.date}
           strength={session.strength}
-          onComplete={() => {
-            markWorkoutDone(session.date, session.strength[0]?.exercise.level ?? 2, lang === 'es' ? session.sessionType_es : session.sessionType);
-            setDone(true);
-            setShowLog(false);
-            onDone?.();
-          }}
+          onComplete={handleWorkoutComplete}
         />
       )}
+
+      {/* Toast stack */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+        {toastQueue.slice(0, 3).map((toast, i) => {
+          if (toast.type === 'xp') {
+            return (
+              <XPGainToast
+                key={`xp-${i}`}
+                gain={toast.gain}
+                onDismiss={() => setToastQueue(q => q.slice(1))}
+              />
+            );
+          }
+          return (
+            <AchievementToast
+              key={`ach-${i}`}
+              item={toast.item}
+              onDismiss={() => setToastQueue(q => q.slice(1))}
+            />
+          );
+        })}
+      </div>
 
       {/* Completed state */}
       {!readOnly && done && (

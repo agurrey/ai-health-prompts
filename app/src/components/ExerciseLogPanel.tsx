@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { useI18n } from '@/lib/i18n';
 import type { SelectedStrengthExercise } from '@/lib/generator';
-import { logExercises, type ExerciseLogEntry } from '@/lib/storage';
+import { logExercises, getPersonalRecords, savePersonalRecord, type ExerciseLogEntry, type PersonalRecord } from '@/lib/storage';
+import { checkNewPRs } from '@/lib/gamification';
 
 interface Props {
   date: string;
   strength: SelectedStrengthExercise[];
-  onComplete: () => void;
+  onComplete: (prCount: number, newPRs: PersonalRecord[]) => void;
 }
 
 interface LogField {
@@ -51,11 +52,19 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
       });
     }
     logExercises(entries);
-    onComplete();
+
+    // Detect PRs from entries that have a non-empty weight and aren't skipped
+    const currentPRs = getPersonalRecords();
+    const logEntriesForPR = entries.filter(e => e.weight && e.weight.trim() !== '' && e.notes !== 'skipped');
+    const newPRs = checkNewPRs(logEntriesForPR, currentPRs);
+    for (const pr of newPRs) {
+      savePersonalRecord(pr);
+    }
+    onComplete(newPRs.length, newPRs);
   }
 
   function handleSkipAll() {
-    onComplete();
+    onComplete(0, []);
   }
 
   return (

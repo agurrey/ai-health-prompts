@@ -18,10 +18,10 @@
 
 ### Achievements
 
-- [ ] **ACH-01**: User unlocks 15 bilingual achievements based on training milestones
+- [x] **ACH-01**: User unlocks 15 bilingual achievements based on training milestones
 - [ ] **ACH-02**: User sees achievement toast notification when unlocking a badge
-- [ ] **ACH-03**: First 3 achievements are unlockable within the first week (early wins)
-- [ ] **ACH-04**: Achievement conditions cover workouts, streaks, PRs, logging, time-of-day, adapt usage
+- [x] **ACH-03**: First 3 achievements are unlockable within the first week (early wins)
+- [x] **ACH-04**: Achievement conditions cover workouts, streaks, PRs, logging, time-of-day, adapt usage
 
 ### Personal Records
 
@@ -108,10 +108,10 @@
 | XP-06 | Phase 1 | Pending |
 | XP-07 | Phase 1 | Pending |
 | XP-08 | Phase 1 | Pending |
-| ACH-01 | Phase 1 | Pending |
+| ACH-01 | Phase 1 | Complete |
 | ACH-02 | Phase 1 | Pending |
-| ACH-03 | Phase 1 | Pending |
-| ACH-04 | Phase 1 | Pending |
+| ACH-03 | Phase 1 | Complete |
+| ACH-04 | Phase 1 | Complete |
 | PR-01 | Phase 1 | Pending |
 | PR-02 | Phase 1 | Pending |
 | PR-03 | Phase 1 | Pending |

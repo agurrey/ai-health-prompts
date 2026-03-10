@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-03-10)
 ## Current Position
 
 Phase: 1 of 3 (Gamification Core)
-Plan: 1 of 6 in current phase
+Plan: 3 of 6 in current phase
 Status: In progress
-Last activity: 2026-03-10 — Plan 01-01 complete (XP engine + storage v2 migration)
+Last activity: 2026-03-10 — Plan 01-03 complete (achievement definitions + evaluator)
 
-Progress: [█░░░░░░░░░] 10%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 5 min
-- Total execution time: 0.08 hours
+- Total plans completed: 2
+- Average duration: 3 min
+- Total execution time: 0.17 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-gamification-core | 1 | 5 min | 5 min |
+| 01-gamification-core | 2 | 7 min | 3.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min)
+- Last 5 plans: 01-01 (5 min), 01-03 (2 min)
 - Trend: -
 
 *Updated after each plan completion*
@@ -50,6 +50,9 @@ Recent decisions affecting current work:
 - 01-01: Streak bonus is 20*streakDay starting day 1 (first workout earns streak XP)
 - 01-01: migrateIfNeeded is a pure function — safe to call, always returns new object
 - 01-01: calculateTotalXP iterates chronologically slicing allWorkouts per iteration for streak accuracy
+- 01-03: community achievement reserved for Phase 3 — condition never evaluates true in Phase 1
+- 01-03: all-patterns simplified to >= 4 workouts in any Mon-Sun week
+- 01-03: full-cycle uses last-28-days window matching gamification.ts isMesocycleComplete pattern
 
 ### Pending Todos
 
@@ -63,5 +66,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-10
-Stopped at: Completed 01-01-PLAN.md (XP engine + storage v2 migration)
+Stopped at: Completed 01-03-PLAN.md (achievement definitions + evaluator)
 Resume file: None

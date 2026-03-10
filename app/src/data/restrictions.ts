@@ -25,9 +25,9 @@ export const RESTRICTIONS: RestrictionConfig[] = [
   { id: 'knee_pain', label: 'Knee pain', label_es: 'Dolor de rodilla' },
   { id: 'hip_pain', label: 'Hip pain', label_es: 'Dolor de cadera' },
   { id: 'foot_pain', label: "Can't bear weight on feet", label_es: 'Sin apoyo de pies' },
-  { id: 'wrist_pain', label: 'Wrist pain', label_es: 'Dolor de muneca' },
+  { id: 'wrist_pain', label: 'Wrist pain', label_es: 'Dolor de muñeca' },
   { id: 'no_pullup_bar', label: 'No pull-up bar', label_es: 'Sin barra de dominadas' },
-  { id: 'pelvic_floor', label: 'Pelvic floor / Postpartum', label_es: 'Suelo pelvico / Postparto' },
+  { id: 'pelvic_floor', label: 'Pelvic floor / Postpartum', label_es: 'Suelo pélvico / Postparto' },
 ];
 
 export const RESTRICTION_MAPS: RestrictionMap[] = [

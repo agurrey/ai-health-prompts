@@ -1,5 +1,6 @@
 import type { Level, Equipment } from '@/data/exercises';
 import { calculateTotalXP, getStreakFreezeState } from '@/lib/gamification';
+import { syncWorkout, syncExerciseLogs, syncAchievement, postFeedEvent, isCommunityUser } from '@/lib/sync';
 
 const STORAGE_KEY = 'hormesis_data';
 const CURRENT_VERSION = 2;
@@ -130,11 +131,25 @@ export function markWorkoutDone(date: string, level: Level, sessionType: string)
     data.completedWorkouts.push({ date, level, sessionType, completedAt: Date.now() });
   }
   saveData(data);
+  // Sync to Supabase + post feed event if community user (non-blocking)
+  isCommunityUser().then(is => {
+    if (is) {
+      const xpData = getXP();
+      syncWorkout({ date, level, sessionType, completedAt: Date.now() }, xpData.xp).catch(() => {});
+      postFeedEvent('workout', { session_type: sessionType }).catch(() => {});
+    }
+  });
   // Award freeze token on 7-day streak milestones (capped at 2)
   const streak = getStreak();
   if (streak.current > 0 && streak.current % 7 === 0) {
     const tokens = getFreezeTokens();
     if (tokens < 2) setFreezeTokens(tokens + 1);
+    // Post streak milestone to feed (non-blocking)
+    isCommunityUser().then(is => {
+      if (is) {
+        postFeedEvent('streak', { streak_days: streak.current }).catch(() => {});
+      }
+    });
   }
 }
 
@@ -152,6 +167,11 @@ export function logExercise(entry: ExerciseLogEntry): void {
     data.exerciseLog.push(entry);
   }
   saveData(data);
+  isCommunityUser().then(is => {
+    if (is) {
+      syncExerciseLogs([entry]).catch(() => {});
+    }
+  });
 }
 
 export function logExercises(entries: ExerciseLogEntry[]): void {
@@ -165,6 +185,11 @@ export function logExercises(entries: ExerciseLogEntry[]): void {
     }
   }
   saveData(data);
+  isCommunityUser().then(is => {
+    if (is) {
+      syncExerciseLogs(entries).catch(() => {});
+    }
+  });
 }
 
 export function getLastLog(exerciseId: string): ExerciseLogEntry | null {
@@ -281,6 +306,12 @@ export function addAchievement(id: string): void {
   if (!data.achievements.some(a => a.id === id)) {
     data.achievements.push({ id, unlockedAt: new Date().toISOString().slice(0, 10) });
     saveData(data);
+    isCommunityUser().then(is => {
+      if (is) {
+        syncAchievement(id, new Date().toISOString().slice(0, 10)).catch(() => {});
+        postFeedEvent('achievement', { achievement_id: id }).catch(() => {});
+      }
+    });
   }
 }
 
@@ -298,6 +329,11 @@ export function savePersonalRecord(pr: PersonalRecord): void {
     data.personalRecords.push(pr);
   }
   saveData(data);
+  isCommunityUser().then(is => {
+    if (is) {
+      postFeedEvent('pr', { exercise_id: pr.exerciseId }).catch(() => {});
+    }
+  });
 }
 
 export function getFreezeTokens(): number {

@@ -99,3 +99,34 @@ body {
   animation: slide-down 0.3s ease-out both;
   overflow: hidden;
 }
+
+/* Toast slide-in animation */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
+
+.toast-enter {
+  animation: slide-in-right 0.3s ease-out both;
+}
+
+.toast-exit {
+  animation: slide-out-right 0.25s ease-in forwards;
+}

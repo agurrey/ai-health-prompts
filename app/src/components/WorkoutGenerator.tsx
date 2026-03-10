@@ -1,147 +1,299 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { track } from '@vercel/analytics';
-import { generateSession, Session, UserLevel } from '@/lib/generator';
-import { getTodayString } from '@/lib/seed';
+import { generateSession, getLoadLabel, Session } from '@/lib/generator';
+import { getTodayString, createSeededRandom, seededShuffle } from '@/lib/seed';
+import { getExercisesByPattern, filterByLevel, filterByRestrictions } from '@/data/exercises';
+import type { Level, Equipment, Restriction } from '@/data/exercises';
 import { useI18n } from '@/lib/i18n';
+import { getLevel, setLevel as persistLevel, getEquipment, setEquipment as persistEquipment, getLastLog, isWorkoutDone, type ExerciseLogEntry } from '@/lib/storage';
 import WorkoutDisplay from './WorkoutDisplay';
+import EquipmentSetup from './EquipmentSetup';
 
-const RESTRICTIONS = [
-  { id: 'shoulder_pain', label: 'Shoulder pain', label_es: 'Dolor de hombro' },
-  { id: 'low_back', label: 'Low back pain', label_es: 'Dolor lumbar' },
-  { id: 'knee_pain', label: 'Knee pain', label_es: 'Dolor de rodilla' },
-  { id: 'hip_pain', label: 'Hip pain', label_es: 'Dolor de cadera' },
-  { id: 'foot_pain', label: "Can't bear weight on feet", label_es: 'Sin apoyo de pies' },
-  { id: 'wrist_pain', label: 'Wrist pain', label_es: 'Dolor de muñeca' },
-  { id: 'no_pullup_bar', label: 'No pull-up bar', label_es: 'Sin barra de dominadas' },
+const LEVELS: { value: Level; en: string; es: string }[] = [
+  { value: 1, en: 'Beginner', es: 'Principiante' },
+  { value: 2, en: 'Intermediate', es: 'Intermedio' },
+  { value: 3, en: 'Advanced', es: 'Avanzado' },
 ];
 
-const LEVEL_LABELS: Record<UserLevel, { en: string; es: string }> = {
-  beginner: { en: 'Beginner', es: 'Principiante' },
-  intermediate: { en: 'Intermediate', es: 'Intermedio' },
-  advanced: { en: 'Advanced', es: 'Avanzado' },
-  warrior: { en: 'Warrior', es: 'Warrior' },
-};
+function shiftDate(dateStr: string, days: number): string {
+  const d = new Date(dateStr + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function formatDateLabel(dateStr: string, lang: string): string {
+  const d = new Date(dateStr + 'T12:00:00Z');
+  const dayNames = lang === 'es'
+    ? ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab']
+    : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const monthNames = lang === 'es'
+    ? ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+    : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${dayNames[d.getUTCDay()]} ${d.getUTCDate()} ${monthNames[d.getUTCMonth()]}`;
+}
 
 export default function WorkoutGenerator() {
   const { t, lang } = useI18n();
-  const [lightKg, setLightKg] = useState(8);
-  const [heavyKg, setHeavyKg] = useState(16);
-  const [level, setLevel] = useState<UserLevel>('intermediate');
-  const [restrictions, setRestrictions] = useState<string[]>([]);
   const [session, setSession] = useState<Session | null>(null);
+  const [level, setLevel] = useState<Level>(() => getLevel());
+  const [equipment, setEquipment] = useState<Equipment[] | null>(() => getEquipment());
+  const [needsSetup, setNeedsSetup] = useState(() => getEquipment() === null);
+  const [showEquipmentSettings, setShowEquipmentSettings] = useState(false);
+  const [swapCounts, setSwapCounts] = useState<Record<number, number>>({});
+  const [lastLogs, setLastLogs] = useState<Record<string, ExerciseLogEntry | null>>({});
+  const [viewDate, setViewDate] = useState(() => getTodayString());
+  const [todayDone, setTodayDone] = useState(false);
 
-  function toggleRestriction(id: string) {
-    setRestrictions(prev =>
-      prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]
+  const today = getTodayString();
+  const tomorrow = shiftDate(today, 1);
+  const isToday = viewDate === today;
+  const isTomorrow = viewDate === tomorrow;
+  const isFuture = viewDate > today;
+  const readOnly = !isToday;
+
+  // Check if today's workout is done (for lock logic)
+  useEffect(() => {
+    setTodayDone(isWorkoutDone(today));
+  }, [today, viewDate]);
+
+  // Listen for workout completion to update lock state
+  useEffect(() => {
+    const handleStorage = () => setTodayDone(isWorkoutDone(today));
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [today]);
+
+  useEffect(() => {
+    if (needsSetup) return;
+    const result = generateSession(viewDate, level, equipment);
+    setSession(result);
+    setSwapCounts({});
+    if (isToday) persistLevel(level);
+    const logs: Record<string, ExerciseLogEntry | null> = {};
+    for (const s of result.strength) {
+      logs[s.exercise.id] = getLastLog(s.exercise.id);
+    }
+    setLastLogs(logs);
+    track('workout_generated', { date: viewDate, level: String(level) });
+  }, [level, viewDate, isToday, equipment, needsSetup]);
+
+  const handleSwapStrength = useCallback((index: number) => {
+    if (!session) return;
+
+    const current = session.strength[index];
+    const pattern = current.exercise.pattern;
+
+    let pool = getExercisesByPattern(pattern);
+    pool = filterByLevel(pool, level);
+    if (equipment) {
+      const available = new Set<string>(['bodyweight', ...equipment]);
+      pool = pool.filter(e => e.equipment.every(eq => available.has(eq)));
+      const restrictions: Restriction[] = [];
+      if (!equipment.includes('pull_up_bar')) restrictions.push('no_pullup_bar');
+      if (restrictions.length > 0) pool = filterByRestrictions(pool, restrictions);
+    }
+
+    const usedIds = new Set(session.strength.map(s => s.exercise.id));
+    pool = pool.filter(e => !usedIds.has(e.id));
+
+    if (pool.length === 0) return;
+
+    const nextSwap = (swapCounts[index] || 0) + 1;
+    const random = createSeededRandom(`${session.date}-swap-${index}-${nextSwap}`);
+    const shuffled = seededShuffle(pool, random);
+    const replacement = shuffled[0];
+
+    const newStrength = [...session.strength];
+    newStrength[index] = {
+      ...current,
+      exercise: replacement,
+      load: getLoadLabel(replacement),
+    };
+
+    setSwapCounts({ ...swapCounts, [index]: nextSwap });
+    setSession({ ...session, strength: newStrength });
+    setLastLogs((prev) => ({
+      ...prev,
+      [replacement.id]: getLastLog(replacement.id),
+    }));
+  }, [session, level, swapCounts, equipment]);
+
+  // Navigation logic
+  const canGoNext = isTomorrow
+    ? false // max peek = 1 day ahead
+    : isToday
+      ? todayDone // locked until today is done
+      : viewDate < today; // past dates can always go forward
+  const nextLocked = isToday && !todayDone;
+
+  const handlePrev = () => setViewDate(shiftDate(viewDate, -1));
+  const handleNext = () => {
+    if (canGoNext) setViewDate(shiftDate(viewDate, 1));
+  };
+  const handleToday = () => setViewDate(today);
+
+  // Re-check todayDone when coming back to today view (user may have completed it)
+  const handleDoneCallback = useCallback(() => {
+    setTodayDone(true);
+  }, []);
+
+  function handleEquipmentSave(eq: Equipment[]) {
+    persistEquipment(eq);
+    setEquipment(eq);
+    setNeedsSetup(false);
+    setShowEquipmentSettings(false);
+  }
+
+  if (needsSetup) {
+    return <EquipmentSetup onSave={handleEquipmentSave} />;
+  }
+
+  if (showEquipmentSettings) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-bold text-foreground">
+            {t('Equipment', 'Equipamiento')}
+          </h3>
+          <button
+            onClick={() => setShowEquipmentSettings(false)}
+            className="text-muted hover:text-foreground text-xs cursor-pointer"
+          >
+            {t('Cancel', 'Cancelar')}
+          </button>
+        </div>
+        <EquipmentSetup initial={equipment ?? undefined} onSave={handleEquipmentSave} mode="settings" />
+      </div>
     );
   }
 
-  function handleGenerate() {
-    const today = getTodayString();
-    const result = generateSession(today, level, lightKg, heavyKg, restrictions);
-    setSession(result);
-    track('workout_generated', { level, lightKg, heavyKg });
-  }
+  if (!session) return null;
 
   return (
-    <div className="space-y-8">
-      {/* Form */}
-      <div className="space-y-6">
-        {/* Weight inputs */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-muted mb-2">
-              {t('Light dumbbells (kg)', 'Mancuernas ligeras (kg)')}
-            </label>
-            <input
-              type="number"
-              min={1}
-              max={50}
-              value={lightKg}
-              onChange={e => setLightKg(Number(e.target.value))}
-              className="w-full bg-card border border-border rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-muted mb-2">
-              {t('Heavy dumbbells (kg)', 'Mancuernas pesadas (kg)')}
-            </label>
-            <input
-              type="number"
-              min={1}
-              max={50}
-              value={heavyKg}
-              onChange={e => setHeavyKg(Number(e.target.value))}
-              className="w-full bg-card border border-border rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
-            />
-          </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-center gap-2">
+        <div className="flex gap-1 p-1 bg-zinc-800 rounded-lg">
+          {LEVELS.map((l) => (
+            <button
+              key={l.value}
+              onClick={() => setLevel(l.value)}
+              className={`px-4 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                level === l.value
+                  ? 'bg-accent text-background'
+                  : 'text-muted hover:text-foreground'
+              }`}
+            >
+              {t(l.en, l.es)}
+            </button>
+          ))}
         </div>
-
-        {/* Level */}
-        <div>
-          <label className="block text-sm text-muted mb-2">
-            {t('Experience level', 'Nivel de experiencia')}
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {(['beginner', 'intermediate', 'advanced', 'warrior'] as const).map(l => (
-              <button
-                key={l}
-                onClick={() => setLevel(l)}
-                className={`py-3 px-4 rounded-lg border text-sm transition-all cursor-pointer ${
-                  level === l
-                    ? l === 'warrior'
-                      ? 'border-red-500 bg-red-500/10 text-red-400'
-                      : 'border-accent bg-accent/10 text-accent'
-                    : l === 'warrior'
-                      ? 'border-red-500/30 text-red-400/60 hover:border-red-500/60'
-                      : 'border-border text-muted hover:border-muted'
-                }`}
-              >
-                {lang === 'es' ? LEVEL_LABELS[l].es : LEVEL_LABELS[l].en}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Restrictions */}
-        <div>
-          <label className="block text-sm text-muted mb-2">
-            {t('Any of these apply?', '¿Te aplica alguna de estas?')}
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {RESTRICTIONS.map(r => (
-              <button
-                key={r.id}
-                onClick={() => toggleRestriction(r.id)}
-                className={`px-3 py-2 rounded-lg border text-xs transition-all cursor-pointer ${
-                  restrictions.includes(r.id)
-                    ? 'border-accent bg-accent/10 text-accent'
-                    : 'border-border text-muted hover:border-muted'
-                }`}
-              >
-                {lang === 'es' ? r.label_es : r.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Generate button */}
         <button
-          onClick={handleGenerate}
-          className="w-full py-4 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all text-lg cursor-pointer"
+          onClick={() => setShowEquipmentSettings(true)}
+          className="p-2 rounded-lg text-muted hover:text-foreground hover:bg-zinc-800 transition-colors cursor-pointer"
+          aria-label={t('Equipment settings', 'Configurar equipamiento')}
+          title={t('Equipment', 'Equipamiento')}
         >
-          {t("Generate Today's Workout", 'Generar el Entrenamiento de Hoy')}
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
         </button>
       </div>
 
-      {/* Output */}
-      {session && (
-        <div className="mt-8">
-          <WorkoutDisplay session={session} />
+      {/* Day Navigation */}
+      <div className="flex items-center justify-center gap-3">
+        <button
+          onClick={handlePrev}
+          className="p-2 rounded-lg text-muted hover:text-foreground hover:bg-zinc-800 transition-colors cursor-pointer"
+          aria-label={t('Previous day', 'Dia anterior')}
+        >
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+
+        <div className="text-center min-w-[140px]">
+          <p className={`text-sm font-medium ${isToday ? 'text-foreground' : 'text-accent'}`}>
+            {isToday
+              ? t('Today', 'Hoy')
+              : isTomorrow
+                ? t('Tomorrow', 'Mañana')
+                : formatDateLabel(viewDate, lang)}
+          </p>
+          {!isToday && (
+            <p className="text-muted text-xs">{formatDateLabel(viewDate, lang)}</p>
+          )}
+        </div>
+
+        <button
+          onClick={handleNext}
+          disabled={!canGoNext}
+          className={`p-2 rounded-lg transition-colors ${
+            canGoNext
+              ? 'text-muted hover:text-foreground hover:bg-zinc-800 cursor-pointer'
+              : 'text-zinc-700 cursor-not-allowed'
+          }`}
+          aria-label={
+            nextLocked
+              ? t('Complete today to unlock', 'Completa hoy para desbloquear')
+              : t('Next day', 'Dia siguiente')
+          }
+          title={
+            nextLocked
+              ? t('Complete today to unlock', 'Completa hoy para desbloquear')
+              : undefined
+          }
+        >
+          {nextLocked ? (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Lock hint */}
+      {nextLocked && isToday && (
+        <p className="text-center text-zinc-600 text-xs">
+          {t('Complete today to peek tomorrow', 'Completa hoy para ver mañana')}
+        </p>
+      )}
+
+      {/* Today button when viewing another date */}
+      {!isToday && (
+        <div className="flex justify-center">
+          <button
+            onClick={handleToday}
+            className="px-3 py-1.5 text-xs font-medium text-accent border border-accent/30 rounded-lg hover:bg-accent/10 transition-colors cursor-pointer"
+          >
+            {t('Back to today', 'Volver a hoy')}
+          </button>
         </div>
       )}
+
+      {/* Future badge */}
+      {isFuture && (
+        <div className="text-center px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
+          <p className="text-zinc-500 text-xs">
+            {t('Preview — read only', 'Vista previa — solo lectura')}
+          </p>
+        </div>
+      )}
+
+      <WorkoutDisplay
+        session={session}
+        onSwapStrength={readOnly ? undefined : handleSwapStrength}
+        lastLogs={lastLogs}
+        readOnly={readOnly}
+        onDone={handleDoneCallback}
+      />
     </div>
   );
 }

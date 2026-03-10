@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import Link from 'next/link';
 import { I18nProvider, useI18n } from '@/lib/i18n';
 import LanguageToggle from './LanguageToggle';
@@ -16,6 +16,12 @@ function Nav() {
           Hormesis
         </Link>
         <div className="flex items-center gap-4 text-sm text-muted">
+          <Link href="/program" className="hover:text-foreground transition-colors">
+            {t('Program', 'Programa')}
+          </Link>
+          <Link href="/history" className="hover:text-foreground transition-colors">
+            {t('History', 'Historial')}
+          </Link>
           <Link href="/prompts" className="hover:text-foreground transition-colors">
             Prompts
           </Link>
@@ -51,9 +57,19 @@ function Footer() {
   );
 }
 
+function ServiceWorkerRegistration() {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  }, []);
+  return null;
+}
+
 export default function ClientShell({ children }: { children: ReactNode }) {
   return (
     <I18nProvider>
+      <ServiceWorkerRegistration />
       <Nav />
       <main className="max-w-3xl mx-auto px-4 py-8">
         {children}

@@ -223,3 +223,38 @@ export function checkNewPRs(
   }
   return newPRs;
 }
+
+// ── Streak Freeze ──
+
+export interface StreakFreezeState {
+  freezeActive: boolean;
+  tokensRemaining: number;
+  streakProtected: boolean;
+}
+
+export function getStreakFreezeState(params: {
+  todayStr: string;
+  completedDates: Set<string>;
+  freezeTokens: number;
+}): StreakFreezeState {
+  const { todayStr, completedDates, freezeTokens } = params;
+  const todayDone = completedDates.has(todayStr);
+  if (todayDone) {
+    return { freezeActive: false, tokensRemaining: freezeTokens, streakProtected: false };
+  }
+
+  const yesterday = new Date(todayStr + 'T00:00:00Z');
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const yesterdayStr = yesterday.toISOString().slice(0, 10);
+  const yesterdayDone = completedDates.has(yesterdayStr);
+
+  if (!yesterdayDone || freezeTokens <= 0) {
+    return { freezeActive: false, tokensRemaining: freezeTokens, streakProtected: false };
+  }
+
+  return {
+    freezeActive: true,
+    tokensRemaining: freezeTokens - 1,
+    streakProtected: true,
+  };
+}

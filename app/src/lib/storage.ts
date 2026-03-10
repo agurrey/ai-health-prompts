@@ -1,5 +1,5 @@
 import type { Level, Equipment } from '@/data/exercises';
-import { calculateTotalXP } from '@/lib/gamification';
+import { calculateTotalXP, getStreakFreezeState } from '@/lib/gamification';
 
 const STORAGE_KEY = 'hormesis_data';
 const CURRENT_VERSION = 2;
@@ -130,6 +130,12 @@ export function markWorkoutDone(date: string, level: Level, sessionType: string)
     data.completedWorkouts.push({ date, level, sessionType, completedAt: Date.now() });
   }
   saveData(data);
+  // Award freeze token on 7-day streak milestones (capped at 2)
+  const streak = getStreak();
+  if (streak.current > 0 && streak.current % 7 === 0) {
+    const tokens = getFreezeTokens();
+    if (tokens < 2) setFreezeTokens(tokens + 1);
+  }
 }
 
 export function isWorkoutDone(date: string): boolean {
@@ -177,31 +183,39 @@ export function getCompletedWorkout(date: string): CompletedWorkout | undefined 
   return loadData().completedWorkouts.find(w => w.date === date);
 }
 
-export function getStreak(): { current: number; longest: number } {
+export function getStreak(): { current: number; longest: number; freezeActive: boolean } {
   const dates = new Set(getCompletedDates());
-  if (dates.size === 0) return { current: 0, longest: 0 };
+  if (dates.size === 0) return { current: 0, longest: 0, freezeActive: false };
+
+  const todayStr = fmt(new Date());
+  const freezeTokens = getFreezeTokens();
+  const freezeState = getStreakFreezeState({ todayStr, completedDates: dates, freezeTokens });
+
+  // If freeze is active: consume the token and treat today as done
+  if (freezeState.freezeActive) {
+    setFreezeTokens(freezeState.tokensRemaining);
+    dates.add(todayStr);
+  }
 
   // Current streak: count back from today
-  const today = new Date();
   let current = 0;
-  const d = new Date(today);
-  // Check today first
+  const d = new Date(todayStr + 'T00:00:00Z');
   if (dates.has(fmt(d))) {
     current = 1;
-    d.setDate(d.getDate() - 1);
+    d.setUTCDate(d.getUTCDate() - 1);
   } else {
-    // Maybe they haven't done today yet — check from yesterday
-    d.setDate(d.getDate() - 1);
-    if (!dates.has(fmt(d))) return { current: 0, longest: longestStreak(dates) };
+    // Haven't done today yet — check from yesterday
+    d.setUTCDate(d.getUTCDate() - 1);
+    if (!dates.has(fmt(d))) return { current: 0, longest: longestStreak(dates), freezeActive: false };
     current = 1;
-    d.setDate(d.getDate() - 1);
+    d.setUTCDate(d.getUTCDate() - 1);
   }
   while (dates.has(fmt(d))) {
     current++;
-    d.setDate(d.getDate() - 1);
+    d.setUTCDate(d.getUTCDate() - 1);
   }
 
-  return { current, longest: Math.max(current, longestStreak(dates)) };
+  return { current, longest: Math.max(current, longestStreak(dates)), freezeActive: freezeState.freezeActive };
 }
 
 function longestStreak(dates: Set<string>): number {

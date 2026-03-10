@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import WorkoutGenerator from '@/components/WorkoutGenerator';
+import XPBar from '@/components/XPBar';
+import StreakWidget from '@/components/StreakWidget';
 import { prompts } from '@/data/prompts';
 import { useI18n } from '@/lib/i18n';
 
@@ -26,6 +28,13 @@ export default function Home() {
             )}
           </p>
         </div>
+
+        {/* Gamification stats row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <XPBar />
+          <StreakWidget />
+        </div>
+
         <WorkoutGenerator />
       </section>
 

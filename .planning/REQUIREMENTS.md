@@ -7,14 +7,14 @@
 
 ### XP System
 
-- [ ] **XP-01**: User earns 100 XP for completing a workout
-- [ ] **XP-02**: User earns 150 XP for completing a workout with exercise logs
-- [ ] **XP-03**: User earns streak bonus XP (20 x streak_day, capped at 7 days)
-- [ ] **XP-04**: User earns 50 XP for setting a new personal record
-- [ ] **XP-05**: User earns 200 XP for their first workout ever
-- [ ] **XP-06**: User earns 300 XP bonus for reaching a 7-day streak
-- [ ] **XP-07**: User earns 1000 XP for completing a full 28-day mesocycle
-- [ ] **XP-08**: User sees XP level badge with exponential progression curve
+- [x] **XP-01**: User earns 100 XP for completing a workout
+- [x] **XP-02**: User earns 150 XP for completing a workout with exercise logs
+- [x] **XP-03**: User earns streak bonus XP (20 x streak_day, capped at 7 days)
+- [x] **XP-04**: User earns 50 XP for setting a new personal record
+- [x] **XP-05**: User earns 200 XP for their first workout ever
+- [x] **XP-06**: User earns 300 XP bonus for reaching a 7-day streak
+- [x] **XP-07**: User earns 1000 XP for completing a full 28-day mesocycle
+- [x] **XP-08**: User sees XP level badge with exponential progression curve
 
 ### Achievements
 
@@ -66,8 +66,8 @@
 
 ### Storage Migration
 
-- [ ] **MIG-01**: localStorage v1 → v2 migration adds gamification fields without data loss
-- [ ] **MIG-02**: Existing workout history is retroactively processed for XP and achievements
+- [x] **MIG-01**: localStorage v1 → v2 migration adds gamification fields without data loss
+- [x] **MIG-02**: Existing workout history is retroactively processed for XP and achievements
 
 ## v2 Requirements
 

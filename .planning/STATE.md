@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md (profile page — BadgeGrid + /profile route)
-last_updated: "2026-03-10T16:24:11.140Z"
+stopped_at: Completed 02-02-PLAN.md (nav + history enhancements — profile discoverability)
+last_updated: "2026-03-10T16:25:00.000Z"
 last_activity: 2026-03-10 — Plan 02-02 complete (Profile nav link + history XP teaser)
 progress:
   total_phases: 3
@@ -85,6 +85,9 @@ Recent decisions affecting current work:
 - [Phase 02-profile-page]: 02-01: BadgeGrid accepts unlockedAchievements as prop — pure display component, no direct storage coupling
 - [Phase 02-profile-page]: 02-01: formatShortDate uses Date.UTC to avoid timezone off-by-one on YYYY-MM-DD string parsing
 - [Phase 02-profile-page]: 02-01: Completion rate uses days-since-first-workout (inclusive) as denominator, capped at 100%
+- [Phase 02-profile-page]: 02-02: Profile link placed between History and Prompts — groups activity-related nav items together
+- [Phase 02-profile-page]: 02-02: XP teaser card between calendar and stats grid — above the fold on mobile, drives profile discoverability
+- [Phase 02-profile-page]: 02-02: Freeze tokens use repeat snowflake emoji — simple, expressive, consistent with plan spec
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:24:11.138Z
-Stopped at: Completed 02-01-PLAN.md (profile page — BadgeGrid + /profile route)
+Last session: 2026-03-10T16:25:00.000Z
+Stopped at: Completed 02-02-PLAN.md (nav + history enhancements — profile discoverability)
 Resume file: None

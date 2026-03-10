@@ -18,6 +18,10 @@ import { exercises } from '@/data/exercises';
 import XPBar from '@/components/XPBar';
 import StreakWidget from '@/components/StreakWidget';
 import BadgeGrid from '@/components/BadgeGrid';
+import CommunityBanner from '@/components/CommunityBanner';
+import JoinCommunity from '@/components/JoinCommunity';
+import UsernameSetup from '@/components/UsernameSetup';
+import { getCommunityStatus, CommunityStatus } from '@/lib/auth';
 
 function formatShortDate(dateStr: string, lang: string): string {
   const [year, month, day] = dateStr.split('-').map(Number);
@@ -71,6 +75,9 @@ export default function ProfilePage() {
   });
   const [freezeTokens, setFreezeTokensState] = useState(0);
   const [completedWorkouts, setCompletedWorkouts] = useState<CompletedWorkout[]>([]);
+  const [communityStatus, setCommunityStatus] = useState<CommunityStatus>('none');
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
 
   useEffect(() => {
     setXpData(getXP());
@@ -79,6 +86,7 @@ export default function ProfilePage() {
     setStreak(getStreak());
     setFreezeTokensState(getFreezeTokens());
     setCompletedWorkouts(loadData().completedWorkouts);
+    getCommunityStatus().then(setCommunityStatus);
   }, []);
 
   // PRs sorted by weight descending, top 5
@@ -190,6 +198,63 @@ export default function ProfilePage() {
           <span>{t('Freeze tokens:', 'Fichas:')} {freezeTokens}/2</span>
         </div>
       </section>
+
+      {/* Section 6: Community */}
+      {communityStatus === 'none' && (
+        <CommunityBanner onJoin={() => setShowJoinModal(true)} />
+      )}
+
+      {communityStatus === 'anonymous' && (
+        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+          <div className="space-y-1">
+            <p className="text-sm font-semibold text-foreground">
+              {t('Claim your spot', 'Reclama tu lugar')}
+            </p>
+            <p className="text-xs text-muted leading-relaxed">
+              {t(
+                'Add an email to unlock leaderboards and a public profile.',
+                'Anade un email para desbloquear clasificaciones y un perfil publico.'
+              )}
+            </p>
+          </div>
+          <button
+            onClick={() => setShowUsernameModal(true)}
+            className="w-full px-4 py-2.5 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm"
+          >
+            {t('Claim Spot', 'Reclamar Lugar')}
+          </button>
+        </div>
+      )}
+
+      {communityStatus === 'member' && (
+        <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
+          <span className="text-2xl">&#x1F30D;</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-foreground">
+              {t('Community member', 'Miembro de la comunidad')}
+            </p>
+            <p className="text-xs text-muted">
+              {t('Public profile active', 'Perfil publico activo')}
+            </p>
+          </div>
+          <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded-full px-2 py-0.5 font-medium">
+            {t('Public', 'Publico')}
+          </span>
+        </div>
+      )}
+
+      <JoinCommunity
+        isOpen={showJoinModal}
+        onClose={() => setShowJoinModal(false)}
+        onSuccess={() => { setShowJoinModal(false); setCommunityStatus('anonymous'); }}
+      />
+
+      <UsernameSetup
+        isOpen={showUsernameModal}
+        onClose={() => setShowUsernameModal(false)}
+        onSuccess={() => { setShowUsernameModal(false); setCommunityStatus('member'); }}
+        showEmailField={true}
+      />
 
     </main>
   );

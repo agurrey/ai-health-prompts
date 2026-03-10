@@ -25,6 +25,12 @@ function Nav() {
           <Link href="/profile" className="hover:text-foreground transition-colors">
             {t('Profile', 'Perfil')}
           </Link>
+          <Link href="/leaderboard" className="hover:text-foreground transition-colors">
+            {t('Leaderboard', 'Clasificacion')}
+          </Link>
+          <Link href="/feed" className="hover:text-foreground transition-colors">
+            {t('Feed', 'Actividad')}
+          </Link>
           <Link href="/prompts" className="hover:text-foreground transition-colors">
             Prompts
           </Link>

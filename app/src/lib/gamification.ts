@@ -1,4 +1,4 @@
-import type { CompletedWorkout, ExerciseLogEntry } from '@/lib/storage';
+import type { CompletedWorkout, ExerciseLogEntry, PersonalRecord } from '@/lib/storage';
 
 // ── Types ──
 
@@ -173,4 +173,53 @@ export function calculateTotalXP(
   }
 
   return { totalXP, level: getLevelFromXP(totalXP) };
+}
+
+// ── PR Detection ──
+
+export function parseWeightKg(raw: string): number | null {
+  if (!raw || raw.trim() === '') return null;
+  const normalized = raw.trim().toLowerCase();
+  if (['bw', 'bodyweight', 'body weight', 'body', '-'].includes(normalized)) return null;
+  const match = normalized.match(/^([\d.]+)\s*(kg|lbs?|lb)?$/);
+  if (!match) return null;
+  const value = parseFloat(match[1]);
+  if (isNaN(value) || value <= 0) return null;
+  const unit = match[2] ?? 'kg';
+  if (unit === 'lbs' || unit === 'lb') {
+    return Math.round(value * 0.453592 * 100) / 100;
+  }
+  return value;
+}
+
+export function detectPR(
+  entry: { exerciseId: string; date: string; weight: string },
+  existingPR: PersonalRecord | null
+): PersonalRecord | null {
+  const weightKg = parseWeightKg(entry.weight);
+  if (weightKg === null) return null;
+  if (existingPR !== null && weightKg <= existingPR.weightKg) return null;
+  return {
+    exerciseId: entry.exerciseId,
+    weightKg,
+    weightRaw: entry.weight,
+    date: entry.date,
+    improvementKg: existingPR ? Math.round((weightKg - existingPR.weightKg) * 100) / 100 : undefined,
+  };
+}
+
+export function checkNewPRs(
+  logEntries: ExerciseLogEntry[],
+  currentPRs: PersonalRecord[]
+): PersonalRecord[] {
+  const newPRs: PersonalRecord[] = [];
+  const prMap = new Map(currentPRs.map(pr => [pr.exerciseId, pr]));
+  for (const entry of logEntries) {
+    const newPR = detectPR(entry, prMap.get(entry.exerciseId) ?? null);
+    if (newPR) {
+      newPRs.push(newPR);
+      prMap.set(entry.exerciseId, newPR);
+    }
+  }
+  return newPRs;
 }

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-06-PLAN.md (gamification integration — full pipeline wired)
-last_updated: "2026-03-10T16:12:50.802Z"
-last_activity: 2026-03-10 — Plan 01-03 complete (achievement definitions + evaluator)
+stopped_at: Completed 02-01-PLAN.md (profile page — BadgeGrid + /profile route)
+last_updated: "2026-03-10T16:24:11.140Z"
+last_activity: 2026-03-10 — Plan 02-02 complete (Profile nav link + history XP teaser)
 progress:
   total_phases: 3
-  completed_phases: 1
-  total_plans: 6
-  completed_plans: 6
-  percent: 83
+  completed_phases: 2
+  total_plans: 8
+  completed_plans: 8
+  percent: 89
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Make users WANT to come back daily by gamifying consistency and adding lightweight social proof
-**Current focus:** Phase 1 — Gamification Core
+**Current focus:** Phase 2 — Profile Page
 
 ## Current Position
 
-Phase: 1 of 3 (Gamification Core)
-Plan: 3 of 6 in current phase
+Phase: 2 of 3 (Profile Page)
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-03-10 — Plan 01-03 complete (achievement definitions + evaluator)
+Last activity: 2026-03-10 — Plan 02-02 complete (Profile nav link + history XP teaser)
 
-Progress: [████████░░] 83%
+Progress: [█████████░] 89%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [████████░░] 83%
 | Phase 01-gamification-core P04 | 3 | 2 tasks | 3 files |
 | Phase 01-gamification-core P05 | 1 | 2 tasks | 2 files |
 | Phase 01-gamification-core P06 | 2 | 2 tasks | 3 files |
+| Phase 02-profile-page P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 - [Phase 01-gamification-core]: 01-05: fire color uses inline style (not Tailwind) — dynamic hex values outside JIT purge scope
 - [Phase 01-gamification-core]: 01-05: at-risk detection runs in useEffect to avoid SSR hydration mismatch on time-based logic
 - [Phase 01-gamification-core]: 01-06: handleWorkoutComplete useCallback extracts full gamification pipeline; loadData after markWorkoutDone for streak accuracy; toast slice(0,3) head-dismiss pattern; grid-cols-1 sm:grid-cols-2 for responsive stats row
+- [Phase 02-profile-page]: 02-01: BadgeGrid accepts unlockedAchievements as prop — pure display component, no direct storage coupling
+- [Phase 02-profile-page]: 02-01: formatShortDate uses Date.UTC to avoid timezone off-by-one on YYYY-MM-DD string parsing
+- [Phase 02-profile-page]: 02-01: Completion rate uses days-since-first-workout (inclusive) as denominator, capped at 100%
 
 ### Pending Todos
 
@@ -93,6 +97,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:06:59.074Z
-Stopped at: Completed 01-06-PLAN.md (gamification integration — full pipeline wired)
+Last session: 2026-03-10T16:24:11.138Z
+Stopped at: Completed 02-01-PLAN.md (profile page — BadgeGrid + /profile route)
 Resume file: None

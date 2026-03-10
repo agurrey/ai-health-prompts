@@ -38,11 +38,11 @@
 
 ### Profile
 
-- [ ] **PRF-01**: User can view profile page with XP level, total XP, and progress bar
-- [ ] **PRF-02**: Profile shows achievement grid (unlocked = color + date, locked = grey + hint)
-- [ ] **PRF-03**: Profile shows top 5 personal records with exercise, weight, date
-- [ ] **PRF-04**: Profile shows stats grid (total workouts, this month, favorite type, completion rate)
-- [ ] **PRF-05**: Profile shows streak widget with current/longest streak and freeze tokens
+- [x] **PRF-01**: User can view profile page with XP level, total XP, and progress bar
+- [x] **PRF-02**: Profile shows achievement grid (unlocked = color + date, locked = grey + hint)
+- [x] **PRF-03**: Profile shows top 5 personal records with exercise, weight, date
+- [x] **PRF-04**: Profile shows stats grid (total workouts, this month, favorite type, completion rate)
+- [x] **PRF-05**: Profile shows streak widget with current/longest streak and freeze tokens
 
 ### Auth & Sync
 
@@ -121,11 +121,11 @@
 | STR-04 | Phase 1 | Complete |
 | MIG-01 | Phase 1 | Pending |
 | MIG-02 | Phase 1 | Pending |
-| PRF-01 | Phase 2 | Pending |
-| PRF-02 | Phase 2 | Pending |
-| PRF-03 | Phase 2 | Pending |
-| PRF-04 | Phase 2 | Pending |
-| PRF-05 | Phase 2 | Pending |
+| PRF-01 | Phase 2 | Complete |
+| PRF-02 | Phase 2 | Complete |
+| PRF-03 | Phase 2 | Complete |
+| PRF-04 | Phase 2 | Complete |
+| PRF-05 | Phase 2 | Complete |
 | AUTH-01 | Phase 3 | Pending |
 | AUTH-02 | Phase 3 | Pending |
 | AUTH-03 | Phase 3 | Pending |

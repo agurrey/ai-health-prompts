@@ -13,7 +13,7 @@ Three phases that layer naturally: first build the gamification engine entirely 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Gamification Core** - XP engine, achievements, PR detection, streak enhancement, and localStorage schema migration — zero external dependencies (completed 2026-03-10)
-- [ ] **Phase 2: Profile Page** - Dedicated profile page exposing all gamification data with visual polish
+- [x] **Phase 2: Profile Page** - Dedicated profile page exposing all gamification data with visual polish (completed 2026-03-10)
 - [ ] **Phase 3: Supabase + Community** - Optional auth, cloud sync, leaderboard, and activity feed
 
 ## Phase Details
@@ -74,5 +74,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Gamification Core | 6/6 | Complete   | 2026-03-10 |
-| 2. Profile Page | 0/2 | Not started | - |
+| 2. Profile Page | 2/2 | Complete   | 2026-03-10 |
 | 3. Supabase + Community | 0/TBD | Not started | - |

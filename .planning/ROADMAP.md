@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Storage v2 migration + XP/level engine (gamification.ts)
-- [ ] 01-02-PLAN.md — PR detection (parseWeightKg, detectPR) + streak freeze token logic
+- [x] 01-02-PLAN.md — PR detection (parseWeightKg, detectPR) + streak freeze token logic
 - [x] 01-03-PLAN.md — Achievement definitions + checkAchievements evaluator (achievements.ts)
 - [ ] 01-04-PLAN.md — Toast components (XPGainToast, AchievementToast) + CSS animations
 - [ ] 01-05-PLAN.md — XPBar + StreakWidget UI components
@@ -69,6 +69,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Gamification Core | 2/6 | In progress | - |
+| 1. Gamification Core | 3/6 | In progress | - |
 | 2. Profile Page | 0/TBD | Not started | - |
 | 3. Supabase + Community | 0/TBD | Not started | - |

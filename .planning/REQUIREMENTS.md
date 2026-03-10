@@ -25,16 +25,16 @@
 
 ### Personal Records
 
-- [ ] **PR-01**: App auto-detects weight PRs by parsing exercise log strings ("20kg", "45lbs")
-- [ ] **PR-02**: User sees toast + XP gain when setting a new PR
-- [ ] **PR-03**: PRs are tracked per exercise with weight, date, and improvement delta
+- [x] **PR-01**: App auto-detects weight PRs by parsing exercise log strings ("20kg", "45lbs")
+- [x] **PR-02**: User sees toast + XP gain when setting a new PR
+- [x] **PR-03**: PRs are tracked per exercise with weight, date, and improvement delta
 
 ### Streak Enhancement
 
 - [ ] **STR-01**: Streak fire icon with size/color progression (green → yellow → orange → red)
 - [ ] **STR-02**: User sees "Streak at risk!" warning after 18:00 if today not completed
-- [ ] **STR-03**: User earns streak freeze tokens (1 per 7-day streak, max 2 stored)
-- [ ] **STR-04**: Freeze token auto-activates to preserve streak for 1 missed day
+- [x] **STR-03**: User earns streak freeze tokens (1 per 7-day streak, max 2 stored)
+- [x] **STR-04**: Freeze token auto-activates to preserve streak for 1 missed day
 
 ### Profile
 
@@ -112,13 +112,13 @@
 | ACH-02 | Phase 1 | Pending |
 | ACH-03 | Phase 1 | Complete |
 | ACH-04 | Phase 1 | Complete |
-| PR-01 | Phase 1 | Pending |
-| PR-02 | Phase 1 | Pending |
-| PR-03 | Phase 1 | Pending |
+| PR-01 | Phase 1 | Complete |
+| PR-02 | Phase 1 | Complete |
+| PR-03 | Phase 1 | Complete |
 | STR-01 | Phase 1 | Pending |
 | STR-02 | Phase 1 | Pending |
-| STR-03 | Phase 1 | Pending |
-| STR-04 | Phase 1 | Pending |
+| STR-03 | Phase 1 | Complete |
+| STR-04 | Phase 1 | Complete |
 | MIG-01 | Phase 1 | Pending |
 | MIG-02 | Phase 1 | Pending |
 | PRF-01 | Phase 2 | Pending |

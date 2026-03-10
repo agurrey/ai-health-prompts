@@ -19,18 +19,18 @@ Progress: [██░░░░░░░░] 20%
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: 3 min
-- Total execution time: 0.17 hours
+- Total execution time: 0.22 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-gamification-core | 2 | 7 min | 3.5 min |
+| 01-gamification-core | 3 | 10 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-03 (2 min)
+- Last 5 plans: 01-01 (5 min), 01-03 (2 min), 01-02 (3 min)
 - Trend: -
 
 *Updated after each plan completion*
@@ -50,6 +50,10 @@ Recent decisions affecting current work:
 - 01-01: Streak bonus is 20*streakDay starting day 1 (first workout earns streak XP)
 - 01-01: migrateIfNeeded is a pure function — safe to call, always returns new object
 - 01-01: calculateTotalXP iterates chronologically slicing allWorkouts per iteration for streak accuracy
+- 01-02: getStreakFreezeState is pure (no storage imports) — avoids circular runtime dependency
+- 01-02: UTC dates throughout streak date math — local time parsing caused off-by-one on Madrid CET
+- 01-02: getStreak() extended return type { current, longest, freezeActive } — additive, backward compatible
+- 01-02: markWorkoutDone awards token on streak.current % 7 === 0, not === 7, to reward 14/21/28-day milestones
 - 01-03: community achievement reserved for Phase 3 — condition never evaluates true in Phase 1
 - 01-03: all-patterns simplified to >= 4 workouts in any Mon-Sun week
 - 01-03: full-cycle uses last-28-days window matching gamification.ts isMesocycleComplete pattern
@@ -66,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-10
-Stopped at: Completed 01-03-PLAN.md (achievement definitions + evaluator)
+Stopped at: Completed 01-02-PLAN.md (PR detection + streak freeze logic)
 Resume file: None

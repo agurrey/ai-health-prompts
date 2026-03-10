@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 03-04-PLAN.md (leaderboard page + LeagueSelector component)
-last_updated: "2026-03-10T21:24:15.152Z"
+stopped_at: Completed 03-05-PLAN.md (activity feed + kudos + nav integration)
+last_updated: "2026-03-10T21:25:13.783Z"
 last_activity: 2026-03-10 — Plan 02-02 complete (Profile nav link + history XP teaser)
 progress:
   total_phases: 3
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 13
-  completed_plans: 12
+  completed_plans: 13
   percent: 89
 ---
 
@@ -57,6 +57,7 @@ Progress: [█████████░] 89%
 | Phase 03-supabase-community P03 | 3 | 2 tasks | 2 files |
 | Phase 03-supabase-community P02 | 7 | 2 tasks | 4 files |
 | Phase 03-supabase-community P04 | 3 | 2 tasks | 2 files |
+| Phase 03-supabase-community P05 | 4 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Recent decisions affecting current work:
 - [Phase 03-supabase-community]: 03-02: CommunityBanner hides by default (useState=true) to prevent flash before getCommunityStatus() resolves
 - [Phase 03-supabase-community]: LeagueSelector is pure controlled component — parent owns selectedLeague state, no internal state
 - [Phase 03-supabase-community]: getAuthUser imported from supabase.ts not auth.ts — function lives in supabase module
+- [Phase 03-supabase-community]: 03-05: FeedItem never renders weights/times/kg/lbs — event_data only exposes exercise_name for PR events (privacy by design)
+- [Phase 03-supabase-community]: 03-05: Kudos optimistic update reverts on any insert error — prevents phantom kudos in UI
 
 ### Pending Todos
 
@@ -111,6 +114,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T21:24:15.150Z
-Stopped at: Completed 03-04-PLAN.md (leaderboard page + LeagueSelector component)
+Last session: 2026-03-10T21:25:13.781Z
+Stopped at: Completed 03-05-PLAN.md (activity feed + kudos + nav integration)
 Resume file: None

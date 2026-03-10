@@ -60,9 +60,9 @@
 - [x] **COM-01**: User can set username when upgrading to public profile
 - [x] **COM-02**: Weekly leaderboard shows top 20 in user's XP league (workouts/week, Mon-Sun)
 - [x] **COM-03**: Leaderboard has 4 leagues: Bronze (level 1-3), Silver (4-6), Gold (7-10), Platinum (11+)
-- [ ] **COM-04**: Activity feed shows public workout completions, achievements, and PRs
-- [ ] **COM-05**: User can give kudos (fist-bump) on feed items (1 per user per item)
-- [ ] **COM-06**: Feed shows WHAT people did, never HOW MUCH (no weights/times displayed)
+- [x] **COM-04**: Activity feed shows public workout completions, achievements, and PRs
+- [x] **COM-05**: User can give kudos (fist-bump) on feed items (1 per user per item)
+- [x] **COM-06**: Feed shows WHAT people did, never HOW MUCH (no weights/times displayed)
 
 ### Storage Migration
 
@@ -136,9 +136,9 @@
 | COM-01 | Phase 3 | Complete |
 | COM-02 | Phase 3 | Complete |
 | COM-03 | Phase 3 | Complete |
-| COM-04 | Phase 3 | Pending |
-| COM-05 | Phase 3 | Pending |
-| COM-06 | Phase 3 | Pending |
+| COM-04 | Phase 3 | Complete |
+| COM-05 | Phase 3 | Complete |
+| COM-06 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 40 total

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useI18n } from '@/lib/i18n';
 import Calendar from '@/components/Calendar';
 import {
@@ -8,7 +9,10 @@ import {
   getStreak,
   exportData,
   importData,
+  getXP,
+  getFreezeTokens,
 } from '@/lib/storage';
+import { xpForLevel } from '@/lib/gamification';
 
 export default function HistoryPage() {
   const { t } = useI18n();
@@ -17,12 +21,16 @@ export default function HistoryPage() {
   const [streak, setStreak] = useState({ current: 0, longest: 0 });
   const [totalWorkouts, setTotalWorkouts] = useState(0);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [xpData, setXpData] = useState<{ xp: number; xpLevel: number }>({ xp: 0, xpLevel: 1 });
+  const [freezeTokens, setFreezeTokens] = useState(0);
 
   useEffect(() => {
     const dates = getCompletedDates();
     setCompletedDates(new Set(dates));
     setTotalWorkouts(dates.length);
     setStreak(getStreak());
+    setXpData(getXP());
+    setFreezeTokens(getFreezeTokens());
   }, []);
 
   // Count this month
@@ -71,11 +79,23 @@ export default function HistoryPage() {
 
       <Calendar completedDates={completedDates} />
 
+      {/* XP teaser */}
+      <Link href="/profile" className="block border border-border rounded-lg p-4 bg-card hover:bg-zinc-800 transition-colors">
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-fuchsia-400 font-bold">Level {xpData.xpLevel}</span>
+            <span className="text-muted text-sm ml-2">{xpData.xp} XP</span>
+          </div>
+          <span className="text-muted text-sm">{t('View Profile', 'Ver Perfil')} &rarr;</span>
+        </div>
+      </Link>
+
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3">
         <div className="border border-border rounded-lg p-4 bg-card text-center">
           <p className="text-2xl font-bold text-accent">{streak.current}</p>
           <p className="text-xs text-muted">{t('Current Streak', 'Racha Actual')}</p>
+          {freezeTokens > 0 && <span className="text-blue-400 text-xs">{'❄️'.repeat(freezeTokens)}</span>}
         </div>
         <div className="border border-border rounded-lg p-4 bg-card text-center">
           <p className="text-2xl font-bold text-foreground">{streak.longest}</p>

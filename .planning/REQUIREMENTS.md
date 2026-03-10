@@ -31,8 +31,8 @@
 
 ### Streak Enhancement
 
-- [ ] **STR-01**: Streak fire icon with size/color progression (green → yellow → orange → red)
-- [ ] **STR-02**: User sees "Streak at risk!" warning after 18:00 if today not completed
+- [x] **STR-01**: Streak fire icon with size/color progression (green → yellow → orange → red)
+- [x] **STR-02**: User sees "Streak at risk!" warning after 18:00 if today not completed
 - [x] **STR-03**: User earns streak freeze tokens (1 per 7-day streak, max 2 stored)
 - [x] **STR-04**: Freeze token auto-activates to preserve streak for 1 missed day
 
@@ -115,8 +115,8 @@
 | PR-01 | Phase 1 | Complete |
 | PR-02 | Phase 1 | Complete |
 | PR-03 | Phase 1 | Complete |
-| STR-01 | Phase 1 | Pending |
-| STR-02 | Phase 1 | Pending |
+| STR-01 | Phase 1 | Complete |
+| STR-02 | Phase 1 | Complete |
 | STR-03 | Phase 1 | Complete |
 | STR-04 | Phase 1 | Complete |
 | MIG-01 | Phase 1 | Pending |

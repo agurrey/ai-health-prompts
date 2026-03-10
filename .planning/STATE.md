@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Completed 01-04-PLAN.md (toast components: XPGainToast + AchievementToast)"
-last_updated: "2026-03-10T16:01:53.425Z"
+stopped_at: Completed 01-05-PLAN.md (XPBar + StreakWidget components)
+last_updated: "2026-03-10T16:02:03.868Z"
 last_activity: 2026-03-10 — Plan 01-03 complete (achievement definitions + evaluator)
 progress:
   total_phases: 3
@@ -77,6 +77,8 @@ Recent decisions affecting current work:
 - 01-03: full-cycle uses last-28-days window matching gamification.ts isMesocycleComplete pattern
 - [Phase 01-gamification-core]: 01-04: exerciseName passed as prop to AchievementToast — exerciseId in PR, display name resolved by caller
 - [Phase 01-gamification-core]: 01-04: XPGainToast 3s dismiss, AchievementToast 4s — achievement needs more read time
+- [Phase 01-gamification-core]: 01-05: fire color uses inline style (not Tailwind) — dynamic hex values outside JIT purge scope
+- [Phase 01-gamification-core]: 01-05: at-risk detection runs in useEffect to avoid SSR hydration mismatch on time-based logic
 
 ### Pending Todos
 
@@ -89,6 +91,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:01:37.534Z
-Stopped at: Completed 01-04-PLAN.md (toast components: XPGainToast + AchievementToast)
+Last session: 2026-03-10T16:02:03.866Z
+Stopped at: Completed 01-05-PLAN.md (XPBar + StreakWidget components)
 Resume file: None

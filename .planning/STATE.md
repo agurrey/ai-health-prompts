@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Completed 03-02-PLAN.md (auth flow: anonymous join + email upgrade + username claiming)"
-last_updated: "2026-03-10T21:17:54.468Z"
+stopped_at: Completed 03-04-PLAN.md (leaderboard page + LeagueSelector component)
+last_updated: "2026-03-10T21:24:15.152Z"
 last_activity: 2026-03-10 — Plan 02-02 complete (Profile nav link + history XP teaser)
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 12
   percent: 89
 ---
 
@@ -56,6 +56,7 @@ Progress: [█████████░] 89%
 | Phase 02-profile-page P01 | 2 | 2 tasks | 2 files |
 | Phase 03-supabase-community P03 | 3 | 2 tasks | 2 files |
 | Phase 03-supabase-community P02 | 7 | 2 tasks | 4 files |
+| Phase 03-supabase-community P04 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,8 @@ Recent decisions affecting current work:
 - [Phase 03-supabase-community]: 03-02: getCommunityStatus() is single source of truth — returns none|anonymous|verified|member based on auth session + profile row
 - [Phase 03-supabase-community]: 03-02: Magic link flow: upgradeToEmail sends link first, username claimed on next session after verification
 - [Phase 03-supabase-community]: 03-02: CommunityBanner hides by default (useState=true) to prevent flash before getCommunityStatus() resolves
+- [Phase 03-supabase-community]: LeagueSelector is pure controlled component — parent owns selectedLeague state, no internal state
+- [Phase 03-supabase-community]: getAuthUser imported from supabase.ts not auth.ts — function lives in supabase module
 
 ### Pending Todos
 
@@ -108,6 +111,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T21:17:54.465Z
-Stopped at: Completed 03-02-PLAN.md (auth flow: anonymous join + email upgrade + username claiming)
+Last session: 2026-03-10T21:24:15.150Z
+Stopped at: Completed 03-04-PLAN.md (leaderboard page + LeagueSelector component)
 Resume file: None

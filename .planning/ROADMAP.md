@@ -82,4 +82,4 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Gamification Core | 6/6 | Complete   | 2026-03-10 |
 | 2. Profile Page | 2/2 | Complete   | 2026-03-10 |
-| 3. Supabase + Community | 3/5 | In Progress|  |
+| 3. Supabase + Community | 4/5 | In Progress|  |

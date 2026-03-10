@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-02-PLAN.md (nav + history enhancements — profile discoverability)
-last_updated: "2026-03-10T16:28:57.977Z"
+stopped_at: "Completed 03-02-PLAN.md (auth flow: anonymous join + email upgrade + username claiming)"
+last_updated: "2026-03-10T21:17:54.468Z"
 last_activity: 2026-03-10 — Plan 02-02 complete (Profile nav link + history XP teaser)
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 13
+  completed_plans: 11
   percent: 89
 ---
 
@@ -54,6 +54,8 @@ Progress: [█████████░] 89%
 | Phase 01-gamification-core P05 | 1 | 2 tasks | 2 files |
 | Phase 01-gamification-core P06 | 2 | 2 tasks | 3 files |
 | Phase 02-profile-page P01 | 2 | 2 tasks | 2 files |
+| Phase 03-supabase-community P03 | 3 | 2 tasks | 2 files |
+| Phase 03-supabase-community P02 | 7 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -88,6 +90,12 @@ Recent decisions affecting current work:
 - [Phase 02-profile-page]: 02-02: Profile link placed between History and Prompts — groups activity-related nav items together
 - [Phase 02-profile-page]: 02-02: XP teaser card between calendar and stats grid — above the fold on mobile, drives profile discoverability
 - [Phase 02-profile-page]: 02-02: Freeze tokens use repeat snowflake emoji — simple, expressive, consistent with plan spec
+- [Phase 03-supabase-community]: isCommunityUser() is async — storage.ts triggers use .then() chain to stay non-blocking
+- [Phase 03-supabase-community]: postFeedEvent checks is_public profile before inserting — opt-in privacy by default
+- [Phase 03-supabase-community]: drainSyncQueue discards items after 5 retries — prevents infinite queue growth
+- [Phase 03-supabase-community]: 03-02: getCommunityStatus() is single source of truth — returns none|anonymous|verified|member based on auth session + profile row
+- [Phase 03-supabase-community]: 03-02: Magic link flow: upgradeToEmail sends link first, username claimed on next session after verification
+- [Phase 03-supabase-community]: 03-02: CommunityBanner hides by default (useState=true) to prevent flash before getCommunityStatus() resolves
 
 ### Pending Todos
 
@@ -100,6 +108,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:25:00.000Z
-Stopped at: Completed 02-02-PLAN.md (nav + history enhancements — profile discoverability)
+Last session: 2026-03-10T21:17:54.465Z
+Stopped at: Completed 03-02-PLAN.md (auth flow: anonymous join + email upgrade + username claiming)
 Resume file: None

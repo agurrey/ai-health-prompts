@@ -50,9 +50,9 @@
 - [ ] **AUTH-02**: User can upgrade to email/magic link to claim username and public profile
 - [ ] **AUTH-03**: Supabase client dynamically imported only when user opts in (~45KB)
 
-- [ ] **SYNC-01**: Workout data syncs to Supabase with last-write-wins strategy
-- [ ] **SYNC-02**: Failed sync writes queue to localStorage and drain on reconnect
-- [ ] **SYNC-03**: App handles Supabase auto-pause with wake-up ping + "Connecting..." state
+- [x] **SYNC-01**: Workout data syncs to Supabase with last-write-wins strategy
+- [x] **SYNC-02**: Failed sync writes queue to localStorage and drain on reconnect
+- [x] **SYNC-03**: App handles Supabase auto-pause with wake-up ping + "Connecting..." state
 - [ ] **SYNC-04**: localStorage remains source of truth — app works fully offline
 
 ### Community
@@ -129,9 +129,9 @@
 | AUTH-01 | Phase 3 | Pending |
 | AUTH-02 | Phase 3 | Pending |
 | AUTH-03 | Phase 3 | Pending |
-| SYNC-01 | Phase 3 | Pending |
-| SYNC-02 | Phase 3 | Pending |
-| SYNC-03 | Phase 3 | Pending |
+| SYNC-01 | Phase 3 | Complete |
+| SYNC-02 | Phase 3 | Complete |
+| SYNC-03 | Phase 3 | Complete |
 | SYNC-04 | Phase 3 | Pending |
 | COM-01 | Phase 3 | Pending |
 | COM-02 | Phase 3 | Pending |

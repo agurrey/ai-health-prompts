@@ -12,7 +12,6 @@ import {
   getXP,
   getFreezeTokens,
 } from '@/lib/storage';
-import { xpForLevel } from '@/lib/gamification';
 
 export default function HistoryPage() {
   const { t } = useI18n();

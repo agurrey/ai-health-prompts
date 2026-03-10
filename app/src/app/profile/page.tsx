@@ -13,7 +13,6 @@ import {
   PersonalRecord,
   CompletedWorkout,
 } from '@/lib/storage';
-import { xpForLevel } from '@/lib/gamification';
 import { ACHIEVEMENTS } from '@/lib/achievements';
 import { exercises } from '@/data/exercises';
 import XPBar from '@/components/XPBar';

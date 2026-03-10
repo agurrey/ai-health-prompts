@@ -3,6 +3,7 @@
 import { useI18n } from '@/lib/i18n';
 import type { FeedItem as FeedItemType } from '@/lib/types/community';
 import { ACHIEVEMENTS } from '@/lib/achievements';
+import { exercises } from '@/data/exercises';
 
 interface FeedItemProps {
   item: FeedItemType;
@@ -58,7 +59,9 @@ function EventText({ item, lang }: { item: FeedItemType; lang: string }) {
       );
     }
     case 'pr': {
-      const exerciseName = item.event_data.exercise_name as string | undefined;
+      const exerciseId = item.event_data.exercise_id as string | undefined;
+      const exercise = exerciseId ? exercises.find(e => e.id === exerciseId) : undefined;
+      const exerciseName = exercise?.name ?? (item.event_data.exercise_name as string | undefined);
       return lang === 'es' ? (
         <span><span className="font-medium text-foreground">{username}</span> <span className="text-muted">establecio un nuevo record personal{exerciseName ? ` en ${exerciseName}` : ''}!</span></span>
       ) : (

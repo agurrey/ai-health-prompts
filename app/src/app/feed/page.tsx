@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useI18n } from '@/lib/i18n';
-import { getSupabase, getAuthUser } from '@/lib/supabase';
+import { getSupabase, getAuthUser, pingSupabase } from '@/lib/supabase';
 import { getCommunityStatus } from '@/lib/auth';
 import CommunityBanner from '@/components/CommunityBanner';
 import FeedItemCard from '@/components/FeedItem';
@@ -64,6 +64,7 @@ export default function FeedPage() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [canKudos, setCanKudos] = useState(false);
+  const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
     getCommunityStatus().then(s => {
@@ -78,6 +79,9 @@ export default function FeedPage() {
   }, []);
 
   const fetchItems = useCallback(async (off: number, userId: string | null) => {
+    setConnecting(true);
+    await pingSupabase();
+    setConnecting(false);
     const sb = await getSupabase();
     if (!sb) return { rows: [], total: 0 };
 
@@ -183,6 +187,12 @@ export default function FeedPage() {
       <h1 className="text-2xl font-bold text-foreground">
         {t('Activity Feed', 'Actividad')}
       </h1>
+
+      {connecting && (
+        <p className="text-xs text-muted text-center py-2 animate-pulse">
+          {t('Connecting to community...', 'Conectando a la comunidad...')}
+        </p>
+      )}
 
       {!canKudos && status === 'ready' && (
         <p className="text-xs text-muted bg-card border border-border rounded-lg px-3 py-2">

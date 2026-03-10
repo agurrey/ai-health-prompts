@@ -1,7 +1,8 @@
 import type { Level, Equipment } from '@/data/exercises';
+import { calculateTotalXP } from '@/lib/gamification';
 
 const STORAGE_KEY = 'hormesis_data';
-const CURRENT_VERSION = 1;
+const CURRENT_VERSION = 2;
 
 export interface CompletedWorkout {
   date: string;
@@ -19,12 +20,31 @@ export interface ExerciseLogEntry {
   notes?: string;
 }
 
+export interface PersonalRecord {
+  exerciseId: string;
+  weightKg: number;
+  weightRaw: string;
+  date: string;
+  improvementKg?: number;
+}
+
+export interface AchievementUnlock {
+  id: string;
+  unlockedAt: string;
+}
+
 interface HormesisData {
   version: number;
   level: Level;
   equipment?: Equipment[];
   completedWorkouts: CompletedWorkout[];
   exerciseLog: ExerciseLogEntry[];
+  // v2 additions:
+  xp: number;
+  xpLevel: number;
+  achievements: AchievementUnlock[];
+  personalRecords: PersonalRecord[];
+  freezeTokens: number;
 }
 
 function defaultData(): HormesisData {
@@ -33,6 +53,26 @@ function defaultData(): HormesisData {
     level: 2,
     completedWorkouts: [],
     exerciseLog: [],
+    xp: 0,
+    xpLevel: 0,
+    achievements: [],
+    personalRecords: [],
+    freezeTokens: 0,
+  };
+}
+
+function migrateIfNeeded(data: HormesisData): HormesisData {
+  if (data.version >= 2) return data;
+  // v1 → v2: add gamification fields, retroactively compute XP
+  const { totalXP, level } = calculateTotalXP(data.completedWorkouts, data.exerciseLog);
+  return {
+    ...data,
+    version: 2,
+    xp: totalXP,
+    xpLevel: level,
+    achievements: [],
+    personalRecords: [],
+    freezeTokens: 0,
   };
 }
 
@@ -43,7 +83,11 @@ export function loadData(): HormesisData {
     if (!raw) return defaultData();
     const parsed = JSON.parse(raw) as HormesisData;
     if (!parsed.version) return defaultData();
-    return parsed;
+    const migrated = migrateIfNeeded(parsed);
+    if (migrated.version !== parsed.version) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+    }
+    return migrated;
   } catch {
     return defaultData();
   }
@@ -193,9 +237,61 @@ export function importData(json: string): boolean {
     if (!data.version || !Array.isArray(data.completedWorkouts) || !Array.isArray(data.exerciseLog)) {
       return false;
     }
+    // Accept both v1 and v2 imports — migrate if needed on next loadData()
     saveData(data);
     return true;
   } catch {
     return false;
   }
+}
+
+export function getXP(): { xp: number; xpLevel: number } {
+  const data = loadData();
+  return { xp: data.xp, xpLevel: data.xpLevel };
+}
+
+export function addXP(amount: number, newLevel: number): void {
+  const data = loadData();
+  data.xp = (data.xp ?? 0) + amount;
+  data.xpLevel = newLevel;
+  saveData(data);
+}
+
+export function getAchievements(): AchievementUnlock[] {
+  return loadData().achievements ?? [];
+}
+
+export function addAchievement(id: string): void {
+  const data = loadData();
+  if (!data.achievements) data.achievements = [];
+  if (!data.achievements.some(a => a.id === id)) {
+    data.achievements.push({ id, unlockedAt: new Date().toISOString().slice(0, 10) });
+    saveData(data);
+  }
+}
+
+export function getPersonalRecords(): PersonalRecord[] {
+  return loadData().personalRecords ?? [];
+}
+
+export function savePersonalRecord(pr: PersonalRecord): void {
+  const data = loadData();
+  if (!data.personalRecords) data.personalRecords = [];
+  const idx = data.personalRecords.findIndex(r => r.exerciseId === pr.exerciseId);
+  if (idx >= 0) {
+    data.personalRecords[idx] = pr;
+  } else {
+    data.personalRecords.push(pr);
+  }
+  saveData(data);
+}
+
+export function getFreezeTokens(): number {
+  return loadData().freezeTokens ?? 0;
+}
+
+export function setFreezeTokens(count: number): void {
+  const data = loadData();
+  data.freezeTokens = Math.min(2, Math.max(0, count));
+  saveData(data);
 }

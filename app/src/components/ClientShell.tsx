@@ -22,6 +22,9 @@ function Nav() {
           <Link href="/history" className="hover:text-foreground transition-colors">
             {t('History', 'Historial')}
           </Link>
+          <Link href="/profile" className="hover:text-foreground transition-colors">
+            {t('Profile', 'Perfil')}
+          </Link>
           <Link href="/prompts" className="hover:text-foreground transition-colors">
             Prompts
           </Link>

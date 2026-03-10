@@ -51,8 +51,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — BadgeGrid component + full /profile page with all gamification data
-- [ ] 02-02-PLAN.md — Profile nav link in ClientShell + history page XP teaser and enhancements
+- [x] 02-01-PLAN.md — BadgeGrid component + full /profile page with all gamification data
+- [x] 02-02-PLAN.md — Profile nav link in ClientShell + history page XP teaser and enhancements
 
 ### Phase 3: Supabase + Community
 **Goal**: Users can optionally join the community — anonymous or with email — sync their data to the cloud, compete on a weekly leaderboard, and see/give kudos in an activity feed
@@ -64,7 +64,14 @@ Plans:
   3. User's workout data syncs in the background; app works fully offline and recovers gracefully from Supabase auto-pause
   4. User sees a weekly leaderboard showing the top 20 in their XP league, resetting every Monday
   5. User sees an activity feed of public workout completions and achievements, and can give one kudos per item — weights and times are never shown
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Supabase client singleton (dynamic import) + community types + SQL migration
+- [ ] 03-02-PLAN.md — Auth flow: anonymous join + email upgrade + username claiming
+- [ ] 03-03-PLAN.md — Offline-first sync engine with queue, merge, and auto-pause recovery
+- [ ] 03-04-PLAN.md — Weekly leaderboard page with league tabs and Monday reset
+- [ ] 03-05-PLAN.md — Activity feed + kudos + nav links + profile community integration
 
 ## Progress
 
@@ -75,4 +82,4 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Gamification Core | 6/6 | Complete   | 2026-03-10 |
 | 2. Profile Page | 2/2 | Complete   | 2026-03-10 |
-| 3. Supabase + Community | 0/TBD | Not started | - |
+| 3. Supabase + Community | 0/5 | Not started | - |

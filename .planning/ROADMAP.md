@@ -28,7 +28,15 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User unlocks an achievement and sees a bilingual badge notification
   4. Streak fire icon changes color/size as streak grows, and shows "at risk" warning after 18:00 on incomplete days
   5. Existing users open the app after update and all previous workout history is intact with XP retroactively calculated
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Storage v2 migration + XP/level engine (gamification.ts)
+- [ ] 01-02-PLAN.md — PR detection (parseWeightKg, detectPR) + streak freeze token logic
+- [ ] 01-03-PLAN.md — Achievement definitions + checkAchievements evaluator (achievements.ts)
+- [ ] 01-04-PLAN.md — Toast components (XPGainToast, AchievementToast) + CSS animations
+- [ ] 01-05-PLAN.md — XPBar + StreakWidget UI components
+- [ ] 01-06-PLAN.md — Wire gamification into workout completion flow + mount on homepage
 
 ### Phase 2: Profile Page
 **Goal**: Users can navigate to a profile page that surfaces all gamification data — XP level, achievements, PRs, streak, and stats — in a coherent visual layout
@@ -61,6 +69,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Gamification Core | 0/TBD | Not started | - |
+| 1. Gamification Core | 0/6 | Not started | - |
 | 2. Profile Page | 0/TBD | Not started | - |
 | 3. Supabase + Community | 0/TBD | Not started | - |

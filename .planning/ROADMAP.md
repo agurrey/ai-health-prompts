@@ -34,9 +34,9 @@ Plans:
 - [x] 01-01-PLAN.md — Storage v2 migration + XP/level engine (gamification.ts)
 - [x] 01-02-PLAN.md — PR detection (parseWeightKg, detectPR) + streak freeze token logic
 - [x] 01-03-PLAN.md — Achievement definitions + checkAchievements evaluator (achievements.ts)
-- [ ] 01-04-PLAN.md — Toast components (XPGainToast, AchievementToast) + CSS animations
-- [ ] 01-05-PLAN.md — XPBar + StreakWidget UI components
-- [ ] 01-06-PLAN.md — Wire gamification into workout completion flow + mount on homepage
+- [x] 01-04-PLAN.md — Toast components (XPGainToast, AchievementToast) + CSS animations
+- [x] 01-05-PLAN.md — XPBar + StreakWidget UI components
+- [x] 01-06-PLAN.md — Wire gamification into workout completion flow + mount on homepage
 
 ### Phase 2: Profile Page
 **Goal**: Users can navigate to a profile page that surfaces all gamification data — XP level, achievements, PRs, streak, and stats — in a coherent visual layout
@@ -48,7 +48,11 @@ Plans:
   3. User sees top 5 personal records showing exercise name, weight, and date
   4. User sees stats grid with total workouts, this-month count, favorite workout type, and completion rate
   5. User sees streak widget showing current streak, longest streak, and available freeze tokens
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — BadgeGrid component + full /profile page with all gamification data
+- [ ] 02-02-PLAN.md — Profile nav link in ClientShell + history page XP teaser and enhancements
 
 ### Phase 3: Supabase + Community
 **Goal**: Users can optionally join the community — anonymous or with email — sync their data to the cloud, compete on a weekly leaderboard, and see/give kudos in an activity feed
@@ -70,5 +74,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Gamification Core | 6/6 | Complete   | 2026-03-10 |
-| 2. Profile Page | 0/TBD | Not started | - |
+| 2. Profile Page | 0/2 | Not started | - |
 | 3. Supabase + Community | 0/TBD | Not started | - |

@@ -54,15 +54,15 @@ export default function Calendar({ completedDates }: Props) {
     <div>
       {/* Month nav */}
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prev} className="px-3 py-1 text-muted hover:text-foreground transition-colors cursor-pointer">&larr;</button>
-        <span className="text-foreground font-medium">{monthNames[month]} {year}</span>
-        <button onClick={next} className="px-3 py-1 text-muted hover:text-foreground transition-colors cursor-pointer">&rarr;</button>
+        <button onClick={prev} className="px-3 py-1.5 rounded-xl text-muted hover:text-foreground hover:bg-card-elevated transition-all cursor-pointer font-bold">&larr;</button>
+        <span className="text-foreground font-bold">{monthNames[month]} {year}</span>
+        <button onClick={next} className="px-3 py-1.5 rounded-xl text-muted hover:text-foreground hover:bg-card-elevated transition-all cursor-pointer font-bold">&rarr;</button>
       </div>
 
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-1 mb-1">
         {dayNames.map((d) => (
-          <div key={d} className="text-center text-xs text-muted py-1">{d}</div>
+          <div key={d} className="text-center text-xs text-muted font-semibold py-1">{d}</div>
         ))}
       </div>
 
@@ -79,15 +79,15 @@ export default function Calendar({ completedDates }: Props) {
             <button
               key={i}
               onClick={() => setSelected(isSel ? null : dateStr)}
-              className={`aspect-square flex items-center justify-center rounded-lg text-sm transition-colors cursor-pointer relative
-                ${done ? 'bg-accent/20 text-accent font-bold' : 'text-muted hover:bg-zinc-800'}
-                ${isToday ? 'ring-1 ring-accent' : ''}
+              className={`aspect-square flex items-center justify-center rounded-xl text-sm font-semibold transition-all cursor-pointer relative
+                ${done ? 'bg-success/20 text-success font-bold' : 'text-muted hover:bg-card-elevated'}
+                ${isToday ? 'ring-2 ring-accent' : ''}
                 ${isSel ? 'ring-2 ring-foreground' : ''}
               `}
             >
               {day}
               {done && (
-                <span className="absolute bottom-0.5 w-1.5 h-1.5 rounded-full bg-accent" />
+                <span className="absolute bottom-0.5 w-1.5 h-1.5 rounded-full bg-success" />
               )}
             </button>
           );
@@ -96,9 +96,9 @@ export default function Calendar({ completedDates }: Props) {
 
       {/* Selected day info */}
       {selected && selectedWorkout && (
-        <div className="mt-4 p-3 rounded-lg bg-card border border-border text-sm animate-fade-up">
-          <p className="text-foreground font-medium">{selectedWorkout.sessionType}</p>
-          <p className="text-muted text-xs mt-1">
+        <div className="mt-4 p-4 rounded-2xl bg-card border-2 border-border text-sm animate-fade-up">
+          <p className="text-foreground font-bold">{selectedWorkout.sessionType}</p>
+          <p className="text-muted text-xs font-semibold mt-1">
             {t('Completed', 'Completado')} {new Date(selectedWorkout.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </p>
         </div>

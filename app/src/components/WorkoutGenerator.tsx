@@ -10,6 +10,7 @@ import { useI18n } from '@/lib/i18n';
 import { getLevel, setLevel as persistLevel, getEquipment, setEquipment as persistEquipment, getLastLog, isWorkoutDone, type ExerciseLogEntry } from '@/lib/storage';
 import WorkoutDisplay from './WorkoutDisplay';
 import EquipmentSetup from './EquipmentSetup';
+import CatMascot from './CatMascot';
 
 const LEVELS: { value: Level; en: string; es: string }[] = [
   { value: 1, en: 'Beginner', es: 'Principiante' },
@@ -180,7 +181,14 @@ export default function WorkoutGenerator() {
   }
 
   if (needsSetup) {
-    return <EquipmentSetup onSave={handleEquipmentSave} />;
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-center">
+          <CatMascot pose="stretching" size={100} />
+        </div>
+        <EquipmentSetup onSave={handleEquipmentSave} />
+      </div>
+    );
   }
 
   if (showEquipmentSettings) {
@@ -202,20 +210,25 @@ export default function WorkoutGenerator() {
     );
   }
 
-  if (!session) return null;
+  if (!session) return (
+    <div className="flex flex-col items-center gap-2 py-8">
+      <CatMascot pose="warmup" size={80} />
+      <p className="text-muted text-sm font-semibold">{t('Loading...', 'Cargando...')}</p>
+    </div>
+  );
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center gap-2">
-        <div className="flex gap-1 p-1 bg-zinc-800 rounded-lg">
+        <div className="flex gap-1 p-1 bg-card rounded-2xl border-2 border-border">
           {LEVELS.map((l) => (
             <button
               key={l.value}
               onClick={() => setLevel(l.value)}
-              className={`px-4 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
                 level === l.value
-                  ? 'bg-accent text-background'
-                  : 'text-muted hover:text-foreground'
+                  ? 'bg-accent/20 text-accent border-2 border-accent'
+                  : 'text-muted hover:text-foreground border-2 border-transparent'
               }`}
             >
               {t(l.en, l.es)}
@@ -224,7 +237,7 @@ export default function WorkoutGenerator() {
         </div>
         <button
           onClick={() => setShowEquipmentSettings(true)}
-          className="p-2 rounded-lg text-muted hover:text-foreground hover:bg-zinc-800 transition-colors cursor-pointer"
+          className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-card-elevated transition-colors cursor-pointer"
           aria-label={t('Equipment settings', 'Configurar equipamiento')}
           title={t('Equipment', 'Equipamiento')}
         >
@@ -239,7 +252,7 @@ export default function WorkoutGenerator() {
       <div className="flex items-center justify-center gap-3">
         <button
           onClick={handlePrev}
-          className="p-2 rounded-lg text-muted hover:text-foreground hover:bg-zinc-800 transition-colors cursor-pointer"
+          className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-card-elevated transition-colors cursor-pointer"
           aria-label={t('Previous day', 'Dia anterior')}
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -263,10 +276,10 @@ export default function WorkoutGenerator() {
         <button
           onClick={handleNext}
           disabled={!canGoNext}
-          className={`p-2 rounded-lg transition-colors ${
+          className={`p-2 rounded-xl transition-colors ${
             canGoNext
-              ? 'text-muted hover:text-foreground hover:bg-zinc-800 cursor-pointer'
-              : 'text-zinc-700 cursor-not-allowed'
+              ? 'text-muted hover:text-foreground hover:bg-card-elevated cursor-pointer'
+              : 'text-muted/30 cursor-not-allowed'
           }`}
           aria-label={
             nextLocked
@@ -294,7 +307,7 @@ export default function WorkoutGenerator() {
 
       {/* Lock hint */}
       {nextLocked && isToday && (
-        <p className="text-center text-zinc-600 text-xs">
+        <p className="text-center text-muted/50 text-xs font-semibold">
           {t('Complete today to peek tomorrow', 'Completa hoy para ver mañana')}
         </p>
       )}
@@ -304,7 +317,7 @@ export default function WorkoutGenerator() {
         <div className="flex justify-center">
           <button
             onClick={handleToday}
-            className="px-3 py-1.5 text-xs font-medium text-accent border border-accent/30 rounded-lg hover:bg-accent/10 transition-colors cursor-pointer"
+            className="px-3 py-1.5 text-xs font-semibold text-accent border-2 border-accent/30 rounded-xl hover:bg-accent/10 transition-colors cursor-pointer"
           >
             {t('Back to today', 'Volver a hoy')}
           </button>
@@ -313,8 +326,8 @@ export default function WorkoutGenerator() {
 
       {/* Future badge */}
       {isFuture && (
-        <div className="text-center px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-          <p className="text-zinc-500 text-xs">
+        <div className="text-center px-4 py-2 rounded-2xl bg-card border-2 border-border">
+          <p className="text-muted text-xs font-semibold">
             {t('Preview — read only', 'Vista previa — solo lectura')}
           </p>
         </div>

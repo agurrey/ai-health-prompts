@@ -26,7 +26,7 @@ function DemoLink({ search, label }: { search: string; label: string }) {
       href={`https://www.youtube.com/results?search_query=${encodeURIComponent(search)}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded bg-zinc-800 text-zinc-400 text-xs hover:text-zinc-200 transition-colors"
+      className="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-xl bg-card-elevated text-muted text-xs font-semibold hover:text-foreground transition-colors"
     >
       <YTIcon />
       {label}
@@ -151,7 +151,7 @@ export default function WorkoutDisplay({
   return (
     <div className="font-mono text-sm leading-relaxed space-y-6">
       {/* Phase banner */}
-      <a href="/program" className="block text-center px-4 py-2.5 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20 hover:bg-fuchsia-500/15 transition-colors">
+      <a href="/program" className="block text-center px-4 py-2.5 rounded-2xl bg-fuchsia-500/10 border-2 border-fuchsia-500/20 hover:bg-fuchsia-500/15 transition-colors">
         <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider">
           {lang === 'es' ? session.phase.label_es : session.phase.label}
           <span className="text-fuchsia-400/50 font-normal ml-1.5">
@@ -166,7 +166,7 @@ export default function WorkoutDisplay({
 
       {/* Header */}
       <div className="text-center space-y-1">
-        <h2 className="text-2xl font-bold text-foreground">
+        <h2 className="text-2xl font-extrabold text-foreground">
           {lang === 'es' ? session.sessionType_es : session.sessionType}
           {isAdapted && (
             <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-accent/30 align-middle font-medium">
@@ -181,8 +181,10 @@ export default function WorkoutDisplay({
 
       {/* Warm-up — GREEN */}
       {session.warmup.exercises.length > 0 && (
-        <div className="border-2 border-emerald-500/40 rounded-lg p-4 bg-emerald-500/5">
-          <h3 className="text-emerald-400 font-bold mb-1 text-xs uppercase tracking-wider">
+        <div className="border-2 border-emerald-500/40 rounded-2xl overflow-hidden bg-emerald-500/5">
+          <div className="h-0.5 bg-emerald-500/60" />
+          <div className="p-4">
+          <h3 className="text-emerald-400 font-extrabold mb-1 text-lg uppercase tracking-widest">
             {t('Warm-up', 'Calentamiento')}
           </h3>
           <p className="text-emerald-400 font-bold text-sm mb-1">
@@ -193,7 +195,7 @@ export default function WorkoutDisplay({
           </p>
           <ul className="space-y-2">
             {session.warmup.exercises.map((w, i) => (
-              <li key={i} className="pl-4 border-l-2 border-emerald-500/30">
+              <li key={i} className="pl-4 border-l-2 border-emerald-500/30 rounded-xl bg-card-elevated/50 py-2 pr-2">
                 <span className="text-foreground">{w.exercise.name}</span>
                 <span className="text-muted"> — {w.exercise.prescription}</span>
                 <p className="text-muted text-xs mt-0.5">
@@ -205,18 +207,21 @@ export default function WorkoutDisplay({
               </li>
             ))}
           </ul>
+          </div>
         </div>
       )}
 
       {/* Strength — RED */}
       {session.strength.length > 0 && (
-        <div className="border-2 border-red-500/40 rounded-lg p-4 bg-red-500/5">
-          <h3 className="text-red-400 font-bold mb-3 text-xs uppercase tracking-wider">
+        <div className="border-2 border-red-500/40 rounded-2xl overflow-hidden bg-red-500/5">
+          <div className="h-0.5 bg-red-500/60" />
+          <div className="p-4">
+          <h3 className="text-red-400 font-extrabold mb-3 text-lg uppercase tracking-widest">
             {t('Strength', 'Fuerza')}
           </h3>
           <div className="space-y-4">
             {session.strength.map((item, i) => (
-              <div key={i} className="pl-4 border-l-2 border-red-500/30">
+              <div key={i} className="pl-4 border-l-2 border-red-500/30 rounded-xl bg-card-elevated/50 py-2 pr-2">
                 <div className="flex flex-wrap items-baseline gap-2">
                   <span className="text-foreground font-medium">{item.exercise.name}</span>
                   {onSwapStrength && (
@@ -249,7 +254,7 @@ export default function WorkoutDisplay({
                 </p>
                 <DemoLink search={item.exercise.demoSearch} label={t('Demo', 'Demo')} />
                 {lastLogs[item.exercise.id] && lastLogs[item.exercise.id]!.weight && (
-                  <p className="text-zinc-500 text-xs mt-1.5">
+                  <p className="text-muted text-xs mt-1.5 font-semibold">
                     {t('Last', 'Anterior')}: {lastLogs[item.exercise.id]!.weight} x {lastLogs[item.exercise.id]!.reps}
                     {' '}({formatLogDate(lastLogs[item.exercise.id]!.date, lang)})
                   </p>
@@ -257,12 +262,15 @@ export default function WorkoutDisplay({
               </div>
             ))}
           </div>
+          </div>
         </div>
       )}
 
       {/* WOD — ORANGE */}
-      <div className="border-2 border-orange-500/40 rounded-lg p-4 bg-orange-500/5">
-        <h3 className="text-orange-400 font-bold mb-1 text-xs uppercase tracking-wider">
+      <div className="border-2 border-orange-500/40 rounded-2xl overflow-hidden bg-orange-500/5">
+        <div className="h-0.5 bg-orange-500/60" />
+        <div className="p-4">
+        <h3 className="text-orange-400 font-extrabold mb-1 text-lg uppercase tracking-widest">
           WOD
         </h3>
 
@@ -322,11 +330,12 @@ export default function WorkoutDisplay({
             {lang === 'es' ? session.conditioning.scalingNote_es : session.conditioning.scalingNote}
           </p>
         )}
+        </div>
       </div>
 
       {/* Strategy */}
-      <div className="border border-border rounded-lg p-4 bg-card">
-        <h3 className="text-foreground font-bold mb-2 text-xs uppercase tracking-wider">
+      <div className="border-2 border-border rounded-2xl p-4 bg-card">
+        <h3 className="text-foreground font-extrabold mb-2 text-lg uppercase tracking-widest">
           {t('Strategy', 'Estrategia')}
         </h3>
         <p className="text-muted text-xs leading-relaxed">
@@ -338,7 +347,7 @@ export default function WorkoutDisplay({
       {!readOnly && !done && !showLog && (
         <button
           onClick={() => setShowLog(true)}
-          className="w-full px-4 py-4 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-lg done-button"
+          className="w-full px-4 py-4 bg-accent text-background font-bold rounded-2xl hover:brightness-110 transition-all cursor-pointer text-lg btn-playful done-button"
         >
           {t('Done', 'Hecho')}
         </button>
@@ -377,7 +386,7 @@ export default function WorkoutDisplay({
 
       {/* Completed state */}
       {!readOnly && done && (
-        <div className="w-full px-4 py-4 bg-accent/15 border-2 border-accent/30 text-accent font-bold rounded-lg text-center text-lg flex items-center justify-center gap-2">
+        <div className="w-full px-4 py-4 bg-success/15 border-2 border-success/30 text-success font-extrabold rounded-2xl text-center text-lg flex items-center justify-center gap-2 glow-success workout-completed-glow">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
@@ -386,11 +395,11 @@ export default function WorkoutDisplay({
       )}
 
       {/* Daily steps — BLUE */}
-      <div className="flex items-center gap-3 rounded-lg border-2 border-blue-500/30 bg-blue-500/5 px-4 py-3">
+      <div className="flex items-center gap-3 rounded-2xl border-2 border-blue-500/30 bg-blue-500/5 px-4 py-3">
         <svg className="w-5 h-5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
         </svg>
-        <p className="text-blue-400 text-sm font-medium">
+        <p className="text-blue-400 text-sm font-semibold">
           {t('Walk 7,000-10,000 steps today. Non-negotiable.', 'Camina 7.000-10.000 pasos hoy. No negociable.')}
         </p>
       </div>

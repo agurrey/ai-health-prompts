@@ -52,16 +52,16 @@ export default function EquipmentSetup({ initial, onSave, mode = 'setup' }: Equi
           <button
             key={eq.id}
             onClick={() => toggle(eq.id)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border transition-colors cursor-pointer text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-colors cursor-pointer text-left ${
               selected.has(eq.id)
                 ? 'border-accent bg-accent/10 text-foreground'
-                : 'border-border bg-card text-muted hover:border-zinc-600'
+                : 'border-border bg-card text-muted hover:border-border'
             }`}
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d={eq.icon} />
             </svg>
-            <span className="text-sm font-medium flex-1">
+            <span className="text-sm font-semibold flex-1">
               {t(eq.en, eq.es)}
             </span>
             {selected.has(eq.id) && (
@@ -73,7 +73,7 @@ export default function EquipmentSetup({ initial, onSave, mode = 'setup' }: Equi
         ))}
 
         <div className="px-4 py-2">
-          <p className="text-zinc-600 text-xs">
+          <p className="text-muted/50 text-xs font-semibold">
             {t(
               'Bodyweight exercises are always included.',
               'Ejercicios con peso corporal siempre incluidos.'
@@ -84,7 +84,7 @@ export default function EquipmentSetup({ initial, onSave, mode = 'setup' }: Equi
 
       <button
         onClick={handleSave}
-        className="w-full px-4 py-3 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm"
+        className="w-full px-4 py-3 bg-accent text-background font-bold rounded-2xl hover:brightness-110 transition-all cursor-pointer text-sm btn-playful"
       >
         {mode === 'setup'
           ? t('Start Training', 'Empezar a Entrenar')

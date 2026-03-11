@@ -76,10 +76,10 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
       {strength.map((item, i) => (
         <div
           key={i}
-          className={`border border-border rounded-lg p-3 bg-card space-y-2 ${fields[i].skipped ? 'opacity-40' : ''}`}
+          className={`border-2 border-border rounded-2xl p-3 bg-card space-y-2 ${fields[i].skipped ? 'opacity-40' : ''}`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm font-medium">{item.exercise.name}</span>
+            <span className="text-foreground text-sm font-semibold">{item.exercise.name}</span>
             <button
               onClick={() => updateField(i, 'skipped', !fields[i].skipped)}
               className="text-xs text-muted hover:text-foreground transition-colors cursor-pointer"
@@ -96,7 +96,7 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
                   placeholder="20kg"
                   value={fields[i].weight}
                   onChange={(e) => updateField(i, 'weight', e.target.value)}
-                  className="w-full px-2 py-1.5 rounded bg-zinc-800 border border-border text-foreground text-sm outline-none focus:border-accent"
+                  className="w-full px-2 py-1.5 rounded-xl bg-background border-2 border-border text-foreground text-sm font-semibold outline-none focus:border-accent"
                 />
               </div>
               <div className="w-20">
@@ -105,7 +105,7 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
                   type="text"
                   value={fields[i].reps}
                   onChange={(e) => updateField(i, 'reps', e.target.value)}
-                  className="w-full px-2 py-1.5 rounded bg-zinc-800 border border-border text-foreground text-sm outline-none focus:border-accent"
+                  className="w-full px-2 py-1.5 rounded-xl bg-background border-2 border-border text-foreground text-sm font-semibold outline-none focus:border-accent"
                 />
               </div>
               <div className="w-16">
@@ -114,7 +114,7 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
                   type="text"
                   value={fields[i].sets}
                   onChange={(e) => updateField(i, 'sets', e.target.value)}
-                  className="w-full px-2 py-1.5 rounded bg-zinc-800 border border-border text-foreground text-sm outline-none focus:border-accent"
+                  className="w-full px-2 py-1.5 rounded-xl bg-background border-2 border-border text-foreground text-sm font-semibold outline-none focus:border-accent"
                 />
               </div>
             </div>
@@ -125,13 +125,13 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
       <div className="flex gap-3">
         <button
           onClick={handleSave}
-          className="flex-1 px-4 py-3 bg-accent text-background font-semibold rounded-lg hover:brightness-110 transition-all cursor-pointer"
+          className="flex-1 px-4 py-3 bg-accent text-background font-bold rounded-2xl hover:brightness-110 transition-all cursor-pointer btn-playful"
         >
           {t('Save & Complete', 'Guardar y Completar')}
         </button>
         <button
           onClick={handleSkipAll}
-          className="px-4 py-3 bg-card border border-border text-muted rounded-lg hover:text-foreground transition-colors cursor-pointer"
+          className="px-4 py-3 bg-card border-2 border-border text-muted rounded-2xl hover:text-foreground transition-colors cursor-pointer font-semibold"
         >
           {t('Skip All', 'Saltar Todo')}
         </button>

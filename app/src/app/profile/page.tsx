@@ -21,6 +21,8 @@ import BadgeGrid from '@/components/BadgeGrid';
 import CommunityBanner from '@/components/CommunityBanner';
 import JoinCommunity from '@/components/JoinCommunity';
 import UsernameSetup from '@/components/UsernameSetup';
+import CatMascot from '@/components/CatMascot';
+import Icon from '@/components/Icon';
 import { getCommunityStatus, CommunityStatus } from '@/lib/auth';
 
 function formatShortDate(dateStr: string, lang: string): string {
@@ -109,22 +111,25 @@ export default function ProfilePage() {
 
       {/* Section 1: Header + XP */}
       <section className="space-y-3">
-        <h1 className="text-2xl font-bold text-foreground">
-          {t('Profile', 'Perfil')}
-        </h1>
+        <div className="flex items-center gap-3">
+          <CatMascot pose={streak.current > 0 ? 'highfive' : 'sitting'} size={48} />
+          <h1 className="text-2xl font-extrabold text-foreground">
+            {t('Profile', 'Perfil')}
+          </h1>
+        </div>
         <XPBar />
-        <p className="text-sm text-muted text-center">
+        <p className="text-sm text-muted font-semibold text-center">
           {xp} {t('XP total', 'XP total')}
         </p>
       </section>
 
       {/* Section 2: Achievements */}
-      <section className="space-y-3">
+      <section className="space-y-3 border-t-2 border-border pt-6 mt-6">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-foreground">
+          <h2 className="text-lg font-extrabold text-foreground">
             {t('Achievements', 'Logros')}
           </h2>
-          <span className="text-xs bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30 rounded-full px-2 py-0.5 font-medium">
+          <span className="text-xs bg-accent/20 text-accent border-2 border-accent/30 rounded-full px-2 py-0.5 font-bold">
             {achievements.length}/{ACHIEVEMENTS.length}
           </span>
         </div>
@@ -132,69 +137,72 @@ export default function ProfilePage() {
       </section>
 
       {/* Section 3: Personal Records */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">
+      <section className="space-y-3 border-t-2 border-border pt-6 mt-6">
+        <h2 className="text-lg font-extrabold text-foreground">
           {t('Personal Records', 'Records Personales')}
         </h2>
         {topPRs.length > 0 ? (
-          <ul className="divide-y divide-border">
+          <ul className="divide-y divide-border-subtle">
             {topPRs.map(pr => {
               const exercise = exercises.find(e => e.id === pr.exerciseId);
               const name = exercise?.name ?? pr.exerciseId;
               return (
                 <li key={pr.exerciseId} className="py-3 flex justify-between items-center">
-                  <span className="text-foreground font-medium">{name}</span>
+                  <span className="text-foreground font-bold">{name}</span>
                   <div className="text-right">
-                    <span className="text-foreground font-bold">{pr.weightRaw}</span>
-                    <p className="text-muted text-xs">{formatShortDate(pr.date, lang)}</p>
+                    <span className="text-xp font-extrabold">{pr.weightRaw}</span>
+                    <p className="text-muted text-xs font-semibold">{formatShortDate(pr.date, lang)}</p>
                   </div>
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p className="text-muted text-sm">
-            {t(
-              'No records yet — log your weights!',
-              'Sin records aun — registra tus pesos!'
-            )}
-          </p>
+          <div className="text-center py-4">
+            <CatMascot pose="stretching" size={60} className="mx-auto mb-2" />
+            <p className="text-muted text-sm font-semibold">
+              {t(
+                'No records yet — log your weights!',
+                'Sin records aun — registra tus pesos!'
+              )}
+            </p>
+          </div>
         )}
       </section>
 
       {/* Section 4: Stats Grid */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">
-          {t('Stats', 'Estadísticas')}
+      <section className="space-y-3 border-t-2 border-border pt-6 mt-6">
+        <h2 className="text-lg font-extrabold text-foreground">
+          {t('Stats', 'Estadisticas')}
         </h2>
         <div className="grid grid-cols-2 gap-3">
-          <div className="border border-border rounded-lg p-4 bg-card text-center">
-            <p className="text-2xl font-bold text-foreground">{totalWorkouts}</p>
-            <p className="text-xs text-muted mt-1">{t('Total workouts', 'Entrenamientos')}</p>
+          <div className="border-2 border-border rounded-2xl p-4 bg-card text-center">
+            <p className="text-2xl font-extrabold text-foreground">{totalWorkouts}</p>
+            <p className="text-xs text-muted font-semibold mt-1">{t('Total workouts', 'Entrenamientos')}</p>
           </div>
-          <div className="border border-border rounded-lg p-4 bg-card text-center">
-            <p className="text-2xl font-bold text-foreground">{thisMonth}</p>
-            <p className="text-xs text-muted mt-1">{t('This month', 'Este mes')}</p>
+          <div className="border-2 border-border rounded-2xl p-4 bg-card text-center">
+            <p className="text-2xl font-extrabold text-foreground">{thisMonth}</p>
+            <p className="text-xs text-muted font-semibold mt-1">{t('This month', 'Este mes')}</p>
           </div>
-          <div className="border border-border rounded-lg p-4 bg-card text-center">
-            <p className="text-lg font-bold text-foreground truncate">{favoriteType}</p>
-            <p className="text-xs text-muted mt-1">{t('Favorite type', 'Tipo favorito')}</p>
+          <div className="border-2 border-border rounded-2xl p-4 bg-card text-center">
+            <p className="text-lg font-extrabold text-foreground truncate">{favoriteType}</p>
+            <p className="text-xs text-muted font-semibold mt-1">{t('Favorite type', 'Tipo favorito')}</p>
           </div>
-          <div className="border border-border rounded-lg p-4 bg-card text-center">
-            <p className="text-2xl font-bold text-foreground">{completionRate}</p>
-            <p className="text-xs text-muted mt-1">{t('Completion rate', 'Constancia')}</p>
+          <div className="border-2 border-border rounded-2xl p-4 bg-card text-center">
+            <p className="text-2xl font-extrabold text-foreground">{completionRate}</p>
+            <p className="text-xs text-muted font-semibold mt-1">{t('Completion rate', 'Constancia')}</p>
           </div>
         </div>
       </section>
 
       {/* Section 5: Streak */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">
+      <section className="space-y-3 border-t-2 border-border pt-6 mt-6">
+        <h2 className="text-lg font-extrabold text-foreground">
           {t('Streak', 'Racha')}
         </h2>
         <StreakWidget />
-        <div className="flex justify-between text-sm text-muted">
-          <span>{t('Longest:', 'Mejor:')} {streak.longest} {t('days', 'días')}</span>
+        <div className="flex justify-between text-sm text-muted font-semibold">
+          <span>{t('Longest:', 'Mejor:')} {streak.longest} {t('days', 'dias')}</span>
           <span>{t('Freeze tokens:', 'Fichas:')} {freezeTokens}/2</span>
         </div>
       </section>
@@ -205,21 +213,21 @@ export default function ProfilePage() {
       )}
 
       {communityStatus === 'anonymous' && (
-        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+        <div className="bg-card border-2 border-border rounded-2xl p-4 space-y-3">
           <div className="space-y-1">
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-bold text-foreground">
               {t('Claim your spot', 'Reclama tu lugar')}
             </p>
-            <p className="text-xs text-muted leading-relaxed">
+            <p className="text-xs text-muted font-semibold leading-relaxed">
               {t(
-                'Add an email to unlock leaderboards and a public profile.',
-                'Anade un email para desbloquear clasificaciones y un perfil publico.'
+                'Pick a username to unlock leaderboards and a public profile.',
+                'Elige un nombre de usuario para desbloquear clasificaciones y un perfil publico.'
               )}
             </p>
           </div>
           <button
             onClick={() => setShowUsernameModal(true)}
-            className="w-full px-4 py-2.5 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm"
+            className="btn-playful w-full px-4 py-2.5 bg-accent text-background font-bold rounded-2xl cursor-pointer text-sm"
           >
             {t('Claim Spot', 'Reclamar Lugar')}
           </button>
@@ -227,17 +235,17 @@ export default function ProfilePage() {
       )}
 
       {communityStatus === 'member' && (
-        <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
-          <span className="text-2xl">&#x1F30D;</span>
+        <div className="bg-card border-2 border-border rounded-2xl p-4 flex items-center gap-3">
+          <span className="text-accent"><Icon name="globe" size={24} /></span>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-bold text-foreground">
               {t('Community member', 'Miembro de la comunidad')}
             </p>
-            <p className="text-xs text-muted">
+            <p className="text-xs text-muted font-semibold">
               {t('Public profile active', 'Perfil publico activo')}
             </p>
           </div>
-          <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded-full px-2 py-0.5 font-medium">
+          <span className="text-xs bg-accent/20 text-accent border-2 border-accent/30 rounded-full px-2 py-0.5 font-bold">
             {t('Public', 'Publico')}
           </span>
         </div>
@@ -253,7 +261,6 @@ export default function ProfilePage() {
         isOpen={showUsernameModal}
         onClose={() => setShowUsernameModal(false)}
         onSuccess={() => { setShowUsernameModal(false); setCommunityStatus('member'); }}
-        showEmailField={true}
       />
 
     </main>

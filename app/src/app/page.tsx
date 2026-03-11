@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import WorkoutGenerator from '@/components/WorkoutGenerator';
 import XPBar from '@/components/XPBar';
 import StreakWidget from '@/components/StreakWidget';
+import Icon from '@/components/Icon';
+import CatMascot from '@/components/CatMascot';
 import { prompts } from '@/data/prompts';
 import { useI18n } from '@/lib/i18n';
 
@@ -17,16 +19,19 @@ export default function Home() {
     <div className="space-y-16">
       {/* Hero + Generator */}
       <section className="space-y-6 animate-fade-up">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold">
-            {t('Today\'s workout', 'El entrenamiento de hoy')}
-          </h1>
-          <p className="text-muted text-sm">
-            {t(
-              'New WOD drops daily at 00:00',
-              'Nuevo WOD cada dia a las 00:00'
-            )}
-          </p>
+        <div className="flex items-center gap-4">
+          <CatMascot pose="stretching" size={80} className="shrink-0" />
+          <div className="space-y-2">
+            <h1 className="text-3xl font-extrabold">
+              {t('Today\'s workout', 'El entrenamiento de hoy')}
+            </h1>
+            <p className="text-muted text-sm font-semibold">
+              {t(
+                'New WOD drops daily at 00:00',
+                'Nuevo WOD cada dia a las 00:00'
+              )}
+            </p>
+          </div>
         </div>
 
         {/* Gamification stats row */}
@@ -39,23 +44,23 @@ export default function Home() {
       </section>
 
       {/* About — compact */}
-      <section className="flex items-center gap-4 p-5 rounded-lg border border-border bg-card animate-fade-up animate-delay-1">
+      <section className="flex items-center gap-4 p-5 rounded-2xl border-2 border-border bg-card animate-fade-up animate-delay-1">
         <img
           src="https://unavatar.io/twitter/ignakki"
-          alt="Iñaki"
+          alt="Inaki"
           className="w-10 h-10 rounded-full object-cover flex-shrink-0"
         />
         <div>
-          <p className="text-sm text-muted leading-relaxed">
+          <p className="text-sm text-muted font-semibold leading-relaxed">
             {t('Built by ', 'Hecho por ')}
-            <a href="https://twitter.com/ignakki" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-medium">@ignakki</a>
+            <a href="https://twitter.com/ignakki" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-bold">@ignakki</a>
             {t(
               ' — helping people move better, for good.',
               ' — ayudando a la gente a moverse mejor, para siempre.'
             )}
           </p>
-          <Link href="/about" className="text-accent text-xs hover:underline mt-1 inline-block">
-            {t('About this project →', 'Sobre este proyecto →')}
+          <Link href="/about" className="text-accent text-xs hover:underline mt-1 inline-block font-bold">
+            {t('About this project', 'Sobre este proyecto')} &rarr;
           </Link>
         </div>
       </section>
@@ -63,14 +68,14 @@ export default function Home() {
       {/* Prompt Hub Teaser — compact */}
       <section className="space-y-4 animate-fade-up animate-delay-2">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-lg font-bold">
+          <h2 className="text-lg font-extrabold">
             {t('AI Health Prompts', 'Prompts de Salud con IA')}
           </h2>
           <Link
             href="/prompts"
-            className="text-accent text-xs hover:underline"
+            className="text-accent text-xs hover:underline font-bold"
           >
-            {t('View all →', 'Ver todos →')}
+            {t('View all', 'Ver todos')} &rarr;
           </Link>
         </div>
         <div className="space-y-1">
@@ -78,11 +83,11 @@ export default function Home() {
             <Link
               key={p.slug}
               href={`/prompts/${p.slug}`}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-card transition-colors"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-card-elevated transition-colors"
             >
-              <span className="text-lg">{p.icon}</span>
-              <span className="text-sm font-medium text-foreground">{lang === 'es' ? p.title_es : p.title}</span>
-              <span className="text-muted text-xs ml-auto hidden sm:block">{lang === 'es' ? p.tagline_es : p.tagline}</span>
+              <span className="text-muted"><Icon name={p.icon} size={20} /></span>
+              <span className="text-sm font-bold text-foreground">{lang === 'es' ? p.title_es : p.title}</span>
+              <span className="text-muted text-xs ml-auto hidden sm:block font-semibold">{lang === 'es' ? p.tagline_es : p.tagline}</span>
             </Link>
           ))}
         </div>

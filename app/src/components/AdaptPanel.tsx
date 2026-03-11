@@ -82,7 +82,7 @@ export default function AdaptPanel({
   }
 
   return (
-    <div className="border-2 border-border rounded-2xl bg-card">
+    <div className="border border-border rounded-lg bg-card">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-4 py-3 cursor-pointer"
@@ -178,7 +178,7 @@ export default function AdaptPanel({
           <div className="flex items-center gap-3 pt-1">
             <button
               onClick={handleApply}
-              className="flex-1 px-4 py-2.5 bg-accent text-background font-bold rounded-2xl hover:brightness-110 transition-all cursor-pointer text-sm btn-playful"
+              className="flex-1 px-4 py-2.5 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm"
             >
               {t('Apply', 'Aplicar')}
             </button>

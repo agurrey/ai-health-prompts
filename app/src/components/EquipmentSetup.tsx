@@ -52,7 +52,7 @@ export default function EquipmentSetup({ initial, onSave, mode = 'setup' }: Equi
           <button
             key={eq.id}
             onClick={() => toggle(eq.id)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-colors cursor-pointer text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border transition-colors cursor-pointer text-left ${
               selected.has(eq.id)
                 ? 'border-accent bg-accent/10 text-foreground'
                 : 'border-border bg-card text-muted hover:border-border'
@@ -84,7 +84,7 @@ export default function EquipmentSetup({ initial, onSave, mode = 'setup' }: Equi
 
       <button
         onClick={handleSave}
-        className="w-full px-4 py-3 bg-accent text-background font-bold rounded-2xl hover:brightness-110 transition-all cursor-pointer text-sm btn-playful"
+        className="w-full px-4 py-3 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm"
       >
         {mode === 'setup'
           ? t('Start Training', 'Empezar a Entrenar')

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Hormesis — Free Daily Dumbbell Workout + AI Health Coach';
+export const alt = 'Hormesis — Free Daily Workout';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -31,7 +31,7 @@ export default function OGImage() {
             Hormesis
           </div>
           <div style={{ fontSize: 24, color: '#a3a3a3', maxWidth: 600, textAlign: 'center' }}>
-            Free daily dumbbell workout + AI health prompts
+            Free daily workout — no login, no paywall
           </div>
         </div>
         <div style={{ fontSize: 18, color: '#22c55e' }}>

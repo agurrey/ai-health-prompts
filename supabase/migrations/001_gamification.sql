@@ -1,10 +1,10 @@
 -- Hormesis Gamification + Community Schema
 -- Run this in Supabase Dashboard -> SQL Editor
 -- Requires: Authentication -> Providers -> Anonymous Sign-Ins -> Enabled
+-- Safe to re-run: uses DROP POLICY IF EXISTS before CREATE POLICY
 
 -- ============================================================
 -- 1. PROFILES
--- Extends auth.users. Auto-created via trigger on sign-up.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.profiles (
   id          UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -19,20 +19,20 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- Users can read and update their own profile
+DROP POLICY IF EXISTS "profiles: own read" ON public.profiles;
 CREATE POLICY "profiles: own read" ON public.profiles
   FOR SELECT USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "profiles: own update" ON public.profiles;
 CREATE POLICY "profiles: own update" ON public.profiles
   FOR UPDATE USING (auth.uid() = id);
 
--- Public profiles readable by all authenticated users
+DROP POLICY IF EXISTS "profiles: public read" ON public.profiles;
 CREATE POLICY "profiles: public read" ON public.profiles
   FOR SELECT USING (is_public = true AND auth.role() = 'authenticated');
 
 -- ============================================================
 -- 2. WORKOUTS
--- Synced completed workouts. One row per user per date.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.workouts (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -47,21 +47,24 @@ CREATE TABLE IF NOT EXISTS public.workouts (
 
 ALTER TABLE public.workouts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "workouts: own read" ON public.workouts;
 CREATE POLICY "workouts: own read" ON public.workouts
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "workouts: own insert" ON public.workouts;
 CREATE POLICY "workouts: own insert" ON public.workouts
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "workouts: own update" ON public.workouts;
 CREATE POLICY "workouts: own update" ON public.workouts
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "workouts: own delete" ON public.workouts;
 CREATE POLICY "workouts: own delete" ON public.workouts
   FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================================
 -- 3. EXERCISE_LOGS
--- Synced exercise entries. One row per user per exercise per date.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.exercise_logs (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -78,21 +81,24 @@ CREATE TABLE IF NOT EXISTS public.exercise_logs (
 
 ALTER TABLE public.exercise_logs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "exercise_logs: own read" ON public.exercise_logs;
 CREATE POLICY "exercise_logs: own read" ON public.exercise_logs
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "exercise_logs: own insert" ON public.exercise_logs;
 CREATE POLICY "exercise_logs: own insert" ON public.exercise_logs
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "exercise_logs: own update" ON public.exercise_logs;
 CREATE POLICY "exercise_logs: own update" ON public.exercise_logs
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "exercise_logs: own delete" ON public.exercise_logs;
 CREATE POLICY "exercise_logs: own delete" ON public.exercise_logs
   FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================================
 -- 4. USER_ACHIEVEMENTS
--- Unlocked achievements per user. Composite PK prevents duplicates.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.user_achievements (
   user_id        UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -103,24 +109,24 @@ CREATE TABLE IF NOT EXISTS public.user_achievements (
 
 ALTER TABLE public.user_achievements ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "user_achievements: own read" ON public.user_achievements;
 CREATE POLICY "user_achievements: own read" ON public.user_achievements
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "user_achievements: own insert" ON public.user_achievements;
 CREATE POLICY "user_achievements: own insert" ON public.user_achievements
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "user_achievements: own update" ON public.user_achievements;
 CREATE POLICY "user_achievements: own update" ON public.user_achievements
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "user_achievements: own delete" ON public.user_achievements;
 CREATE POLICY "user_achievements: own delete" ON public.user_achievements
   FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================================
 -- 5. ACTIVITY_FEED
--- Public workout/achievement/PR/streak events.
--- IMPORTANT: event_data MUST NEVER contain weight or time values.
--- This is enforced at application level (see supabase.ts postFeedEvent).
--- Allowed keys: exercise_name, workout_name, achievement_id, streak_days, xp_earned.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.activity_feed (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -132,25 +138,23 @@ CREATE TABLE IF NOT EXISTS public.activity_feed (
 
 ALTER TABLE public.activity_feed ENABLE ROW LEVEL SECURITY;
 
--- All authenticated users can read public feed
+DROP POLICY IF EXISTS "activity_feed: authenticated read" ON public.activity_feed;
 CREATE POLICY "activity_feed: authenticated read" ON public.activity_feed
   FOR SELECT USING (auth.role() = 'authenticated');
 
--- Users insert their own feed items only
+DROP POLICY IF EXISTS "activity_feed: own insert" ON public.activity_feed;
 CREATE POLICY "activity_feed: own insert" ON public.activity_feed
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
--- Users can delete their own feed items
+DROP POLICY IF EXISTS "activity_feed: own delete" ON public.activity_feed;
 CREATE POLICY "activity_feed: own delete" ON public.activity_feed
   FOR DELETE USING (auth.uid() = user_id);
 
--- Index for feed queries (latest first)
 CREATE INDEX IF NOT EXISTS idx_activity_feed_created_at ON public.activity_feed(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_activity_feed_user_id ON public.activity_feed(user_id);
 
 -- ============================================================
 -- 6. KUDOS
--- Reactions on feed items. One kudos per user per feed item.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.kudos (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -162,21 +166,20 @@ CREATE TABLE IF NOT EXISTS public.kudos (
 
 ALTER TABLE public.kudos ENABLE ROW LEVEL SECURITY;
 
--- All authenticated users can read kudos
+DROP POLICY IF EXISTS "kudos: authenticated read" ON public.kudos;
 CREATE POLICY "kudos: authenticated read" ON public.kudos
   FOR SELECT USING (auth.role() = 'authenticated');
 
--- Users insert their own kudos only
+DROP POLICY IF EXISTS "kudos: own insert" ON public.kudos;
 CREATE POLICY "kudos: own insert" ON public.kudos
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
--- Users delete their own kudos only (un-kudos)
+DROP POLICY IF EXISTS "kudos: own delete" ON public.kudos;
 CREATE POLICY "kudos: own delete" ON public.kudos
   FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================================
 -- 7. WEEKLY_LEADERBOARD
--- Materialized weekly stats, refreshed by refresh_weekly_leaderboard().
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.weekly_leaderboard (
   user_id         UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -190,11 +193,10 @@ CREATE TABLE IF NOT EXISTS public.weekly_leaderboard (
 
 ALTER TABLE public.weekly_leaderboard ENABLE ROW LEVEL SECURITY;
 
--- All authenticated users can read leaderboard
+DROP POLICY IF EXISTS "weekly_leaderboard: authenticated read" ON public.weekly_leaderboard;
 CREATE POLICY "weekly_leaderboard: authenticated read" ON public.weekly_leaderboard
   FOR SELECT USING (auth.role() = 'authenticated');
 
--- Index for leaderboard queries (by league + week + rank)
 CREATE INDEX IF NOT EXISTS idx_weekly_leaderboard_league_week ON public.weekly_leaderboard(league, week_start, rank);
 
 -- ============================================================
@@ -209,21 +211,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- ============================================================
 -- FUNCTION: Refresh weekly leaderboard
--- Call this on a schedule (e.g. Supabase pg_cron, or from app on load)
--- Only includes public profiles with a username that have at least 1 workout this week.
 -- ============================================================
 CREATE OR REPLACE FUNCTION public.refresh_weekly_leaderboard()
 RETURNS void AS $$
 DECLARE
   week_start_date DATE;
 BEGIN
-  -- Current week Monday
   week_start_date := date_trunc('week', CURRENT_DATE)::DATE;
 
   DELETE FROM weekly_leaderboard WHERE week_start = week_start_date;

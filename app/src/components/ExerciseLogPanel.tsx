@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import { useI18n } from '@/lib/i18n';
 import type { SelectedStrengthExercise } from '@/lib/generator';
-import { logExercises, getPersonalRecords, savePersonalRecord, type ExerciseLogEntry, type PersonalRecord } from '@/lib/storage';
-import { checkNewPRs } from '@/lib/gamification';
+import { logExercises, type ExerciseLogEntry } from '@/lib/storage';
 
 interface Props {
   date: string;
   strength: SelectedStrengthExercise[];
-  onComplete: (prCount: number, newPRs: PersonalRecord[]) => void;
+  onComplete: () => void;
 }
 
 interface LogField {
@@ -52,19 +51,11 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
       });
     }
     logExercises(entries);
-
-    // Detect PRs from entries that have a non-empty weight and aren't skipped
-    const currentPRs = getPersonalRecords();
-    const logEntriesForPR = entries.filter(e => e.weight && e.weight.trim() !== '' && e.notes !== 'skipped');
-    const newPRs = checkNewPRs(logEntriesForPR, currentPRs);
-    for (const pr of newPRs) {
-      savePersonalRecord(pr);
-    }
-    onComplete(newPRs.length, newPRs);
+    onComplete();
   }
 
   function handleSkipAll() {
-    onComplete(0, []);
+    onComplete();
   }
 
   return (
@@ -76,7 +67,7 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
       {strength.map((item, i) => (
         <div
           key={i}
-          className={`border-2 border-border rounded-2xl p-3 bg-card space-y-2 ${fields[i].skipped ? 'opacity-40' : ''}`}
+          className={`border border-border rounded-lg p-3 bg-card space-y-2 ${fields[i].skipped ? 'opacity-40' : ''}`}
         >
           <div className="flex items-center justify-between">
             <span className="text-foreground text-sm font-semibold">{item.exercise.name}</span>
@@ -125,13 +116,13 @@ export default function ExerciseLogPanel({ date, strength, onComplete }: Props) 
       <div className="flex gap-3">
         <button
           onClick={handleSave}
-          className="flex-1 px-4 py-3 bg-accent text-background font-bold rounded-2xl hover:brightness-110 transition-all cursor-pointer btn-playful"
+          className="flex-1 px-4 py-3 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer"
         >
           {t('Save & Complete', 'Guardar y Completar')}
         </button>
         <button
           onClick={handleSkipAll}
-          className="px-4 py-3 bg-card border-2 border-border text-muted rounded-2xl hover:text-foreground transition-colors cursor-pointer font-semibold"
+          className="px-4 py-3 bg-card border border-border text-muted rounded-lg hover:text-foreground transition-colors cursor-pointer font-semibold"
         >
           {t('Skip All', 'Saltar Todo')}
         </button>

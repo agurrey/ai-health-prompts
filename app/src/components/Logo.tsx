@@ -1,4 +1,4 @@
-export default function Logo({ size = 28, wordmark = false }: { size?: number; wordmark?: boolean }) {
+export default function Logo({ size = 28, wordmark = false, className }: { size?: number; wordmark?: boolean; className?: string }) {
   if (wordmark) {
     // Full wordmark: "Hormesis" with stylized H
     const scale = size / 32;
@@ -40,6 +40,7 @@ export default function Logo({ size = 28, wordmark = false }: { size?: number; w
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-label="Hormesis"
+      className={className}
     >
       <line x1="7" y1="5" x2="7" y2="27" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
       <line x1="25" y1="5" x2="25" y2="27" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />

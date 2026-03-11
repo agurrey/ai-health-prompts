@@ -2,15 +2,13 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { track } from '@vercel/analytics';
-import { generateSession, getLoadLabel, Session } from '@/lib/generator';
-import { getTodayString, createSeededRandom, seededShuffle } from '@/lib/seed';
-import { getExercisesByPattern, filterByLevel, filterByRestrictions } from '@/data/exercises';
+import { generateSession, Session } from '@/lib/generator';
+import { getTodayString } from '@/lib/seed';
 import type { Level, Equipment, Restriction } from '@/data/exercises';
 import { useI18n } from '@/lib/i18n';
 import { getLevel, setLevel as persistLevel, getEquipment, setEquipment as persistEquipment, getLastLog, isWorkoutDone, type ExerciseLogEntry } from '@/lib/storage';
 import WorkoutDisplay from './WorkoutDisplay';
 import EquipmentSetup from './EquipmentSetup';
-import CatMascot from './CatMascot';
 
 const LEVELS: { value: Level; en: string; es: string }[] = [
   { value: 1, en: 'Beginner', es: 'Principiante' },
@@ -42,7 +40,6 @@ export default function WorkoutGenerator() {
   const [equipment, setEquipment] = useState<Equipment[] | null>(() => getEquipment());
   const [needsSetup, setNeedsSetup] = useState(() => getEquipment() === null);
   const [showEquipmentSettings, setShowEquipmentSettings] = useState(false);
-  const [swapCounts, setSwapCounts] = useState<Record<number, number>>({});
   const [lastLogs, setLastLogs] = useState<Record<string, ExerciseLogEntry | null>>({});
   const [viewDate, setViewDate] = useState(() => getTodayString());
   const [todayDone, setTodayDone] = useState(false);
@@ -74,7 +71,6 @@ export default function WorkoutGenerator() {
     const effectiveEquipment = equipmentOverride ?? equipment;
     const result = generateSession(viewDate, level, effectiveEquipment, restrictions, shortMode);
     setSession(result);
-    setSwapCounts({});
     if (isToday) persistLevel(level);
     const logs: Record<string, ExerciseLogEntry | null> = {};
     for (const s of result.strength) {
@@ -83,49 +79,6 @@ export default function WorkoutGenerator() {
     setLastLogs(logs);
     track('workout_generated', { date: viewDate, level: String(level) });
   }, [level, viewDate, isToday, equipment, needsSetup, restrictions, equipmentOverride, shortMode]);
-
-  const handleSwapStrength = useCallback((index: number) => {
-    if (!session) return;
-
-    const current = session.strength[index];
-    const pattern = current.exercise.pattern;
-    const effectiveEquipment = equipmentOverride ?? equipment;
-
-    let pool = getExercisesByPattern(pattern);
-    pool = filterByLevel(pool, level);
-    if (effectiveEquipment) {
-      const available = new Set<string>(['bodyweight', ...effectiveEquipment]);
-      pool = pool.filter(e => e.equipment.every(eq => available.has(eq)));
-      const eqRestrictions: Restriction[] = [];
-      if (!effectiveEquipment.includes('pull_up_bar')) eqRestrictions.push('no_pullup_bar');
-      if (eqRestrictions.length > 0) pool = filterByRestrictions(pool, eqRestrictions);
-    }
-    if (restrictions.length > 0) pool = filterByRestrictions(pool, restrictions);
-
-    const usedIds = new Set(session.strength.map(s => s.exercise.id));
-    pool = pool.filter(e => !usedIds.has(e.id));
-
-    if (pool.length === 0) return;
-
-    const nextSwap = (swapCounts[index] || 0) + 1;
-    const random = createSeededRandom(`${session.date}-swap-${index}-${nextSwap}`);
-    const shuffled = seededShuffle(pool, random);
-    const replacement = shuffled[0];
-
-    const newStrength = [...session.strength];
-    newStrength[index] = {
-      ...current,
-      exercise: replacement,
-      load: getLoadLabel(replacement),
-    };
-
-    setSwapCounts({ ...swapCounts, [index]: nextSwap });
-    setSession({ ...session, strength: newStrength });
-    setLastLogs((prev) => ({
-      ...prev,
-      [replacement.id]: getLastLog(replacement.id),
-    }));
-  }, [session, level, swapCounts, equipment, equipmentOverride, restrictions]);
 
   // Navigation logic
   const canGoNext = isTomorrow
@@ -183,9 +136,6 @@ export default function WorkoutGenerator() {
   if (needsSetup) {
     return (
       <div className="space-y-4">
-        <div className="flex justify-center">
-          <CatMascot pose="stretching" size={100} />
-        </div>
         <EquipmentSetup onSave={handleEquipmentSave} />
       </div>
     );
@@ -212,7 +162,7 @@ export default function WorkoutGenerator() {
 
   if (!session) return (
     <div className="flex flex-col items-center gap-2 py-8">
-      <CatMascot pose="warmup" size={80} />
+      <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
       <p className="text-muted text-sm font-semibold">{t('Loading...', 'Cargando...')}</p>
     </div>
   );
@@ -220,7 +170,7 @@ export default function WorkoutGenerator() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center gap-2">
-        <div className="flex gap-1 p-1 bg-card rounded-2xl border-2 border-border">
+        <div className="flex gap-1 p-1 bg-card rounded-lg border border-border">
           {LEVELS.map((l) => (
             <button
               key={l.value}
@@ -326,7 +276,7 @@ export default function WorkoutGenerator() {
 
       {/* Future badge */}
       {isFuture && (
-        <div className="text-center px-4 py-2 rounded-2xl bg-card border-2 border-border">
+        <div className="text-center px-4 py-2 rounded-lg bg-card border border-border">
           <p className="text-muted text-xs font-semibold">
             {t('Preview — read only', 'Vista previa — solo lectura')}
           </p>
@@ -335,7 +285,6 @@ export default function WorkoutGenerator() {
 
       <WorkoutDisplay
         session={session}
-        onSwapStrength={readOnly ? undefined : handleSwapStrength}
         lastLogs={lastLogs}
         readOnly={readOnly}
         onDone={handleDoneCallback}

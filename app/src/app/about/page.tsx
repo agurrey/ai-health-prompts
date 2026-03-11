@@ -29,7 +29,7 @@ export default function AboutPage() {
       {/* Header */}
       <section className="flex items-center gap-5 animate-fade-up">
         <img
-          src="https://unavatar.io/twitter/ignakki"
+          src="https://unavatar.io/twitter/ignakki?v=2"
           alt="Iñaki"
           className="w-16 h-16 rounded-full object-cover flex-shrink-0"
         />

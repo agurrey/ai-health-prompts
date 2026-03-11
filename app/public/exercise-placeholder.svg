@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">
+  <rect width="320" height="180" fill="#1a1a1a" rx="8"/>
+  <g transform="translate(130,55)" fill="none" stroke="#404040" stroke-width="3" stroke-linecap="round">
+    <!-- Dumbbell icon -->
+    <rect x="0" y="22" width="14" height="26" rx="3"/>
+    <rect x="46" y="22" width="14" height="26" rx="3"/>
+    <line x1="14" y1="35" x2="46" y2="35"/>
+    <rect x="-4" y="28" width="8" height="14" rx="2"/>
+    <rect x="56" y="28" width="8" height="14" rx="2"/>
+  </g>
+  <text x="160" y="130" text-anchor="middle" fill="#525252" font-family="system-ui" font-size="13" font-weight="600">No video</text>
+</svg>

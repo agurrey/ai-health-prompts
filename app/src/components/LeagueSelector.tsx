@@ -27,7 +27,7 @@ export default function LeagueSelector({ selected, userLeague, onChange }: Leagu
   const { t, lang } = useI18n();
 
   return (
-    <div className="flex gap-1 overflow-x-auto" role="tablist" aria-label={t('League', 'Liga')}>
+    <div className="bg-card rounded-2xl border-2 border-border p-1 flex gap-1 overflow-x-auto" role="tablist" aria-label={t('League', 'Liga')}>
       {LEAGUES.map((league) => {
         const isSelected = selected === league.id;
         const isUserLeague = userLeague === league.id;
@@ -40,13 +40,13 @@ export default function LeagueSelector({ selected, userLeague, onChange }: Leagu
             aria-selected={isSelected}
             onClick={() => onChange(league.id)}
             className={[
-              'flex flex-col items-center px-3 py-2 border-b-2 transition-all whitespace-nowrap',
+              'flex flex-col items-center px-3 py-2 rounded-xl transition-all whitespace-nowrap flex-1',
               isSelected
-                ? `${league.borderColor} ${league.color} font-bold`
-                : 'border-transparent text-muted hover:text-foreground',
+                ? 'bg-accent text-background font-bold'
+                : 'text-muted hover:text-foreground hover:bg-card-elevated',
             ].join(' ')}
           >
-            <span className="text-sm leading-tight">
+            <span className="text-sm leading-tight font-semibold">
               {label}
               {isUserLeague && (
                 <span className="ml-1 text-xs" aria-label={t('your league', 'tu liga')}>
@@ -54,7 +54,7 @@ export default function LeagueSelector({ selected, userLeague, onChange }: Leagu
                 </span>
               )}
             </span>
-            <span className={`text-xs mt-0.5 ${isSelected ? league.color : 'text-muted'}`}>
+            <span className={`text-xs mt-0.5 font-semibold ${isSelected ? 'text-background/70' : 'text-muted'}`}>
               {league.range}
             </span>
           </button>

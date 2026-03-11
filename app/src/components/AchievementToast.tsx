@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { m } from 'motion/react';
 import { useI18n } from '@/lib/i18n';
 import type { Achievement } from '@/lib/achievements';
 import type { PersonalRecord } from '@/lib/storage';
+import Icon from './Icon';
 
 export type ToastItem =
   | { type: 'achievement'; achievement: Achievement }
@@ -17,39 +19,37 @@ interface Props {
 
 export default function AchievementToast({ item, onDismiss, autoDismissMs = 4000 }: Props) {
   const { t, lang } = useI18n();
-  const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setExiting(true);
-      setTimeout(onDismiss, 250);
-    }, autoDismissMs);
+    const timer = setTimeout(onDismiss, autoDismissMs);
     return () => clearTimeout(timer);
   }, [autoDismissMs, onDismiss]);
-
-  const containerClass = `flex items-start gap-3 px-4 py-3 rounded-lg shadow-lg min-w-[220px] max-w-[300px] border ${exiting ? 'toast-exit' : 'toast-enter'}`;
 
   if (item.type === 'achievement') {
     const { achievement } = item;
     return (
-      <div
-        className={`${containerClass} bg-card border-fuchsia-500/30`}
+      <m.div
+        className="flex items-start gap-3 px-4 py-3 rounded-2xl shadow-lg min-w-[220px] max-w-[300px] border-2 bg-card-elevated backdrop-blur-sm border-accent/30 glow-accent"
+        initial={{ opacity: 0, x: 80, scale: 0.85 }}
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        exit={{ opacity: 0, x: 80, scale: 0.85 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 22 }}
         role="status"
         aria-live="polite"
       >
-        <span className="text-2xl shrink-0">{achievement.icon}</span>
+        <span className="text-accent shrink-0"><Icon name={achievement.icon} size={24} /></span>
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-fuchsia-400 font-bold uppercase tracking-wider">
-            {t('Achievement Unlocked!', '¡Logro Desbloqueado!')}
+          <p className="text-xs text-accent font-bold uppercase tracking-wider">
+            {t('Achievement Unlocked!', 'Logro Desbloqueado!')}
           </p>
-          <p className="text-foreground font-semibold text-sm">
+          <p className="font-bold text-accent text-sm">
             {lang === 'es' ? achievement.name_es : achievement.name}
           </p>
-          <p className="text-muted text-xs mt-0.5 line-clamp-2">
+          <p className="text-muted text-xs mt-0.5 line-clamp-2 font-semibold">
             {lang === 'es' ? achievement.description_es : achievement.description}
           </p>
         </div>
-      </div>
+      </m.div>
     );
   }
 
@@ -57,24 +57,28 @@ export default function AchievementToast({ item, onDismiss, autoDismissMs = 4000
   const { pr, exerciseName } = item;
   const improvementText = pr.improvementKg
     ? t(`+${pr.improvementKg}kg PR`, `+${pr.improvementKg}kg PR`)
-    : t('New PR!', '¡Nuevo PR!');
+    : t('New PR!', 'Nuevo PR!');
 
   return (
-    <div
-      className={`${containerClass} bg-card border-yellow-500/30`}
+    <m.div
+      className="flex items-start gap-3 px-4 py-3 rounded-2xl shadow-lg min-w-[220px] max-w-[300px] border-2 bg-card-elevated backdrop-blur-sm border-xp/30 glow-xp"
+      initial={{ opacity: 0, x: 80, scale: 0.85 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: 80, scale: 0.85 }}
+      transition={{ type: 'spring', stiffness: 350, damping: 22 }}
       role="status"
       aria-live="polite"
     >
-      <span className="text-2xl shrink-0">🏆</span>
+      <span className="text-xp shrink-0"><Icon name="trophy" size={24} /></span>
       <div className="flex-1 min-w-0">
-        <p className="text-xs text-yellow-400 font-bold uppercase tracking-wider">
-          {t('Personal Record!', '¡Récord Personal!')}
+        <p className="text-xs text-xp font-bold uppercase tracking-wider">
+          {t('Personal Record!', 'Record Personal!')}
         </p>
-        <p className="text-foreground font-semibold text-sm truncate">{exerciseName}</p>
-        <p className="text-yellow-400/80 text-xs">
-          {pr.weightRaw} — {improvementText}
+        <p className="text-foreground font-bold text-sm truncate">{exerciseName}</p>
+        <p className="text-xp/80 text-xs font-semibold">
+          {pr.weightRaw} -- {improvementText}
         </p>
       </div>
-    </div>
+    </m.div>
   );
 }

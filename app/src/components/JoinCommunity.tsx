@@ -32,7 +32,7 @@ export default function JoinCommunity({ isOpen, onClose, onSuccess }: JoinCommun
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-card border border-border rounded-xl w-full max-w-md p-6 space-y-5">
+      <div className="bg-card-elevated border-2 border-border rounded-2xl w-full max-w-md p-6 space-y-5">
         {/* Header */}
         <div className="flex items-start justify-between">
           <h2 className="text-lg font-bold text-foreground">
@@ -51,7 +51,7 @@ export default function JoinCommunity({ isOpen, onClose, onSuccess }: JoinCommun
         </div>
 
         {/* Body */}
-        <p className="text-sm text-muted leading-relaxed">
+        <p className="text-sm text-muted leading-relaxed font-semibold">
           {t(
             'Join anonymously — no email needed. Your workout data stays on your device. You can add an email later to claim a username and unlock leaderboards.',
             'Unete de forma anonima, sin necesidad de email. Tus datos permanecen en tu dispositivo. Puedes anadir un email despues para reclamar un nombre de usuario y acceder a las clasificaciones.'
@@ -60,7 +60,7 @@ export default function JoinCommunity({ isOpen, onClose, onSuccess }: JoinCommun
 
         {/* Error */}
         {error && (
-          <p className="text-xs text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+          <p className="text-xs text-danger bg-danger/10 border-2 border-danger/20 rounded-xl px-3 py-2 font-semibold">
             {error}
           </p>
         )}
@@ -70,7 +70,7 @@ export default function JoinCommunity({ isOpen, onClose, onSuccess }: JoinCommun
           <button
             onClick={handleJoin}
             disabled={loading}
-            className="w-full px-4 py-3 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="btn-playful w-full text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -85,7 +85,7 @@ export default function JoinCommunity({ isOpen, onClose, onSuccess }: JoinCommun
           </button>
           <button
             onClick={onClose}
-            className="w-full px-4 py-2 text-sm text-muted hover:text-foreground transition-colors cursor-pointer"
+            className="w-full px-4 py-2 text-sm text-muted hover:text-foreground transition-colors cursor-pointer font-semibold"
           >
             {t('Cancel', 'Cancelar')}
           </button>

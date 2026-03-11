@@ -3,13 +3,14 @@
 import { ACHIEVEMENTS, Achievement } from '@/lib/achievements';
 import { AchievementUnlock } from '@/lib/storage';
 import { useI18n } from '@/lib/i18n';
+import { m } from 'motion/react';
+import Icon from './Icon';
 
 interface BadgeGridProps {
   unlockedAchievements: AchievementUnlock[];
 }
 
 function formatShortDate(dateStr: string, lang: string): string {
-  // dateStr is 'YYYY-MM-DD'
   const [year, month, day] = dateStr.split('-').map(Number);
   const d = new Date(Date.UTC(year, month - 1, day));
   if (lang === 'es') {
@@ -29,25 +30,28 @@ export default function BadgeGrid({ unlockedAchievements }: BadgeGridProps) {
 
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-      {ACHIEVEMENTS.map((achievement: Achievement) => {
+      {ACHIEVEMENTS.map((achievement: Achievement, index: number) => {
         const unlock = unlockedMap.get(achievement.id);
         const isUnlocked = unlock !== undefined;
 
         return (
-          <div
+          <m.div
             key={achievement.id}
-            className={`bg-card border rounded-lg p-3 text-center flex flex-col items-center gap-1 ${
-              isUnlocked ? 'border-fuchsia-500/40' : 'border-border'
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.04, type: 'spring', stiffness: 400, damping: 20 }}
+            className={`bg-card border-2 rounded-2xl p-3 text-center flex flex-col items-center gap-1 card-interactive ${
+              isUnlocked ? 'border-accent/40 glow-xp' : 'border-border opacity-40'
             }`}
           >
             <span
-              className={`text-2xl leading-none ${isUnlocked ? '' : 'opacity-30 grayscale'}`}
+              className={`leading-none ${isUnlocked ? 'text-accent animate-pop' : 'text-muted'}`}
             >
-              {achievement.icon}
+              <Icon name={achievement.icon} size={24} />
             </span>
 
             <span
-              className={`text-xs font-medium leading-tight ${
+              className={`text-xs font-semibold leading-tight ${
                 isUnlocked ? 'text-foreground' : 'text-muted'
               }`}
             >
@@ -55,7 +59,7 @@ export default function BadgeGrid({ unlockedAchievements }: BadgeGridProps) {
             </span>
 
             {isUnlocked ? (
-              <span className="text-xs text-fuchsia-400 leading-tight">
+              <span className="text-xs text-accent font-semibold leading-tight">
                 {formatShortDate(unlock.unlockedAt, lang)}
               </span>
             ) : (
@@ -63,7 +67,7 @@ export default function BadgeGrid({ unlockedAchievements }: BadgeGridProps) {
                 {lang === 'es' ? achievement.description_es : achievement.description}
               </span>
             )}
-          </div>
+          </m.div>
         );
       })}
     </div>

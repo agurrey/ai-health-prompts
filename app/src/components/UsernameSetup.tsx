@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 import { useI18n } from '@/lib/i18n';
-import { setUsername, upgradeToEmail } from '@/lib/auth';
+import { setUsername } from '@/lib/auth';
 
 interface UsernameSetupProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  showEmailField: boolean;
 }
 
 type UsernameState = 'idle' | 'checking' | 'available' | 'taken' | 'invalid';
@@ -20,15 +19,13 @@ function validateUsername(value: string): string | null {
   return null;
 }
 
-export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailField }: UsernameSetupProps) {
+export default function UsernameSetup({ isOpen, onClose, onSuccess }: UsernameSetupProps) {
   const { t } = useI18n();
   const [username, setUsernameInput] = useState('');
-  const [email, setEmail] = useState('');
   const [usernameState, setUsernameState] = useState<UsernameState>('idle');
   const [validationError, setValidationError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
 
   if (!isOpen) return null;
 
@@ -68,18 +65,6 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
     setSubmitError(null);
 
     try {
-      // If email field is shown, send magic link first
-      if (showEmailField && email.trim()) {
-        const { success, error } = await upgradeToEmail(email);
-        if (!success) {
-          setSubmitError(error ?? t('Failed to send email', 'Error al enviar email'));
-          return;
-        }
-        setEmailSent(true);
-        return; // Wait for email confirmation before setting username
-      }
-
-      // Claim username
       const { success, error } = await setUsername(username);
       if (!success) {
         setSubmitError(error ?? t('Failed to claim username', 'Error al reclamar nombre de usuario'));
@@ -95,34 +80,9 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
   const usernameValid = !validateUsername(username) && usernameState !== 'taken';
   const canSubmit = usernameValid && (usernameState === 'available' || usernameState === 'idle') && !loading;
 
-  if (emailSent) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-        <div className="bg-card border border-border rounded-xl w-full max-w-md p-6 space-y-4 text-center">
-          <div className="text-4xl">@</div>
-          <h2 className="text-lg font-bold text-foreground">
-            {t('Check your email', 'Revisa tu email')}
-          </h2>
-          <p className="text-sm text-muted leading-relaxed">
-            {t(
-              'We sent a magic link to your email. Click it to verify, then come back to claim your username.',
-              'Enviamos un enlace magico a tu email. Haz clic en el para verificar y luego vuelve a reclamar tu nombre de usuario.'
-            )}
-          </p>
-          <button
-            onClick={onClose}
-            className="w-full px-4 py-2.5 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm"
-          >
-            {t('Got it', 'Entendido')}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-card border border-border rounded-xl w-full max-w-md p-6 space-y-5">
+      <div className="bg-card-elevated border-2 border-border rounded-2xl w-full max-w-md p-6 space-y-5">
         {/* Header */}
         <div className="flex items-start justify-between">
           <h2 className="text-lg font-bold text-foreground">
@@ -140,31 +100,9 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
           </button>
         </div>
 
-        {/* Email field (shown only for anonymous → verified upgrade) */}
-        {showEmailField && (
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted uppercase tracking-wide">
-              {t('Add your email to claim your spot', 'Anade tu email para reservar tu lugar')}
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder={t('your@email.com', 'tu@email.com')}
-              className="w-full px-3 py-2.5 bg-background border border-border rounded-lg text-sm text-foreground placeholder-muted focus:outline-none focus:border-accent transition-colors"
-            />
-            <p className="text-xs text-muted">
-              {t(
-                "We'll send a magic link — no password needed.",
-                'Te enviamos un enlace magico, sin contrasena.'
-              )}
-            </p>
-          </div>
-        )}
-
         {/* Username field */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-muted uppercase tracking-wide">
+          <label className="text-xs font-semibold text-muted uppercase tracking-wide">
             {t('Username', 'Nombre de usuario')}
           </label>
           <div className="relative">
@@ -175,11 +113,11 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
               onBlur={handleUsernameBlur}
               placeholder={t('e.g. iron_agur', 'ej. agur_fuerte')}
               maxLength={20}
-              className={`w-full px-3 py-2.5 bg-background border rounded-lg text-sm text-foreground placeholder-muted focus:outline-none transition-colors pr-8 ${
+              className={`w-full px-3 py-2.5 bg-background border-2 rounded-xl text-sm text-foreground placeholder-muted focus:outline-none transition-colors pr-8 ${
                 usernameState === 'available'
-                  ? 'border-green-500 focus:border-green-500'
+                  ? 'border-success focus:border-success'
                   : usernameState === 'taken' || validationError
-                  ? 'border-red-400 focus:border-red-400'
+                  ? 'border-danger focus:border-danger'
                   : 'border-border focus:border-accent'
               }`}
             />
@@ -190,7 +128,7 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
               </svg>
             )}
             {usernameState === 'available' && (
-              <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             )}
@@ -198,7 +136,7 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
 
           {/* Validation feedback */}
           {validationError && username.length > 0 && (
-            <p className="text-xs text-red-400">
+            <p className="text-xs text-danger font-semibold">
               {t(validationError, validationError === 'Username must be at least 3 characters'
                 ? 'El nombre debe tener al menos 3 caracteres'
                 : validationError === 'Username must be at most 20 characters'
@@ -207,12 +145,12 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
             </p>
           )}
           {usernameState === 'taken' && (
-            <p className="text-xs text-red-400">
+            <p className="text-xs text-danger font-semibold">
               {t('Username already taken', 'Nombre de usuario no disponible')}
             </p>
           )}
           {usernameState === 'available' && (
-            <p className="text-xs text-green-500">
+            <p className="text-xs text-success font-semibold">
               {t('Available', 'Disponible')}
             </p>
           )}
@@ -220,7 +158,7 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
 
         {/* Submit error */}
         {submitError && (
-          <p className="text-xs text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+          <p className="text-xs text-danger bg-danger/10 border-2 border-danger/20 rounded-xl px-3 py-2 font-semibold">
             {submitError}
           </p>
         )}
@@ -230,7 +168,7 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="w-full px-4 py-3 bg-accent text-background font-bold rounded-lg hover:brightness-110 transition-all cursor-pointer text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="btn-playful w-full text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -245,7 +183,7 @@ export default function UsernameSetup({ isOpen, onClose, onSuccess, showEmailFie
           </button>
           <button
             onClick={onClose}
-            className="w-full px-4 py-2 text-sm text-muted hover:text-foreground transition-colors cursor-pointer"
+            className="w-full px-4 py-2 text-sm text-muted hover:text-foreground transition-colors cursor-pointer font-semibold"
           >
             {t('Cancel', 'Cancelar')}
           </button>

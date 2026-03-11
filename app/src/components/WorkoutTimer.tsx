@@ -284,9 +284,9 @@ export default function WorkoutTimer() {
   function getTimerColor(): string {
     if (timerState === 'idle') return 'text-foreground';
     if (mode === 'intervals') {
-      return intervalPhase === 'work' ? 'text-emerald-400' : 'text-red-400';
+      return intervalPhase === 'work' ? 'text-success' : 'text-danger';
     }
-    return 'text-foreground';
+    return 'text-accent';
   }
 
   function getSubInfo(): string {
@@ -322,7 +322,7 @@ export default function WorkoutTimer() {
       {/* Floating button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-accent text-background flex items-center justify-center shadow-lg hover:brightness-110 transition-all cursor-pointer"
+        className="fixed bottom-20 sm:bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-accent text-background flex items-center justify-center shadow-lg hover:brightness-110 transition-all cursor-pointer btn-playful"
         aria-label={t('Open timer', 'Abrir temporizador')}
       >
         {timerState !== 'idle' ? (
@@ -339,9 +339,9 @@ export default function WorkoutTimer() {
 
       {/* Timer panel — bottom sheet */}
       <div className={`fixed bottom-0 left-0 right-0 z-50 transform transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
-        <div className="bg-zinc-900 border border-zinc-700 rounded-t-2xl max-w-lg mx-auto shadow-2xl">
+        <div className="bg-card border-2 border-border rounded-t-2xl max-w-lg mx-auto shadow-2xl">
           <div className="flex justify-center pt-3 pb-1">
-            <div className="w-10 h-1 rounded-full bg-zinc-600" />
+            <div className="w-10 h-1 rounded-full bg-border" />
           </div>
 
           <div className="px-6 pb-6 pt-2 space-y-5">
@@ -352,8 +352,8 @@ export default function WorkoutTimer() {
                   key={m}
                   onClick={() => { if (timerState !== 'idle') return; setMode(m); }}
                   disabled={timerState !== 'idle'}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
-                    mode === m ? 'bg-accent text-background' : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                    mode === m ? 'bg-accent/20 text-accent border-2 border-accent' : 'bg-card-elevated text-muted hover:text-foreground border-2 border-transparent'
                   } ${timerState !== 'idle' ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {getModeLabel(m, t)}
@@ -365,23 +365,23 @@ export default function WorkoutTimer() {
             {timerState === 'idle' && mode === 'timer' && (
               <div className="space-y-3">
                 <div className="flex gap-1 justify-center">
-                  <button onClick={() => setDirection('down')} className={`px-3 py-1 rounded text-xs font-medium cursor-pointer transition-colors ${direction === 'down' ? 'bg-zinc-700 text-foreground' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                  <button onClick={() => setDirection('down')} className={`px-3 py-1 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${direction === 'down' ? 'bg-card-elevated text-foreground' : 'text-muted hover:text-foreground'}`}>
                     {t('Countdown', 'Cuenta atras')}
                   </button>
-                  <button onClick={() => setDirection('up')} className={`px-3 py-1 rounded text-xs font-medium cursor-pointer transition-colors ${direction === 'up' ? 'bg-zinc-700 text-foreground' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                  <button onClick={() => setDirection('up')} className={`px-3 py-1 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${direction === 'up' ? 'bg-card-elevated text-foreground' : 'text-muted hover:text-foreground'}`}>
                     {t('Stopwatch', 'Cronometro')}
                   </button>
                 </div>
                 {direction === 'down' && (
                   <div className="flex items-center justify-center gap-3">
                     <div className="flex flex-col items-center">
-                      <label className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">{t('Min', 'Min')}</label>
-                      <input type="number" min={0} max={99} value={inputMinutes} onChange={e => setInputMinutes(Math.max(0, Math.min(99, parseInt(e.target.value) || 0)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-zinc-800 border border-zinc-600 rounded-lg text-foreground focus:border-accent focus:outline-none" />
+                      <label className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">{t('Min', 'Min')}</label>
+                      <input type="number" min={0} max={99} value={inputMinutes} onChange={e => setInputMinutes(Math.max(0, Math.min(99, parseInt(e.target.value) || 0)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-background border-2 border-border rounded-xl text-foreground focus:border-accent focus:outline-none" />
                     </div>
-                    <span className="text-2xl font-bold text-zinc-500 mt-4">:</span>
+                    <span className="text-2xl font-bold text-muted mt-4">:</span>
                     <div className="flex flex-col items-center">
-                      <label className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">{t('Sec', 'Seg')}</label>
-                      <input type="number" min={0} max={59} value={inputSeconds} onChange={e => setInputSeconds(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-zinc-800 border border-zinc-600 rounded-lg text-foreground focus:border-accent focus:outline-none" />
+                      <label className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">{t('Sec', 'Seg')}</label>
+                      <input type="number" min={0} max={59} value={inputSeconds} onChange={e => setInputSeconds(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-background border-2 border-border rounded-xl text-foreground focus:border-accent focus:outline-none" />
                     </div>
                   </div>
                 )}
@@ -392,8 +392,8 @@ export default function WorkoutTimer() {
             {timerState === 'idle' && mode === 'emom' && (
               <div className="flex items-center justify-center gap-3">
                 <div className="flex flex-col items-center">
-                  <label className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">{t('Total min', 'Min totales')}</label>
-                  <input type="number" min={1} max={99} value={inputMinutes} onChange={e => setInputMinutes(Math.max(1, Math.min(99, parseInt(e.target.value) || 1)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-zinc-800 border border-zinc-600 rounded-lg text-foreground focus:border-accent focus:outline-none" />
+                  <label className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">{t('Total min', 'Min totales')}</label>
+                  <input type="number" min={1} max={99} value={inputMinutes} onChange={e => setInputMinutes(Math.max(1, Math.min(99, parseInt(e.target.value) || 1)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-background border-2 border-border rounded-xl text-foreground focus:border-accent focus:outline-none" />
                 </div>
               </div>
             )}
@@ -404,7 +404,7 @@ export default function WorkoutTimer() {
                 {/* Presets */}
                 <div className="flex gap-1 justify-center flex-wrap">
                   {INTERVAL_PRESETS.map((p, i) => (
-                    <button key={i} onClick={() => applyPreset(p)} className="px-2.5 py-1 rounded text-xs text-zinc-400 bg-zinc-800 hover:text-zinc-200 hover:bg-zinc-700 transition-colors cursor-pointer">
+                    <button key={i} onClick={() => applyPreset(p)} className="px-2.5 py-1 rounded-xl text-xs font-semibold text-muted bg-card-elevated hover:text-foreground hover:bg-border transition-colors cursor-pointer">
                       {p.label}
                     </button>
                   ))}
@@ -412,23 +412,23 @@ export default function WorkoutTimer() {
                 {/* Custom inputs */}
                 <div className="flex items-center justify-center gap-4">
                   <div className="flex flex-col items-center">
-                    <label className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">{t('Work', 'Trabajo')}</label>
-                    <input type="number" min={5} max={300} value={workTime} onChange={e => setWorkTime(Math.max(5, Math.min(300, parseInt(e.target.value) || 5)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-zinc-800 border border-zinc-600 rounded-lg text-emerald-400 focus:border-emerald-400 focus:outline-none" />
-                    <span className="text-[10px] text-zinc-600 mt-0.5">sec</span>
+                    <label className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">{t('Work', 'Trabajo')}</label>
+                    <input type="number" min={5} max={300} value={workTime} onChange={e => setWorkTime(Math.max(5, Math.min(300, parseInt(e.target.value) || 5)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-background border-2 border-border rounded-xl text-emerald-400 focus:border-emerald-400 focus:outline-none" />
+                    <span className="text-[10px] text-muted/50 mt-0.5">sec</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <label className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">{t('Rest', 'Descanso')}</label>
-                    <input type="number" min={0} max={300} value={restTime} onChange={e => setRestTime(Math.max(0, Math.min(300, parseInt(e.target.value) || 0)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-zinc-800 border border-zinc-600 rounded-lg text-red-400 focus:border-red-400 focus:outline-none" />
-                    <span className="text-[10px] text-zinc-600 mt-0.5">sec</span>
+                    <label className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">{t('Rest', 'Descanso')}</label>
+                    <input type="number" min={0} max={300} value={restTime} onChange={e => setRestTime(Math.max(0, Math.min(300, parseInt(e.target.value) || 0)))} className="w-16 h-12 text-center text-2xl font-mono font-bold bg-background border-2 border-border rounded-xl text-red-400 focus:border-red-400 focus:outline-none" />
+                    <span className="text-[10px] text-muted/50 mt-0.5">sec</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <label className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">{t('Rounds', 'Rondas')}</label>
-                    <input type="number" min={1} max={50} value={totalRounds} onChange={e => setTotalRounds(Math.max(1, Math.min(50, parseInt(e.target.value) || 1)))} disabled={noLimit} className={`w-16 h-12 text-center text-2xl font-mono font-bold bg-zinc-800 border border-zinc-600 rounded-lg text-foreground focus:border-accent focus:outline-none ${noLimit ? 'opacity-30' : ''}`} />
+                    <label className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">{t('Rounds', 'Rondas')}</label>
+                    <input type="number" min={1} max={50} value={totalRounds} onChange={e => setTotalRounds(Math.max(1, Math.min(50, parseInt(e.target.value) || 1)))} disabled={noLimit} className={`w-16 h-12 text-center text-2xl font-mono font-bold bg-background border-2 border-border rounded-xl text-foreground focus:border-accent focus:outline-none ${noLimit ? 'opacity-30' : ''}`} />
                   </div>
                 </div>
                 <label className="flex items-center justify-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={noLimit} onChange={e => setNoLimit(e.target.checked)} className="accent-accent w-4 h-4 cursor-pointer" />
-                  <span className="text-xs text-zinc-400">{t('No limit (runs until you stop)', 'Sin limite (corre hasta parar)')}</span>
+                  <span className="text-xs text-muted font-semibold">{t('No limit (runs until you stop)', 'Sin limite (corre hasta parar)')}</span>
                 </label>
               </div>
             )}
@@ -436,14 +436,14 @@ export default function WorkoutTimer() {
 
             {/* Timer display */}
             <div className="text-center space-y-1">
-              <div className={`text-7xl font-mono font-bold tracking-wider ${getTimerColor()} transition-colors`}>
+              <div className={`text-7xl font-mono font-extrabold tracking-wider ${getTimerColor()} transition-colors`}>
                 {getDisplayTime()}
               </div>
               {isRunningOrPaused && (
-                <p className={`text-sm font-medium ${
+                <p className={`text-sm font-semibold ${
                   mode === 'intervals' && intervalPhase === 'work' ? 'text-emerald-400' :
                   mode === 'intervals' && intervalPhase === 'rest' ? 'text-red-400' :
-                  'text-zinc-400'
+                  'text-muted'
                 }`}>
                   {getSubInfo()}
                 </p>
@@ -453,28 +453,28 @@ export default function WorkoutTimer() {
             {/* Controls */}
             <div className="flex items-center justify-center gap-4">
               {timerState === 'idle' ? (
-                <button onClick={handleStart} disabled={!canStart} className="px-8 py-3 bg-accent text-background font-bold rounded-xl text-lg hover:brightness-110 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                <button onClick={handleStart} disabled={!canStart} className="px-8 py-3 bg-accent text-background font-bold rounded-xl text-lg hover:brightness-110 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed btn-playful">
                   {t('Start', 'Iniciar')}
                 </button>
               ) : (
                 <>
                   {timerState === 'running' ? (
-                    <button onClick={handlePause} className="px-6 py-3 bg-amber-500 text-background font-bold rounded-xl text-lg hover:brightness-110 transition-all cursor-pointer">
+                    <button onClick={handlePause} className="px-6 py-3 bg-amber-500 text-background font-bold rounded-xl text-lg hover:brightness-110 transition-all cursor-pointer btn-playful">
                       {t('Pause', 'Pausa')}
                     </button>
                   ) : (
-                    <button onClick={handleStart} className="px-6 py-3 bg-accent text-background font-bold rounded-xl text-lg hover:brightness-110 transition-all cursor-pointer">
+                    <button onClick={handleStart} className="px-6 py-3 bg-accent text-background font-bold rounded-xl text-lg hover:brightness-110 transition-all cursor-pointer btn-playful">
                       {t('Resume', 'Continuar')}
                     </button>
                   )}
-                  <button onClick={handleReset} className="px-6 py-3 bg-zinc-700 text-zinc-200 font-bold rounded-xl text-lg hover:bg-zinc-600 transition-all cursor-pointer">
+                  <button onClick={handleReset} className="px-6 py-3 bg-card-elevated text-foreground font-bold rounded-xl text-lg hover:bg-border transition-all cursor-pointer btn-playful">
                     {t('Reset', 'Reset')}
                   </button>
                 </>
               )}
             </div>
 
-            <button onClick={() => setIsOpen(false)} className="w-full py-2 text-zinc-500 text-xs hover:text-zinc-300 transition-colors cursor-pointer">
+            <button onClick={() => setIsOpen(false)} className="w-full py-2 text-muted text-xs font-semibold hover:text-foreground transition-colors cursor-pointer">
               {t('Close', 'Cerrar')}
             </button>
           </div>

@@ -37,8 +37,8 @@ export default function AboutPage() {
           <h1 className="text-2xl font-bold text-foreground">Iñaki</h1>
           <p className="text-muted text-sm mt-0.5">
             {t(
-              'Helping people move better — for good.',
-              'Ayudo a la gente a moverse mejor — para siempre.'
+              'Your daily training dose',
+              'Tu dosis diaria de entrenamiento'
             )}
           </p>
           <a href="https://twitter.com/ignakki" target="_blank" rel="noopener noreferrer" className="text-accent text-sm hover:underline">
@@ -47,31 +47,83 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* The project */}
+      {/* What is Hormesis? */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('What is this?', 'Que es esto?')}
+          {t('What is Hormesis?', 'Que es Hormesis?')}
         </h2>
         <div className="space-y-3 text-sm text-muted leading-relaxed">
           <p>
             {t(
-              'Free, open-source project. The daily workout generator uses the same exercise science, coaching cues, and progressive overload logic I use with my in-person clients — automated so anyone with dumbbells can train properly at home.',
-              'Proyecto gratuito y open-source. El generador de entrenos usa la misma ciencia del ejercicio, indicaciones tecnicas y logica de sobrecarga progresiva que uso con mis clientes presenciales — automatizado para que cualquiera con mancuernas pueda entrenar bien en casa.'
+              'Hormesis is a biological principle: small, controlled doses of stress make your body stronger. Cold exposure, fasting, training — the mechanism is the same. Your body adapts to what challenges it.',
+              'Hormesis es un principio biologico: dosis pequenas y controladas de estres hacen tu cuerpo mas fuerte. Exposicion al frio, ayuno, entrenamiento — el mecanismo es el mismo. Tu cuerpo se adapta a lo que le desafia.'
             )}
           </p>
           <p>
             {t(
-              'New workout every day at midnight. 7 days a week. Warm-up, strength, and conditioning — always. Pick your level, swap exercises, set a timer, and go.',
-              'Nuevo entreno cada dia a medianoche. 7 dias a la semana. Calentamiento, fuerza y acondicionamiento — siempre. Elige tu nivel, cambia ejercicios, pon el temporizador y a darle.'
-            )}
-          </p>
-          <p>
-            {t(
-              'The AI prompts are not generic templates. Each one encodes real methodology: phase systems with gates, injury decision trees, intake protocols, and safety checks. They turn ChatGPT, Claude, or DeepSeek into a capable health coach for their specific domain.',
-              'Los prompts de IA no son plantillas genericas. Cada uno codifica metodologia real: sistemas de fases con puertas, arboles de decision para lesiones, protocolos de evaluacion y controles de seguridad. Convierten ChatGPT, Claude o DeepSeek en un coach de salud competente en su dominio.'
+              'This app applies that principle to training. One coached session per day — the right dose, programmed by a real trainer.',
+              'Esta app aplica ese principio al entrenamiento. Una sesion dirigida al dia — la dosis correcta, programada por un entrenador real.'
             )}
           </p>
         </div>
+      </section>
+
+      {/* How it works */}
+      <section className="space-y-4 animate-fade-up">
+        <h2 className="text-lg font-bold text-foreground">
+          {t('How it works', 'Como funciona')}
+        </h2>
+        <div className="space-y-3 text-sm text-muted leading-relaxed">
+          <p>
+            {t(
+              'Every session follows the same 3-block structure: warmup, strength, conditioning. The content changes daily — movements, protocols, formats, intensity.',
+              'Cada sesion sigue la misma estructura de 3 bloques: calentamiento, fuerza, acondicionamiento. El contenido cambia cada dia — movimientos, protocolos, formatos, intensidad.'
+            )}
+          </p>
+          <ul className="space-y-1.5 list-disc list-inside">
+            <li>{t('4-week periodization that repeats continuously', 'Periodizacion de 4 semanas que se repite continuamente')}</li>
+            <li>{t('155 exercises, 28 warmup movements, 31 conditioning formats', '155 ejercicios, 28 movimientos de calentamiento, 31 formatos de acondicionamiento')}</li>
+            <li>{t('Equipment filter — dumbbells, pull-up bar, bodyweight only, or all', 'Filtro de equipamiento — mancuernas, barra de dominadas, solo peso corporal, o todo')}</li>
+            <li>{t('Level selector with real coaching cues at every step', 'Selector de nivel con indicaciones tecnicas reales en cada paso')}</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Why I built this */}
+      <section className="space-y-4 animate-fade-up">
+        <h2 className="text-lg font-bold text-foreground">
+          {t('Why I built this', 'Por que lo construi')}
+        </h2>
+        <div className="space-y-3 text-sm text-muted leading-relaxed">
+          <p>
+            {t(
+              'I\'m a personal trainer in Madrid. I wanted my clients to train properly on the days they don\'t see me — same methodology, same cues, same periodization. So I automated it.',
+              'Soy entrenador personal en Madrid. Queria que mis clientes entrenasen bien los dias que no me ven — misma metodologia, mismas indicaciones, misma periodizacion. Asi que lo automatice.'
+            )}
+          </p>
+          <p>
+            {t(
+              'This isn\'t a workout logger or a random generator. It\'s 4-week periodized coaching with real exercise science — the same programming a PT charges 50\u20AC/session for.',
+              'Esto no es un diario de entrenos ni un generador aleatorio. Es coaching periodizado de 4 semanas con ciencia del ejercicio real — la misma programacion por la que un entrenador cobra 50\u20AC/sesion.'
+            )}
+          </p>
+        </div>
+      </section>
+
+      {/* AI Health Prompts */}
+      <section className="space-y-3 animate-fade-up">
+        <h2 className="text-lg font-bold text-foreground">
+          {t('AI Health Prompts', 'Prompts de Salud IA')}
+        </h2>
+        <p className="text-sm text-muted leading-relaxed">
+          {t(
+            'Copy a specialized prompt into ChatGPT, Claude, or DeepSeek and get a capable health coach for that domain.',
+            'Copia un prompt especializado en ChatGPT, Claude o DeepSeek y consigue un coach de salud competente en ese area.'
+          )}
+        </p>
+        <Link href="/prompts" className="text-accent text-sm hover:underline font-bold">
+          {t('Browse prompts', 'Ver prompts')} →
+        </Link>
       </section>
 
       {/* Knowledge sources */}

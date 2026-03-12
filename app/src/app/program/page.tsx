@@ -38,8 +38,8 @@ const PHASES: { phase: PhaseInfo['phase']; week: number; en: string; es: string;
     desc_es: 'Suda. Tus articulaciones descansan mientras tu motor crece.',
     strength_en: 'Strength-Endurance, Mechanical Drop Sets, To Failure, Tempo. Lighter loads, movement variety.',
     strength_es: 'Fuerza-Resistencia, Mechanical Drop Sets, Al Fallo, Tempo. Cargas ligeras, variedad.',
-    wod_en: 'Maximum variety: Triplets, Tabata, Double WOD, Pyramid, FGB, AMRAPs. Any timecap.',
-    wod_es: 'Maxima variedad: Triplets, Tabata, Double WOD, Piramide, FGB, AMRAPs. Cualquier timecap.',
+    wod_en: 'Maximum variety: Triplets, Tabata, Double Session, Pyramid, FGB, AMRAPs. Any timecap.',
+    wod_es: 'Maxima variedad: Triplets, Tabata, Doble Sesion, Piramide, FGB, AMRAPs. Cualquier timecap.',
   },
   {
     phase: 'realization',
@@ -77,8 +77,8 @@ export default function ProgramPage() {
         </h1>
         <p className="text-muted text-sm leading-relaxed">
           {t(
-            'Hormesis follows a 4-week mesocycle that repeats continuously. Each week has a different training bias — the workouts, strength protocols, and WOD formats all adapt automatically. No two weeks feel the same.',
-            'Hormesis sigue un mesociclo de 4 semanas que se repite continuamente. Cada semana tiene un sesgo de entrenamiento diferente — los entrenos, protocolos de fuerza y formatos de WOD se adaptan automaticamente. Ninguna semana se siente igual.'
+            'Hormesis follows a 4-week mesocycle that repeats continuously. Each week has a different training bias — the workouts, strength protocols, and conditioning formats all adapt automatically. No two weeks feel the same.',
+            'Hormesis sigue un mesociclo de 4 semanas que se repite continuamente. Cada semana tiene un sesgo de entrenamiento diferente — los entrenos, protocolos de fuerza y formatos de acondicionamiento se adaptan automaticamente. Ninguna semana se siente igual.'
           )}
         </p>
       </section>
@@ -163,7 +163,7 @@ export default function ProgramPage() {
                     <span className="text-muted">{lang === 'es' ? p.strength_es : p.strength_en}</span>
                   </div>
                   <div className="flex gap-2 text-xs">
-                    <span className="text-orange-400 font-medium shrink-0">WOD:</span>
+                    <span className="text-orange-400 font-medium shrink-0">{t('Conditioning:', 'Acondicionamiento:')}</span>
                     <span className="text-muted">{lang === 'es' ? p.wod_es : p.wod_en}</span>
                   </div>
                 </div>
@@ -226,7 +226,7 @@ export default function ProgramPage() {
           {[
             { color: 'bg-green-500', label: t('Warm-up', 'Calentamiento'), desc: t('RAMP protocol + CARs + breathing. Prepares joints and nervous system.', 'Protocolo RAMP + CARs + respiracion. Prepara articulaciones y sistema nervioso.') },
             { color: 'bg-red-500', label: t('Strength', 'Fuerza'), desc: t('2-3 exercises, protocol changes by week phase. Swap button to adapt.', '2-3 ejercicios, protocolo cambia por fase semanal. Boton de cambio para adaptar.') },
-            { color: 'bg-orange-500', label: 'WOD', desc: t('Conditioning block. Format and intensity vary by mesocycle phase.', 'Bloque de acondicionamiento. Formato e intensidad varian por fase del mesociclo.') },
+            { color: 'bg-orange-500', label: t('Conditioning', 'Acondicionamiento'), desc: t('Format and intensity vary by mesocycle phase.', 'Formato e intensidad varian por fase del mesociclo.') },
           ].map((block) => (
             <div key={block.label} className="flex items-start gap-3 p-3 rounded-lg border border-border bg-card">
               <div className={`w-3 h-3 rounded-full ${block.color} mt-0.5 shrink-0`} />

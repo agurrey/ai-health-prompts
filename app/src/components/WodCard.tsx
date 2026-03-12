@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { m } from 'motion/react';
+import { m, AnimatePresence } from 'motion/react';
 import { useI18n } from '@/lib/i18n';
 import type { TimerConfig } from '@/lib/timer-engine';
 import { useExerciseTimer } from '@/hooks/useExerciseTimer';
 import Icon from './Icon';
 import TimerDisplay from './TimerDisplay';
+import VideoPlayer from './VideoPlayer';
 
 interface WodMovement {
   name: string;
@@ -66,7 +67,7 @@ const FORMAT_EXPLANATIONS: Record<string, { en: string; es: string }> = {
   },
   buy_in_out: {
     en: 'Buy-In/Buy-Out = Complete a set task before and after the main workout. The buy-in earns entry, the buy-out finishes it.',
-    es: 'Buy-In/Buy-Out = Completa una tarea antes y despues del WOD principal. El buy-in te da entrada, el buy-out lo cierra.',
+    es: 'Buy-In/Buy-Out = Completa una tarea antes y despues del bloque principal. El buy-in te da entrada, el buy-out lo cierra.',
   },
   death_by: {
     en: 'Death By = Start with 1 rep in minute 1, add 1 rep each minute. Continue until you can\'t complete the reps within the minute.',
@@ -77,8 +78,8 @@ const FORMAT_EXPLANATIONS: Record<string, { en: string; es: string }> = {
     es: 'Movimiento Unico = Un ejercicio, esfuerzo maximo. Simple, enfocado, intenso. Sin donde esconderse.',
   },
   double_wod: {
-    en: 'Double WOD = Two short workouts back to back. Different stimulus each. Recover briefly between them.',
-    es: 'Doble WOD = Dos entrenamientos cortos seguidos. Estimulo diferente en cada uno. Recupera brevemente entre ellos.',
+    en: 'Double Session = Two short workouts back to back. Different stimulus each. Recover briefly between them.',
+    es: 'Doble Sesion = Dos entrenamientos cortos seguidos. Estimulo diferente en cada uno. Recupera brevemente entre ellos.',
   },
   fgb: {
     en: 'Fight Gone Bad = 1 minute at each station, rotate. 1 minute rest between rounds. Score = total reps across all stations.',
@@ -99,6 +100,7 @@ interface WodCardProps {
   onComplete: () => void;
   onSkip: () => void;
   timerConfig?: TimerConfig | null;
+  readOnly?: boolean;
 }
 
 export default function WodCard({
@@ -114,6 +116,7 @@ export default function WodCard({
   onComplete,
   onSkip,
   timerConfig,
+  readOnly = false,
 }: WodCardProps) {
   const { t, lang } = useI18n();
   const [showTimer, setShowTimer] = useState(false);
@@ -137,10 +140,9 @@ export default function WodCard({
       {/* Header */}
       <div className="p-4 border-b border-orange-500/20">
         <div className="flex items-center justify-between mb-2">
-          <h4 className="font-extrabold text-orange-400 text-sm uppercase tracking-wider">WOD</h4>
+          <h4 className="font-extrabold text-orange-400 text-sm uppercase tracking-wider">{formatName}</h4>
           <span className="text-orange-400 text-xs font-bold">Cap: {timecap}</span>
         </div>
-        <p className="text-foreground font-bold text-sm">{formatName}</p>
         <p className="text-orange-400/60 text-xs mt-1">{formatDescription}</p>
         <div className="flex gap-2 mt-2">
           <span className="text-xs px-2 py-0.5 rounded bg-orange-500/15 text-orange-400 border border-orange-500/20">
@@ -164,16 +166,23 @@ export default function WodCard({
         </div>
       )}
 
-      {/* Movements list */}
-      <div className="p-4 space-y-2">
-        {movements.map((mv, i) => (
-          <div key={i} className="flex items-center gap-2 text-sm">
-            <span className="font-mono font-bold text-orange-400 min-w-[40px]">{mv.reps}</span>
-            <span className="text-foreground flex-1">{mv.name}</span>
-            {mv.load !== 'BW' && (
-              <span className="text-muted text-xs">({mv.load})</span>
+      {/* Watch first callout */}
+      <div className="mx-4 mt-4 px-3 py-2 rounded-lg bg-blue-500/5 border border-blue-500/15">
+        <div className="flex gap-2">
+          <Icon name="play" size={14} className="text-blue-400/60 shrink-0 mt-0.5" />
+          <p className="text-blue-400/80 text-xs leading-relaxed">
+            {t(
+              'Watch all the videos first, then execute the plan.',
+              'Mira todos los videos primero, luego ejecuta el plan.'
             )}
-          </div>
+          </p>
+        </div>
+      </div>
+
+      {/* Movements list — expandable */}
+      <div className="p-4 space-y-1">
+        {movements.map((mv, i) => (
+          <WodMovementRow key={i} movement={mv} />
         ))}
 
         {note && (
@@ -199,6 +208,7 @@ export default function WodCard({
       )}
 
       {/* Action buttons */}
+      {!readOnly && (
       <div className="px-4 pb-4 flex gap-2">
         {timerConfig && !showTimer && (
           <button
@@ -223,6 +233,47 @@ export default function WodCard({
           {t('Skip', 'Saltar')}
         </button>
       </div>
+      )}
     </m.div>
+  );
+}
+
+function WodMovementRow({ movement }: { movement: WodMovement }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex items-center gap-2 text-sm w-full text-left py-1.5 px-1 rounded-lg hover:bg-orange-500/5 transition-colors cursor-pointer"
+      >
+        <span className="font-mono font-bold text-orange-400 min-w-[40px]">{movement.reps}</span>
+        <span className="text-foreground flex-1">{movement.name}</span>
+        {movement.load !== 'BW' && (
+          <span className="text-muted text-xs">({movement.load})</span>
+        )}
+        <Icon
+          name={expanded ? 'chevron-up' : 'chevron-down'}
+          size={12}
+          className="text-muted/40 shrink-0"
+        />
+      </button>
+
+      <AnimatePresence>
+        {expanded && (
+          <m.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="ml-[48px] mr-1 mb-2 rounded-lg border border-border bg-card overflow-hidden">
+              <VideoPlayer demoSearch={movement.demoSearch} name={movement.name} />
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

@@ -14,8 +14,8 @@ const MESSAGES = {
     es: 'Calentamiento hecho! Vamos con Fuerza.',
   },
   strength: {
-    en: 'Strength done! Time for the WOD.',
-    es: 'Fuerza hecha! Hora del WOD.',
+    en: 'Strength done! Time for conditioning.',
+    es: 'Fuerza hecha! Hora del acondicionamiento.',
   },
 };
 

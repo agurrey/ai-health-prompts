@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useI18n } from '@/lib/i18n';
 import {
   getStreak,
   loadData,
   getEquipment,
   setEquipment as persistEquipment,
+  exportData,
+  importData,
+  getCompletedDates,
   CompletedWorkout,
 } from '@/lib/storage';
 import type { Equipment } from '@/data/exercises';
@@ -27,10 +30,12 @@ function getCompletionRate(workouts: CompletedWorkout[]): string {
 
 export default function ProfilePage() {
   const { t } = useI18n();
+  const fileRef = useRef<HTMLInputElement>(null);
   const [streak, setStreak] = useState<{ current: number; longest: number }>({ current: 0, longest: 0 });
   const [completedWorkouts, setCompletedWorkouts] = useState<CompletedWorkout[]>([]);
   const [showEquipment, setShowEquipment] = useState(false);
   const [equipment, setEquipment] = useState<Equipment[] | undefined>(undefined);
+  const [importStatus, setImportStatus] = useState<string | null>(null);
 
   useEffect(() => {
     setStreak(getStreak());
@@ -50,8 +55,38 @@ export default function ProfilePage() {
     setShowEquipment(false);
   }
 
+  function handleExport() {
+    const json = exportData();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `hormesis-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const ok = importData(reader.result as string);
+      if (ok) {
+        setStreak(getStreak());
+        setCompletedWorkouts(loadData().completedWorkouts);
+        setImportStatus(t('Data restored!', 'Datos restaurados!'));
+      } else {
+        setImportStatus(t('Invalid file', 'Archivo invalido'));
+      }
+      setTimeout(() => setImportStatus(null), 3000);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
   return (
-    <main className="max-w-lg mx-auto px-4 py-8 space-y-8 animate-fade-up">
+    <div className="max-w-lg mx-auto space-y-8 animate-fade-up">
       <h1 className="text-2xl font-bold text-foreground">
         {t('Profile', 'Perfil')}
       </h1>
@@ -108,6 +143,37 @@ export default function ProfilePage() {
           </p>
         )}
       </section>
-    </main>
+
+      {/* Export / Import */}
+      <section className="space-y-3 border-t border-border pt-6">
+        <h2 className="text-lg font-bold text-foreground">
+          {t('Data', 'Datos')}
+        </h2>
+        <div className="flex gap-3">
+          <button
+            onClick={handleExport}
+            className="flex-1 px-4 py-3 bg-card border border-border text-foreground rounded-lg cursor-pointer text-sm font-bold"
+          >
+            {t('Export', 'Exportar')}
+          </button>
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="flex-1 px-4 py-3 bg-card border border-border text-foreground rounded-lg cursor-pointer text-sm font-bold"
+          >
+            {t('Import', 'Importar')}
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+          />
+        </div>
+        {importStatus && (
+          <p className="text-center text-sm text-accent font-bold animate-fade-in">{importStatus}</p>
+        )}
+      </section>
+    </div>
   );
 }

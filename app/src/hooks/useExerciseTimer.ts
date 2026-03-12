@@ -58,16 +58,17 @@ export function useExerciseTimer(config: TimerConfig | null) {
     }
 
     if (config.mode === 'emom') {
+      const interval = config.intervalSeconds || 60;
       setDisplaySeconds(prev => {
         if (prev <= 1) {
-          const totalMin = Math.floor((config.totalSeconds || 600) / 60);
+          const totalBlocks = Math.floor((config.totalSeconds || 600) / interval);
           setCurrentMinute(cm => {
-            if (cm >= totalMin) { handleComplete(); return cm; }
+            if (cm >= totalBlocks) { handleComplete(); return cm; }
             beepShort();
-            setDisplaySeconds(60);
+            setDisplaySeconds(interval);
             return cm + 1;
           });
-          return 60;
+          return interval;
         }
         beepCountdown(prev - 1);
         return prev - 1;
@@ -121,7 +122,7 @@ export function useExerciseTimer(config: TimerConfig | null) {
         setDisplaySeconds(0);
         break;
       case 'emom':
-        setDisplaySeconds(60);
+        setDisplaySeconds(config.intervalSeconds || 60);
         setCurrentMinute(1);
         break;
       case 'intervals':
@@ -168,8 +169,9 @@ export function useExerciseTimer(config: TimerConfig | null) {
         progress = config.totalSeconds ? 1 - displaySeconds / config.totalSeconds : 0;
         break;
       case 'emom': {
-        const totalMin = Math.floor((config.totalSeconds || 600) / 60);
-        progress = (currentMinute - 1 + (1 - displaySeconds / 60)) / totalMin;
+        const interval = config.intervalSeconds || 60;
+        const totalBlocks = Math.floor((config.totalSeconds || 600) / interval);
+        progress = (currentMinute - 1 + (1 - displaySeconds / interval)) / totalBlocks;
         break;
       }
       case 'intervals': {
@@ -193,7 +195,7 @@ export function useExerciseTimer(config: TimerConfig | null) {
     currentRound: config?.mode === 'intervals' ? currentRound : undefined,
     totalRounds: config?.mode === 'intervals' ? config.rounds : undefined,
     currentMinute: config?.mode === 'emom' ? currentMinute : undefined,
-    totalMinutes: config?.mode === 'emom' ? Math.floor((config.totalSeconds || 600) / 60) : undefined,
+    totalMinutes: config?.mode === 'emom' ? Math.floor((config.totalSeconds || 600) / (config.intervalSeconds || 60)) : undefined,
     progress: Math.min(1, Math.max(0, progress)),
   };
 

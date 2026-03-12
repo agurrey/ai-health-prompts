@@ -1,11 +1,17 @@
 'use client';
 
+import { useEffect } from 'react';
 import { m } from 'motion/react';
 import { useI18n } from '@/lib/i18n';
 import Icon from './Icon';
+import { playVictoryFeedback } from '@/lib/feedback';
 
 export default function FinalCelebration() {
   const { t } = useI18n();
+
+  useEffect(() => {
+    playVictoryFeedback();
+  }, []);
 
   return (
     <m.div

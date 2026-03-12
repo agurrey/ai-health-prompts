@@ -8,6 +8,7 @@ export interface TimerConfig {
   workSeconds?: number;     // intervals work
   restSeconds?: number;     // intervals rest
   rounds?: number;          // intervals rounds
+  intervalSeconds?: number; // emom interval (60 for EMOM, 120 for E2MOM, 180 for E3MOM)
 }
 
 export interface TimerSnapshot {

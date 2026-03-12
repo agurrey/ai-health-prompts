@@ -1,12 +1,13 @@
 import type { Session } from './generator';
 
-export type StepType = 'warmup' | 'strength' | 'wod';
+export type StepType = 'warmup' | 'strength' | 'wod_preview' | 'wod';
 export type StepStatus = 'pending' | 'current' | 'done' | 'skipped';
 
 export interface FlowStep {
   type: StepType;
   index: number;
   status: StepStatus;
+  swappedExerciseId?: string;
 }
 
 export interface LinearFlowState {
@@ -26,9 +27,19 @@ export function createLinearState(session: Session): LinearFlowState {
   for (let i = 0; i < session.strength.length; i++) {
     steps.push({ type: 'strength', index: i, status: 'pending' });
   }
+  for (let i = 0; i < session.conditioning.movements.length; i++) {
+    steps.push({ type: 'wod_preview', index: i, status: 'pending' });
+  }
   steps.push({ type: 'wod', index: 0, status: 'pending' });
 
   return { date: session.date, steps, currentStep: 0 };
+}
+
+export function expectedStepCount(session: Session): number {
+  return session.warmup.exercises.length
+    + session.strength.length
+    + session.conditioning.movements.length
+    + 1;
 }
 
 export function completeStep(state: LinearFlowState): LinearFlowState {
@@ -51,6 +62,28 @@ function advanceStep(state: LinearFlowState, newStatus: 'done' | 'skipped'): Lin
   }
 
   return { ...state, steps, currentStep: nextIdx };
+}
+
+export function swapExercise(state: LinearFlowState, stepIndex: number, newExerciseId: string): LinearFlowState {
+  const steps = state.steps.map((s, i) => {
+    if (i === stepIndex) return { ...s, swappedExerciseId: newExerciseId };
+    return s;
+  });
+  return { ...state, steps };
+}
+
+export function skipToWod(state: LinearFlowState): LinearFlowState {
+  const steps = state.steps.map(s => {
+    if (s.type === 'wod_preview' && (s.status === 'pending' || s.status === 'current')) {
+      return { ...s, status: 'skipped' as StepStatus };
+    }
+    return s;
+  });
+  const wodIdx = steps.findIndex(s => s.type === 'wod');
+  if (wodIdx >= 0) {
+    steps[wodIdx] = { ...steps[wodIdx], status: 'current' };
+  }
+  return { ...state, steps, currentStep: wodIdx >= 0 ? wodIdx : state.currentStep };
 }
 
 export function isBlockComplete(state: LinearFlowState, type: StepType): boolean {
@@ -80,6 +113,28 @@ export function getBlockTransition(state: LinearFlowState): StepType | null {
   const curr = state.steps[state.currentStep];
   if (prev.type !== curr.type) return prev.type;
   return null;
+}
+
+const BLOCK_ORDER: Record<StepType, number> = { warmup: 0, strength: 1, wod_preview: 2, wod: 3 };
+
+export function resetBlock(state: LinearFlowState, type: StepType): LinearFlowState {
+  const targetOrder = BLOCK_ORDER[type];
+  const steps = state.steps.map(s => {
+    if (BLOCK_ORDER[s.type] >= targetOrder) return { ...s, status: 'pending' as StepStatus, swappedExerciseId: undefined };
+    return s;
+  });
+  const firstIdx = steps.findIndex(s => s.type === type);
+  if (firstIdx >= 0) steps[firstIdx] = { ...steps[firstIdx], status: 'current' };
+  return { ...state, steps, currentStep: firstIdx >= 0 ? firstIdx : 0 };
+}
+
+export function resetAll(state: LinearFlowState): LinearFlowState {
+  const steps = state.steps.map((s, i) => ({
+    ...s,
+    status: (i === 0 ? 'current' : 'pending') as StepStatus,
+    swappedExerciseId: undefined,
+  }));
+  return { ...state, steps, currentStep: 0 };
 }
 
 export function saveFlowState(state: LinearFlowState): void {

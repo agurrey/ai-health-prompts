@@ -35,9 +35,6 @@ function Nav() {
           <Link href="/program" className={linkClass('/program')}>
             {t('Program', 'Programa')}
           </Link>
-          <Link href="/history" className={linkClass('/history')}>
-            {t('History', 'Historial')}
-          </Link>
           <Link href="/about" className={linkClass('/about')}>
             {t('About', 'Info')}
           </Link>
@@ -62,13 +59,12 @@ function MobileBottomNav() {
   const tabs = [
     { href: '/', icon: 'home', label: 'H' },
     { href: '/program', icon: 'calendar', label: t('Program', 'Programa') },
-    { href: '/history', icon: 'clock', label: t('History', 'Historial') },
     { href: '/about', icon: 'info', label: t('About', 'Info') },
   ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-card/95 backdrop-blur-sm border-t border-border">
-      <div className="grid grid-cols-4 min-h-[56px]">
+      <div className="grid grid-cols-3 min-h-[56px]">
         {tabs.map(tab => (
           <Link
             key={tab.href}
@@ -99,7 +95,7 @@ function Footer() {
       <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
         <div className="flex items-center gap-2">
           <Logo size={16} className="opacity-30" />
-          <p className="font-semibold">{t('Built by a trainer, not a corporation.', 'Hecho por un entrenador, no una empresa.')}</p>
+          <p className="font-semibold">{t('Same programming. Zero cost.', 'La misma programacion. Coste cero.')}</p>
         </div>
         <div className="flex gap-6">
           <Link href="/about" className="hover:text-foreground transition-colors font-semibold">

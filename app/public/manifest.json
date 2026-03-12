@@ -1,7 +1,7 @@
 {
   "name": "Hormesis",
   "short_name": "Hormesis",
-  "description": "Free daily dumbbell workout. New WOD drops at 00:00.",
+  "description": "Your daily training dose. New coached session at 00:00.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",

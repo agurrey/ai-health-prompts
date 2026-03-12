@@ -53,11 +53,31 @@ export function configFromWod(formatType: string, timecap: string): TimerConfig 
     return { mode: 'intervals', workSeconds: 20, restSeconds: 10, rounds: 8 };
   }
 
+  // E2MOM / E3MOM (must check before generic emom)
+  if (lc.includes('e2mom')) {
+    const totalSec = parseTimecap(timecap);
+    return { mode: 'emom', totalSeconds: totalSec || 600, intervalSeconds: 120 };
+  }
+  if (lc.includes('e3mom')) {
+    const totalSec = parseTimecap(timecap);
+    return { mode: 'emom', totalSeconds: totalSec || 600, intervalSeconds: 180 };
+  }
+
   // EMOM
   if (lc.includes('emom')) {
     const totalSec = parseTimecap(timecap);
-    if (totalSec) return { mode: 'emom', totalSeconds: totalSec };
-    return { mode: 'emom', totalSeconds: 600 }; // default 10 min
+    return { mode: 'emom', totalSeconds: totalSec || 600, intervalSeconds: 60 };
+  }
+
+  // Fight Gone Bad — 3 rounds of 5 stations x 1 min + 1 min rest
+  if (lc.includes('fgb') || lc.includes('fight_gone_bad')) {
+    return { mode: 'intervals', workSeconds: 60, restSeconds: 60, rounds: 15 };
+  }
+
+  // Death By — escalating EMOM, use stopwatch (athlete decides when to stop)
+  if (lc.includes('death_by')) {
+    const totalSec = parseTimecap(timecap);
+    return { mode: 'emom', totalSeconds: totalSec || 600, intervalSeconds: 60 };
   }
 
   // AMRAP, For Time, or any countdown-based format

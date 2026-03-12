@@ -91,29 +91,7 @@ export function isWorkoutDone(date: string): boolean {
   return loadData().completedWorkouts.some(w => w.date === date);
 }
 
-export function logExercise(entry: ExerciseLogEntry): void {
-  const data = loadData();
-  const idx = data.exerciseLog.findIndex(e => e.exerciseId === entry.exerciseId && e.date === entry.date);
-  if (idx >= 0) {
-    data.exerciseLog[idx] = entry;
-  } else {
-    data.exerciseLog.push(entry);
-  }
-  saveData(data);
-}
 
-export function logExercises(entries: ExerciseLogEntry[]): void {
-  const data = loadData();
-  for (const entry of entries) {
-    const idx = data.exerciseLog.findIndex(e => e.exerciseId === entry.exerciseId && e.date === entry.date);
-    if (idx >= 0) {
-      data.exerciseLog[idx] = entry;
-    } else {
-      data.exerciseLog.push(entry);
-    }
-  }
-  saveData(data);
-}
 
 export function getLastLog(exerciseId: string): ExerciseLogEntry | null {
   const data = loadData();

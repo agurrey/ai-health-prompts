@@ -30,7 +30,7 @@ export default function TimerDisplay({ snapshot, onStart, onPause, onReset, colo
   let subLabel = '';
   if (!isIdle) {
     if (mode === 'emom' && currentMinute && totalMinutes) {
-      subLabel = `${t('Min', 'Min')} ${currentMinute}/${totalMinutes}`;
+      subLabel = `${currentMinute}/${totalMinutes}`;
     } else if (mode === 'intervals' && currentRound) {
       const roundLabel = totalRounds ? `${currentRound}/${totalRounds}` : `${currentRound}`;
       const phaseLabel = phase === 'work' ? t('WORK', 'TRABAJO') : t('REST', 'DESCANSO');

@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import WorkoutGenerator from '@/components/WorkoutGenerator';
-import StreakWidget from '@/components/StreakWidget';
 import { useI18n } from '@/lib/i18n';
 
 export default function Home() {
@@ -14,17 +13,15 @@ export default function Home() {
       <section className="space-y-6 animate-fade-up">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">
-            {t('Today\'s workout', 'El entrenamiento de hoy')}
+            {t('Today\'s session', 'La sesion de hoy')}
           </h1>
           <p className="text-muted text-sm font-semibold">
             {t(
-              'New WOD drops daily at 00:00',
-              'Nuevo WOD cada dia a las 00:00'
+              'New at midnight. Warmup + strength + conditioning.',
+              'Nuevo a medianoche. Calentamiento + fuerza + acondicionamiento.'
             )}
           </p>
         </div>
-
-        <StreakWidget />
 
         <WorkoutGenerator />
       </section>
@@ -41,8 +38,8 @@ export default function Home() {
             {t('Built by ', 'Hecho por ')}
             <a href="https://twitter.com/ignakki" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-bold">@ignakki</a>
             {t(
-              ' — helping people move better, for good.',
-              ' — ayudando a la gente a moverse mejor, para siempre.'
+              ' — same programming I use with my clients.',
+              ' — la misma programacion que uso con mis clientes.'
             )}
           </p>
           <Link href="/about" className="text-accent text-xs hover:underline mt-1 inline-block font-bold">

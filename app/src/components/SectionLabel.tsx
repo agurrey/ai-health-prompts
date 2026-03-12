@@ -1,19 +1,22 @@
 'use client';
 
 import { useI18n } from '@/lib/i18n';
+import Icon from './Icon';
 
 interface SectionLabelProps {
   type: 'warmup' | 'strength' | 'wod';
   count: number;
+  isComplete?: boolean;
+  onReset?: () => void;
 }
 
 const CONFIG = {
   warmup: { en: 'WARM-UP', es: 'CALENTAMIENTO', color: 'text-emerald-400', border: 'border-emerald-500/30' },
   strength: { en: 'STRENGTH', es: 'FUERZA', color: 'text-red-400', border: 'border-red-500/30' },
-  wod: { en: 'WOD', es: 'WOD', color: 'text-orange-400', border: 'border-orange-500/30' },
+  wod: { en: 'CONDITIONING', es: 'ACONDICIONAMIENTO', color: 'text-orange-400', border: 'border-orange-500/30' },
 };
 
-export default function SectionLabel({ type, count }: SectionLabelProps) {
+export default function SectionLabel({ type, count, isComplete, onReset }: SectionLabelProps) {
   const { t } = useI18n();
   const c = CONFIG[type];
 
@@ -26,6 +29,15 @@ export default function SectionLabel({ type, count }: SectionLabelProps) {
           <span className="font-semibold opacity-60 ml-1.5">({count})</span>
         )}
       </span>
+      {isComplete && onReset && (
+        <button
+          onClick={onReset}
+          className="text-muted/40 hover:text-foreground transition-colors cursor-pointer"
+          title={t('Redo', 'Rehacer')}
+        >
+          <Icon name="cycle" size={14} />
+        </button>
+      )}
       <div className={`h-px flex-1 ${c.border} border-t`} />
     </div>
   );

@@ -18,13 +18,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hormesis — Free Daily Workout",
+  title: "Hormesis — Your daily training dose",
   description:
-    "New WOD drops daily at 00:00. Free daily workout generator with 4-week periodization, warmup, strength, and conditioning. No login. No paywall.",
+    "Coached sessions that change every day. 4-week periodization, warmup → strength → conditioning. 155 exercises, real coaching cues. Free. No login.",
   openGraph: {
-    title: "Hormesis — Free Daily Workout",
+    title: "Hormesis — Your daily training dose",
     description:
-      "New WOD drops daily at 00:00. Free daily workout. No login. No paywall.",
+      "Your body adapts to stress. Hormesis gives you the right dose. New coached session every day. Free.",
     type: "website",
   },
   twitter: {

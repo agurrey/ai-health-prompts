@@ -5,15 +5,15 @@ import { useI18n } from '@/lib/i18n';
 
 const SOURCES = [
   { author: 'Stuart McGill', work: 'Low Back Disorders', work_es: 'Low Back Disorders', topic: 'Spine stability, Big 3', topic_es: 'Estabilidad espinal, Big 3' },
-  { author: 'Gray Cook', work: 'Movement', work_es: 'Movement', topic: 'Functional screening', topic_es: 'Evaluacion funcional' },
+  { author: 'Gray Cook', work: 'Movement', work_es: 'Movement', topic: 'Functional screening', topic_es: 'Evaluación funcional' },
   { author: 'Kelly Starrett', work: 'Becoming a Supple Leopard', work_es: 'Becoming a Supple Leopard', topic: 'Mobility systems', topic_es: 'Sistemas de movilidad' },
   { author: 'Brad Schoenfeld', work: 'Science and Development of Muscle Hypertrophy', work_es: 'Science and Development of Muscle Hypertrophy', topic: 'Hypertrophy mechanisms, volume, intensity', topic_es: 'Mecanismos de hipertrofia, volumen, intensidad' },
-  { author: 'Eric Helms', work: 'The Muscle & Strength Pyramids', work_es: 'The Muscle & Strength Pyramids', topic: 'Training & nutrition hierarchy', topic_es: 'Jerarquia de entrenamiento y nutricion' },
-  { author: 'Matthew Walker', work: 'Why We Sleep', work_es: 'Why We Sleep', topic: 'Sleep architecture', topic_es: 'Arquitectura del sueno' },
-  { author: 'BJ Fogg', work: 'Tiny Habits', work_es: 'Tiny Habits', topic: 'Behavior design', topic_es: 'Diseno de comportamiento' },
-  { author: 'NSCA', work: 'Essentials of Strength & Conditioning', work_es: 'Essentials of Strength & Conditioning', topic: 'Programming, periodization, exercise science', topic_es: 'Programacion, periodizacion, ciencia del ejercicio' },
-  { author: 'NASM', work: 'Corrective Exercise Specialist', work_es: 'Especialista en Ejercicio Correctivo', topic: 'Movement assessment & correction', topic_es: 'Evaluacion y correccion del movimiento' },
-  { author: 'NOVA Classification', work: 'Food Classification System', work_es: 'Sistema de Clasificacion de Alimentos', topic: 'Ultra-processed food framework', topic_es: 'Marco de alimentos ultraprocesados' },
+  { author: 'Eric Helms', work: 'The Muscle & Strength Pyramids', work_es: 'The Muscle & Strength Pyramids', topic: 'Training & nutrition hierarchy', topic_es: 'Jerarquía de entrenamiento y nutrición' },
+  { author: 'Matthew Walker', work: 'Why We Sleep', work_es: 'Why We Sleep', topic: 'Sleep architecture', topic_es: 'Arquitectura del sueño' },
+  { author: 'BJ Fogg', work: 'Tiny Habits', work_es: 'Tiny Habits', topic: 'Behavior design', topic_es: 'Diseño de comportamiento' },
+  { author: 'NSCA', work: 'Essentials of Strength & Conditioning', work_es: 'Essentials of Strength & Conditioning', topic: 'Programming, periodization, exercise science', topic_es: 'Programación, periodización, ciencia del ejercicio' },
+  { author: 'NASM', work: 'Corrective Exercise Specialist', work_es: 'Especialista en Ejercicio Correctivo', topic: 'Movement assessment & correction', topic_es: 'Evaluación y corrección del movimiento' },
+  { author: 'NOVA Classification', work: 'Food Classification System', work_es: 'Sistema de Clasificación de Alimentos', topic: 'Ultra-processed food framework', topic_es: 'Marco de alimentos ultraprocesados' },
 ];
 
 export default function AboutPage() {
@@ -50,19 +50,19 @@ export default function AboutPage() {
       {/* What is Hormesis? */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('What is Hormesis?', 'Que es Hormesis?')}
+          {t('What is Hormesis?', '\u00bfQu\u00e9 es Hormesis?')}
         </h2>
         <div className="space-y-3 text-sm text-muted leading-relaxed">
           <p>
             {t(
               'Hormesis is a biological principle: small, controlled doses of stress make your body stronger. Cold exposure, fasting, training — the mechanism is the same. Your body adapts to what challenges it.',
-              'Hormesis es un principio biologico: dosis pequenas y controladas de estres hacen tu cuerpo mas fuerte. Exposicion al frio, ayuno, entrenamiento — el mecanismo es el mismo. Tu cuerpo se adapta a lo que le desafia.'
+              'Hormesis es un principio biológico: dosis pequeñas y controladas de estrés hacen tu cuerpo más fuerte. Exposición al frío, ayuno, entrenamiento — el mecanismo es el mismo. Tu cuerpo se adapta a lo que le desafía.'
             )}
           </p>
           <p>
             {t(
               'This app applies that principle to training. One coached session per day — the right dose, programmed by a real trainer.',
-              'Esta app aplica ese principio al entrenamiento. Una sesion dirigida al dia — la dosis correcta, programada por un entrenador real.'
+              'Esta app aplica ese principio al entrenamiento. Una sesión dirigida al día — la dosis correcta, programada por un entrenador real.'
             )}
           </p>
         </div>
@@ -71,20 +71,20 @@ export default function AboutPage() {
       {/* How it works */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('How it works', 'Como funciona')}
+          {t('How it works', '\u00bfCómo funciona?')}
         </h2>
         <div className="space-y-3 text-sm text-muted leading-relaxed">
           <p>
             {t(
               'Every session follows the same 3-block structure: warmup, strength, conditioning. The content changes daily — movements, protocols, formats, intensity.',
-              'Cada sesion sigue la misma estructura de 3 bloques: calentamiento, fuerza, acondicionamiento. El contenido cambia cada dia — movimientos, protocolos, formatos, intensidad.'
+              'Cada sesión sigue la misma estructura de 3 bloques: calentamiento, fuerza, acondicionamiento. El contenido cambia cada día — movimientos, protocolos, formatos, intensidad.'
             )}
           </p>
           <ul className="space-y-1.5 list-disc list-inside">
-            <li>{t('4-week periodization that repeats continuously', 'Periodizacion de 4 semanas que se repite continuamente')}</li>
+            <li>{t('4-week periodization that repeats continuously', 'Periodización de 4 semanas que se repite continuamente')}</li>
             <li>{t('155 exercises, 28 warmup movements, 31 conditioning formats', '155 ejercicios, 28 movimientos de calentamiento, 31 formatos de acondicionamiento')}</li>
             <li>{t('Equipment filter — dumbbells, pull-up bar, bodyweight only, or all', 'Filtro de equipamiento — mancuernas, barra de dominadas, solo peso corporal, o todo')}</li>
-            <li>{t('Level selector with real coaching cues at every step', 'Selector de nivel con indicaciones tecnicas reales en cada paso')}</li>
+            <li>{t('Level selector with real coaching cues at every step', 'Selector de nivel con indicaciones técnicas reales en cada paso')}</li>
           </ul>
         </div>
       </section>
@@ -92,19 +92,19 @@ export default function AboutPage() {
       {/* Why I built this */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('Why I built this', 'Por que lo construi')}
+          {t('Why I built this', '\u00bfPor qué lo construí?')}
         </h2>
         <div className="space-y-3 text-sm text-muted leading-relaxed">
           <p>
             {t(
               'I\'m a personal trainer in Madrid. I wanted my clients to train properly on the days they don\'t see me — same methodology, same cues, same periodization. So I automated it.',
-              'Soy entrenador personal en Madrid. Queria que mis clientes entrenasen bien los dias que no me ven — misma metodologia, mismas indicaciones, misma periodizacion. Asi que lo automatice.'
+              'Soy entrenador personal en Madrid. Quería que mis clientes entrenasen bien los días que no me ven — misma metodología, mismas indicaciones, misma periodización. Así que lo automaticé.'
             )}
           </p>
           <p>
             {t(
               'This isn\'t a workout logger or a random generator. It\'s 4-week periodized coaching with real exercise science — the same programming a PT charges 50\u20AC/session for.',
-              'Esto no es un diario de entrenos ni un generador aleatorio. Es coaching periodizado de 4 semanas con ciencia del ejercicio real — la misma programacion por la que un entrenador cobra 50\u20AC/sesion.'
+              'Esto no es un diario de entrenos ni un generador aleatorio. Es coaching periodizado de 4 semanas con ciencia del ejercicio real — la misma programación por la que un entrenador cobra 50\u20AC/sesión.'
             )}
           </p>
         </div>
@@ -118,7 +118,7 @@ export default function AboutPage() {
         <p className="text-sm text-muted leading-relaxed">
           {t(
             'Copy a specialized prompt into ChatGPT, Claude, or DeepSeek and get a capable health coach for that domain.',
-            'Copia un prompt especializado en ChatGPT, Claude o DeepSeek y consigue un coach de salud competente en ese area.'
+            'Copia un prompt especializado en ChatGPT, Claude o DeepSeek y consigue un coach de salud competente en esa área.'
           )}
         </p>
         <Link href="/prompts" className="text-accent text-sm hover:underline font-bold">
@@ -134,7 +134,7 @@ export default function AboutPage() {
         <p className="text-muted text-sm">
           {t(
             'The methodology behind the workouts, prompts, and coaching logic comes from:',
-            'La metodologia detras de los entrenos, prompts y logica de coaching viene de:'
+            'La metodología detrás de los entrenos, prompts y lógica de coaching viene de:'
           )}
         </p>
         <div className="space-y-2">
@@ -184,7 +184,7 @@ export default function AboutPage() {
           className="inline-flex items-center gap-2 px-5 py-3 bg-accent text-background font-semibold rounded-lg hover:brightness-110 transition-all"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          {t('DM me on X', 'Escribeme por X')}
+          {t('DM me on X', 'Escríbeme por X')}
         </a>
       </section>
 
@@ -192,7 +192,7 @@ export default function AboutPage() {
       <p className="text-muted/60 text-xs leading-relaxed">
         {t(
           'These tools generate general health guidance, not medical advice. If you have a diagnosed medical condition, always consult your healthcare provider.',
-          'Estas herramientas generan orientacion general de salud, no consejo medico. Si tienes una condicion medica diagnosticada, consulta siempre a tu profesional de salud.'
+          'Estas herramientas generan orientación general de salud, no consejo médico. Si tienes una condición médica diagnosticada, consulta siempre a tu profesional de salud.'
         )}
       </p>
     </div>

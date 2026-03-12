@@ -52,9 +52,9 @@ export default function HistoryPage() {
         setCompletedDates(new Set(dates));
         setTotalWorkouts(dates.length);
         setStreak(getStreak());
-        setImportStatus(t('Data restored!', 'Datos restaurados!'));
+        setImportStatus(t('Data restored!', '\u00a1Datos restaurados!'));
       } else {
-        setImportStatus(t('Invalid file', 'Archivo invalido'));
+        setImportStatus(t('Invalid file', 'Archivo inválido'));
       }
       setTimeout(() => setImportStatus(null), 3000);
     };
@@ -71,7 +71,7 @@ export default function HistoryPage() {
       {totalWorkouts === 0 ? (
         <div className="text-center py-8 space-y-3">
           <p className="text-muted font-semibold">
-            {t('No workouts yet. Time to start!', 'Sin entrenos aun. Es hora de empezar!')}
+            {t('No workouts yet. Time to start!', 'Sin entrenos aún. \u00a1Es hora de empezar!')}
           </p>
         </div>
       ) : (

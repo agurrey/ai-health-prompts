@@ -75,9 +75,9 @@ export default function ProfilePage() {
       if (ok) {
         setStreak(getStreak());
         setCompletedWorkouts(loadData().completedWorkouts);
-        setImportStatus(t('Data restored!', 'Datos restaurados!'));
+        setImportStatus(t('Data restored!', '\u00a1Datos restaurados!'));
       } else {
-        setImportStatus(t('Invalid file', 'Archivo invalido'));
+        setImportStatus(t('Invalid file', 'Archivo inválido'));
       }
       setTimeout(() => setImportStatus(null), 3000);
     };
@@ -95,14 +95,14 @@ export default function ProfilePage() {
       <section className="space-y-3">
         <StreakWidget />
         <div className="flex justify-between text-sm text-muted font-semibold">
-          <span>{t('Longest:', 'Mejor:')} {streak.longest} {t('days', 'dias')}</span>
+          <span>{t('Longest:', 'Mejor:')} {streak.longest} {t('days', 'días')}</span>
         </div>
       </section>
 
       {/* Stats */}
       <section className="space-y-3 border-t border-border pt-6">
         <h2 className="text-lg font-bold text-foreground">
-          {t('Stats', 'Estadisticas')}
+          {t('Stats', 'Estadísticas')}
         </h2>
         <div className="grid grid-cols-3 gap-3">
           <div className="border border-border rounded-lg p-4 bg-card text-center">

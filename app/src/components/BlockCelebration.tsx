@@ -11,11 +11,11 @@ interface BlockCelebrationProps {
 const MESSAGES = {
   warmup: {
     en: 'Warm-up done! On to Strength.',
-    es: 'Calentamiento hecho! Vamos con Fuerza.',
+    es: '\u00a1Calentamiento hecho! \u00a1Vamos con Fuerza!',
   },
   strength: {
     en: 'Strength done! Time for conditioning.',
-    es: 'Fuerza hecha! Hora del acondicionamiento.',
+    es: '\u00a1Fuerza hecha! \u00a1Hora del acondicionamiento!',
   },
 };
 

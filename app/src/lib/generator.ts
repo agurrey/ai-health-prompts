@@ -50,9 +50,9 @@ export function getWeekPhase(date: string): PhaseInfo {
         weekNumber: 1,
         dayInWeek,
         label: 'Week 1/4 — Accumulation',
-        label_es: 'Semana 1/4 — Acumulacion',
+        label_es: 'Semana 1/4 — Acumulación',
         description: 'Build your base. Higher reps, moderate loads, longer conditioning. Volume is king this week.',
-        description_es: 'Construye tu base. Mas reps, cargas moderadas, acondicionamiento largo. El volumen manda esta semana.',
+        description_es: 'Construye tu base. Más reps, cargas moderadas, acondicionamiento largo. El volumen manda esta semana.',
       };
     case 1:
       return {
@@ -60,9 +60,9 @@ export function getWeekPhase(date: string): PhaseInfo {
         weekNumber: 2,
         dayInWeek,
         label: 'Week 2/4 — Intensification',
-        label_es: 'Semana 2/4 — Intensificacion',
-        description: 'Get strong. Heavier loads, fewer reps, full rest. Short, intense WODs.',
-        description_es: 'Hazte fuerte. Cargas pesadas, pocas reps, descanso completo. WODs cortos e intensos.',
+        label_es: 'Semana 2/4 — Intensificación',
+        description: 'Get strong. Heavier loads, fewer reps, full rest. Short, intense conditioning.',
+        description_es: 'Hazte fuerte. Cargas pesadas, pocas reps, descanso completo. Acondicionamientos cortos e intensos.',
       };
     case 2:
       return {
@@ -72,7 +72,7 @@ export function getWeekPhase(date: string): PhaseInfo {
         label: 'Week 3/4 — Conditioning',
         label_es: 'Semana 3/4 — Acondicionamiento',
         description: 'Sweat. Lighter strength, faster pace, maximum conditioning variety. Your joints recover while your engine grows.',
-        description_es: 'Suda. Fuerza ligera, ritmo rapido, maxima variedad de acondicionamiento. Tus articulaciones descansan mientras tu motor crece.',
+        description_es: 'Suda. Fuerza ligera, ritmo rápido, máxima variedad de acondicionamiento. Tus articulaciones descansan mientras tu motor crece.',
       };
     case 3:
       return {
@@ -80,9 +80,9 @@ export function getWeekPhase(date: string): PhaseInfo {
         weekNumber: 4,
         dayInWeek,
         label: 'Week 4/4 — Realization',
-        label_es: 'Semana 4/4 — Realizacion',
-        description: 'Show what you\'ve built. Heavy strength, benchmark WODs. Test yourself.',
-        description_es: 'Demuestra lo que has construido. Fuerza pesada, WODs de referencia. Ponte a prueba.',
+        label_es: 'Semana 4/4 — Realización',
+        description: 'Show what you\'ve built. Heavy strength, benchmark conditioning. Test yourself.',
+        description_es: 'Demuestra lo que has construido. Fuerza pesada, acondicionamientos de referencia. Ponte a prueba.',
       };
     default:
       return { phase: 'accumulation', weekNumber: 1, dayInWeek, label: 'Week 1/4', label_es: 'Semana 1/4', description: '', description_es: '' };
@@ -171,7 +171,7 @@ const WARMUP_FORMATS: BlockFormat[] = [
     name: '2 Rounds For Quality',
     name_es: '2 Rondas Por Calidad',
     detail: 'Not for time — move well, feel each position',
-    detail_es: 'Sin tiempo — muevete bien, siente cada posicion',
+    detail_es: 'Sin tiempo — muévete bien, siente cada posición',
   },
   {
     name: 'EMOM 5 min',
@@ -199,7 +199,7 @@ const WARMUP_FORMATS: BlockFormat[] = [
   },
   {
     name: 'Tabata 4 min (activation)',
-    name_es: 'Tabata 4 min (activacion)',
+    name_es: 'Tabata 4 min (activación)',
     detail: 'Tabata = 20s work / 10s rest x 8 rounds. Alternate 2 exercises to build heat',
     detail_es: 'Tabata = 20s trabajo / 10s descanso x 8 rondas. Alterna 2 ejercicios para entrar en calor',
   },
@@ -217,7 +217,7 @@ interface SessionTemplate {
 }
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const DAY_NAMES_ES = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+const DAY_NAMES_ES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
 const SESSION_TEMPLATES: Record<number, SessionTemplate> = {
   0: {
@@ -226,7 +226,7 @@ const SESSION_TEMPLATES: Record<number, SessionTemplate> = {
     strengthPatterns: ['squat', 'push', 'pull'],
     wodSize: 'standard',
     strategy: 'Sunday: move well, lighter loads. Recovery happens between sessions, not instead of them. Still train.',
-    strategy_es: 'Domingo: muevete bien, cargas ligeras. La recuperacion pasa entre sesiones, no en vez de ellas. Sigue entrenando.',
+    strategy_es: 'Domingo: muévete bien, cargas ligeras. La recuperación pasa entre sesiones, no en vez de ellas. Sigue entrenando.',
   },
   1: {
     type: 'Lower + Push',
@@ -234,15 +234,15 @@ const SESSION_TEMPLATES: Record<number, SessionTemplate> = {
     strengthPatterns: ['squat', 'hinge', 'push', 'carry'],
     wodSize: 'standard',
     strategy: 'Start the week strong. Brace before every squat and hinge rep. Control the weight down — tempo matters more than speed.',
-    strategy_es: 'Empieza la semana fuerte. Bracing antes de cada rep de sentadilla y bisagra. Controla el peso en la bajada — el tempo importa mas que la velocidad.',
+    strategy_es: 'Empieza la semana fuerte. Bracing antes de cada rep de sentadilla y bisagra. Controla el peso en la bajada — el tempo importa más que la velocidad.',
   },
   2: {
     type: 'Upper Pull Focus',
-    type_es: 'Tren Superior + Tiron',
+    type_es: 'Tren Superior + Tirón',
     strengthPatterns: ['push', 'pull', 'pull', 'carry'],
     wodSize: 'standard',
     strategy: 'Pull day: squeeze shoulder blades on every row. Presses at 45 degrees, not 90.',
-    strategy_es: 'Dia de tiron: aprieta escapulas en cada remo. Press a 45 grados, no 90.',
+    strategy_es: 'Día de tirón: aprieta escápulas en cada remo. Press a 45 grados, no 90.',
   },
   3: {
     type: 'Full Body',
@@ -250,15 +250,15 @@ const SESSION_TEMPLATES: Record<number, SessionTemplate> = {
     strengthPatterns: ['squat', 'hinge', 'push', 'pull', 'carry'],
     wodSize: 'standard',
     strategy: 'Mid-week full body. One exercise per pattern, keep it crisp. If anything feels off, lighten up.',
-    strategy_es: 'Cuerpo completo de mitad de semana. Un ejercicio por patron, mantenlo limpio. Si algo no se siente bien, baja el peso.',
+    strategy_es: 'Cuerpo completo de mitad de semana. Un ejercicio por patrón, mantenlo limpio. Si algo no se siente bien, baja el peso.',
   },
   4: {
     type: 'Lower + Pull',
-    type_es: 'Tren Inferior + Tiron',
+    type_es: 'Tren Inferior + Tirón',
     strengthPatterns: ['hinge', 'squat', 'pull', 'carry'],
     wodSize: 'standard',
     strategy: 'Second lower day. If legs are sore from Monday, use lighter variations or add tempo.',
-    strategy_es: 'Segundo dia de pierna. Si las piernas estan cargadas del lunes, usa variaciones mas ligeras o anade tempo.',
+    strategy_es: 'Segundo día de pierna. Si las piernas están cargadas del lunes, usa variaciones más ligeras o añade tempo.',
   },
   5: {
     type: 'Upper Push Focus',
@@ -266,15 +266,15 @@ const SESSION_TEMPLATES: Record<number, SessionTemplate> = {
     strengthPatterns: ['push', 'pull', 'push', 'carry'],
     wodSize: 'standard',
     strategy: 'End-of-week upper session. Push rows hard — back handles high volume. Keep presses strict, no arching.',
-    strategy_es: 'Sesion de tren superior de fin de semana. Empuja fuerte en los remos — la espalda tolera alto volumen. Press estrictos, sin arquear.',
+    strategy_es: 'Sesión de tren superior de fin de semana. Empuja fuerte en los remos — la espalda tolera alto volumen. Press estrictos, sin arquear.',
   },
   6: {
     type: 'Conditioning Day',
-    type_es: 'Dia de Acondicionamiento',
+    type_es: 'Día de Acondicionamiento',
     strengthPatterns: ['squat', 'hinge', 'push', 'pull'],
     wodSize: 'big',
     strategy: 'Saturday conditioning: keep moving, shorter rest. Work capacity over max strength. Breathe, maintain form when tired.',
-    strategy_es: 'Acondicionamiento del sabado: sigue moviendote, menos descanso. Capacidad de trabajo, no fuerza maxima. Respira, mantiene la forma cuando te canses.',
+    strategy_es: 'Acondicionamiento del sábado: sigue moviéndote, menos descanso. Capacidad de trabajo, no fuerza máxima. Respira, mantiene la forma cuando te canses.',
   },
 };
 
@@ -327,7 +327,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     reps: '15-20',
     rest: '45s',
     note: 'High reps, short rest. The burn is the stimulus — keep moving.',
-    note_es: 'Muchas reps, poco descanso. El ardor es el estimulo — sigue moviendo.',
+    note_es: 'Muchas reps, poco descanso. El ardor es el estímulo — sigue moviendo.',
     compatibleLoads: ['heavy', 'light', 'bodyweight'],
     estimatedMinutes: 5,
   },
@@ -340,7 +340,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     rest: '90s',
     tempo: '3-1-2',
     note: '3s down, 1s pause at bottom, 2s up. Time under tension builds strength and control.',
-    note_es: '3s bajada, 1s pausa abajo, 2s subida. Tiempo bajo tension construye fuerza y control.',
+    note_es: '3s bajada, 1s pausa abajo, 2s subida. Tiempo bajo tensión construye fuerza y control.',
     compatibleLoads: ['heavy', 'light'],
     estimatedMinutes: 9,
   },
@@ -352,7 +352,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     reps: 'max',
     rest: '120s',
     note: 'Go until form breaks — not ego, form. Full rest between sets.',
-    note_es: 'Ve hasta que la tecnica se rompa — no el ego, la tecnica. Descanso completo.',
+    note_es: 'Ve hasta que la técnica se rompa — no el ego, la técnica. Descanso completo.',
     compatibleLoads: ['heavy', 'light', 'bodyweight'],
     estimatedMinutes: 8,
   },
@@ -364,7 +364,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     reps: '12-15 + 4x3-5',
     rest: '15s between myo-sets, 120s between rounds',
     note: 'Myo-Reps: 1 set of 12-15 reps near failure, then 15s rest, 3-5 reps, repeat 4 times. Maximum stimulus, minimum time.',
-    note_es: 'Myo-Reps: 1 serie de 12-15 reps cerca del fallo, luego 15s descanso, 3-5 reps, repite 4 veces. Maximo estimulo, minimo tiempo.',
+    note_es: 'Myo-Reps: 1 serie de 12-15 reps cerca del fallo, luego 15s descanso, 3-5 reps, repite 4 veces. Máximo estímulo, mínimo tiempo.',
     compatibleLoads: ['heavy', 'light', 'bodyweight'],
     estimatedMinutes: 7,
   },
@@ -388,7 +388,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     reps: 'to failure x3 variations',
     rest: '90s between rounds',
     note: 'Mechanical Drop Set: 3 exercise variations, hardest to easiest, no rest between. Same pattern, maximum fatigue.',
-    note_es: 'Mechanical Drop Set: 3 variaciones del ejercicio, de mas dificil a mas facil, sin descanso. Mismo patron, fatiga maxima.',
+    note_es: 'Mechanical Drop Set: 3 variaciones del ejercicio, de más difícil a más fácil, sin descanso. Mismo patrón, fatiga máxima.',
     compatibleLoads: ['heavy', 'light', 'bodyweight'],
     estimatedMinutes: 7,
   },
@@ -400,7 +400,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     reps: '2+2+2 (cluster)',
     rest: '20s intra-cluster, 120s between sets',
     note: 'Cluster Sets: 3 micro-sets of 2 reps with 20s rest between. Allows heavier loading per rep.',
-    note_es: 'Cluster Sets: 3 micro-series de 2 reps con 20s descanso entre ellas. Permite mas carga por rep.',
+    note_es: 'Cluster Sets: 3 micro-series de 2 reps con 20s descanso entre ellas. Permite más carga por rep.',
     compatibleLoads: ['heavy'],
     estimatedMinutes: 10,
   },
@@ -412,7 +412,7 @@ const STRENGTH_PROTOCOLS: StrengthProtocol[] = [
     reps: '5-3-1, 5-3-1',
     rest: '90s between sets',
     note: 'Wave Loading: 5 reps, 3 reps, 1 rep — repeat the wave. Neural drive, build to max effort.',
-    note_es: 'Wave Loading: 5 reps, 3 reps, 1 rep — repite la onda. Drive neural, construye hasta esfuerzo maximo.',
+    note_es: 'Wave Loading: 5 reps, 3 reps, 1 rep — repite la onda. Drive neural, construye hasta esfuerzo máximo.',
     compatibleLoads: ['heavy'],
     estimatedMinutes: 12,
   },

@@ -95,7 +95,7 @@ function Footer() {
       <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
         <div className="flex items-center gap-2">
           <Logo size={16} className="opacity-30" />
-          <p className="font-semibold">{t('Same programming. Zero cost.', 'La misma programacion. Coste cero.')}</p>
+          <p className="font-semibold">{t('Same programming. Zero cost.', 'La misma programación. Coste cero.')}</p>
         </div>
         <div className="flex gap-6">
           <Link href="/about" className="hover:text-foreground transition-colors font-semibold">

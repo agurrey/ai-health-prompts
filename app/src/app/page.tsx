@@ -13,7 +13,7 @@ export default function Home() {
       <section className="space-y-6 animate-fade-up">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">
-            {t('Today\'s session', 'La sesion de hoy')}
+            {t('Today\'s session', 'La sesión de hoy')}
           </h1>
           <p className="text-muted text-sm font-semibold">
             {t(
@@ -39,7 +39,7 @@ export default function Home() {
             <a href="https://twitter.com/ignakki" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-bold">@ignakki</a>
             {t(
               ' — same programming I use with my clients.',
-              ' — la misma programacion que uso con mis clientes.'
+              ' — la misma programación que uso con mis clientes.'
             )}
           </p>
           <Link href="/about" className="text-accent text-xs hover:underline mt-1 inline-block font-bold">

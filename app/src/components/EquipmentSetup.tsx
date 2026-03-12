@@ -36,12 +36,12 @@ export default function EquipmentSetup({ initial, onSave, mode = 'setup' }: Equi
       {mode === 'setup' && (
         <div className="text-center space-y-2">
           <h2 className="text-xl font-bold text-foreground">
-            {t('What equipment do you have?', 'Que equipamiento tienes?')}
+            {t('What equipment do you have?', '\u00bfQué equipamiento tienes?')}
           </h2>
           <p className="text-muted text-sm">
             {t(
               'We\'ll tailor every session to your gear. You can change this anytime.',
-              'Adaptamos cada sesion a tu material. Puedes cambiarlo cuando quieras.'
+              'Adaptamos cada sesión a tu material. Puedes cambiarlo cuando quieras.'
             )}
           </p>
         </div>

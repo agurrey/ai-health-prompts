@@ -101,7 +101,7 @@ export default function WorkoutReceipt({ session, steps }: WorkoutReceiptProps) 
 
               {/* WOD */}
               <div>
-                <h4 className="text-orange-400 text-xs font-bold uppercase tracking-wider mb-2">WOD</h4>
+                <h4 className="text-orange-400 text-xs font-bold uppercase tracking-wider mb-2">{t('Conditioning', 'Acondicionamiento')}</h4>
                 <p className="text-muted text-xs">
                   {lang === 'es' ? session.conditioning.formatName_es : session.conditioning.formatName}
                   {' — '}

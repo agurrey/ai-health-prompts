@@ -9,7 +9,7 @@ const PHASES: { phase: PhaseInfo['phase']; week: number; en: string; es: string;
     phase: 'accumulation',
     week: 1,
     en: 'Accumulation',
-    es: 'Acumulacion',
+    es: 'Acumulación',
     desc_en: 'Build your base. Volume is king.',
     desc_es: 'Construye tu base. El volumen manda.',
     strength_en: 'Hypertrophy, Strength-Endurance, Tempo, Myo-Reps. Moderate loads, higher reps (8-15).',
@@ -21,7 +21,7 @@ const PHASES: { phase: PhaseInfo['phase']; week: number; en: string; es: string;
     phase: 'intensification',
     week: 2,
     en: 'Intensification',
-    es: 'Intensificacion',
+    es: 'Intensificación',
     desc_en: 'Get strong. Intensity over volume.',
     desc_es: 'Hazte fuerte. Intensidad sobre volumen.',
     strength_en: 'Heavy RIR1, Wave Loading, Cluster Sets, Rest-Pause. Heavier loads, fewer reps (3-6).',
@@ -39,13 +39,13 @@ const PHASES: { phase: PhaseInfo['phase']; week: number; en: string; es: string;
     strength_en: 'Strength-Endurance, Mechanical Drop Sets, To Failure, Tempo. Lighter loads, movement variety.',
     strength_es: 'Fuerza-Resistencia, Mechanical Drop Sets, Al Fallo, Tempo. Cargas ligeras, variedad.',
     wod_en: 'Maximum variety: Triplets, Tabata, Double Session, Pyramid, FGB, AMRAPs. Any timecap.',
-    wod_es: 'Maxima variedad: Triplets, Tabata, Doble Sesion, Piramide, FGB, AMRAPs. Cualquier timecap.',
+    wod_es: 'Máxima variedad: Triplets, Tabata, Doble Sesión, Pirámide, FGB, AMRAPs. Cualquier timecap.',
   },
   {
     phase: 'realization',
     week: 4,
     en: 'Realization',
-    es: 'Realizacion',
+    es: 'Realización',
     desc_en: 'Show what you\'ve built. Test yourself.',
     desc_es: 'Demuestra lo que has construido. Ponte a prueba.',
     strength_en: 'Heavy RIR1, Wave Loading, Cluster Sets, To Failure, Rest-Pause. Go heavy.',
@@ -78,7 +78,7 @@ export default function ProgramPage() {
         <p className="text-muted text-sm leading-relaxed">
           {t(
             'Hormesis follows a 4-week mesocycle that repeats continuously. Each week has a different training bias — the workouts, strength protocols, and conditioning formats all adapt automatically. No two weeks feel the same.',
-            'Hormesis sigue un mesociclo de 4 semanas que se repite continuamente. Cada semana tiene un sesgo de entrenamiento diferente — los entrenos, protocolos de fuerza y formatos de acondicionamiento se adaptan automaticamente. Ninguna semana se siente igual.'
+            'Hormesis sigue un mesociclo de 4 semanas que se repite continuamente. Cada semana tiene un sesgo de entrenamiento diferente — los entrenos, protocolos de fuerza y formatos de acondicionamiento se adaptan automáticamente. Ninguna semana se siente igual.'
           )}
         </p>
       </section>
@@ -87,12 +87,12 @@ export default function ProgramPage() {
       <section className="animate-fade-up">
         <div className="p-4 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20">
           <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider">
-            {t('You are here', 'Estas aqui')}
+            {t('You are here', 'Estás aquí')}
           </p>
           <p className="text-fuchsia-400 text-lg font-bold mt-1">
             {lang === 'es' ? current.label_es : current.label}
             <span className="text-fuchsia-400/50 font-normal text-sm ml-2">
-              {lang === 'es' ? `dia ${current.dayInWeek}/7` : `day ${current.dayInWeek}/7`}
+              {lang === 'es' ? `día ${current.dayInWeek}/7` : `day ${current.dayInWeek}/7`}
             </span>
           </p>
           {/* Day dots */}
@@ -176,22 +176,22 @@ export default function ProgramPage() {
       {/* Weekly split */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('Weekly split', 'Distribucion semanal')}
+          {t('Weekly split', 'Distribución semanal')}
         </h2>
         <p className="text-muted text-sm">
           {t(
             'Each day targets different movement patterns. The split balances push/pull/squat/hinge across the week so nothing gets overtrained.',
-            'Cada dia trabaja diferentes patrones de movimiento. La distribucion equilibra empuje/tiron/sentadilla/bisagra a lo largo de la semana para no sobreentrenar nada.'
+            'Cada día trabaja diferentes patrones de movimiento. La distribución equilibra empuje/tirón/sentadilla/bisagra a lo largo de la semana para no sobreentrenar nada.'
           )}
         </p>
         <div className="space-y-1.5">
           {[
             { day_en: 'Monday', day_es: 'Lunes', type_en: 'Lower + Push', type_es: 'Tren Inferior + Empuje', patterns: 'squat / hinge / push / carry', isToday: current.dayInWeek === 1 },
-            { day_en: 'Tuesday', day_es: 'Martes', type_en: 'Upper Pull Focus', type_es: 'Tren Superior + Tiron', patterns: 'push / pull / pull / carry', isToday: current.dayInWeek === 2 },
-            { day_en: 'Wednesday', day_es: 'Miercoles', type_en: 'Full Body', type_es: 'Cuerpo Completo', patterns: 'squat / hinge / push / pull / carry', isToday: current.dayInWeek === 3 },
-            { day_en: 'Thursday', day_es: 'Jueves', type_en: 'Lower + Pull', type_es: 'Tren Inferior + Tiron', patterns: 'hinge / squat / pull / carry', isToday: current.dayInWeek === 4 },
+            { day_en: 'Tuesday', day_es: 'Martes', type_en: 'Upper Pull Focus', type_es: 'Tren Superior + Tirón', patterns: 'push / pull / pull / carry', isToday: current.dayInWeek === 2 },
+            { day_en: 'Wednesday', day_es: 'Miércoles', type_en: 'Full Body', type_es: 'Cuerpo Completo', patterns: 'squat / hinge / push / pull / carry', isToday: current.dayInWeek === 3 },
+            { day_en: 'Thursday', day_es: 'Jueves', type_en: 'Lower + Pull', type_es: 'Tren Inferior + Tirón', patterns: 'hinge / squat / pull / carry', isToday: current.dayInWeek === 4 },
             { day_en: 'Friday', day_es: 'Viernes', type_en: 'Upper Push Focus', type_es: 'Tren Superior + Empuje', patterns: 'push / pull / push / carry', isToday: current.dayInWeek === 5 },
-            { day_en: 'Saturday', day_es: 'Sabado', type_en: 'Conditioning Day', type_es: 'Dia de Acondicionamiento', patterns: 'squat / hinge / push / pull', isToday: current.dayInWeek === 6 },
+            { day_en: 'Saturday', day_es: 'Sábado', type_en: 'Conditioning Day', type_es: 'Día de Acondicionamiento', patterns: 'squat / hinge / push / pull', isToday: current.dayInWeek === 6 },
             { day_en: 'Sunday', day_es: 'Domingo', type_en: 'Active Full Body', type_es: 'Cuerpo Completo Activo', patterns: 'squat / push / pull', isToday: current.dayInWeek === 7 },
           ].map((d) => (
             <div
@@ -220,13 +220,13 @@ export default function ProgramPage() {
       {/* Daily structure */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('Session structure', 'Estructura de sesion')}
+          {t('Session structure', 'Estructura de sesión')}
         </h2>
         <div className="space-y-2">
           {[
-            { color: 'bg-green-500', label: t('Warm-up', 'Calentamiento'), desc: t('RAMP protocol + CARs + breathing. Prepares joints and nervous system.', 'Protocolo RAMP + CARs + respiracion. Prepara articulaciones y sistema nervioso.') },
-            { color: 'bg-red-500', label: t('Strength', 'Fuerza'), desc: t('2-3 exercises, protocol changes by week phase. Swap button to adapt.', '2-3 ejercicios, protocolo cambia por fase semanal. Boton de cambio para adaptar.') },
-            { color: 'bg-orange-500', label: t('Conditioning', 'Acondicionamiento'), desc: t('Format and intensity vary by mesocycle phase.', 'Formato e intensidad varian por fase del mesociclo.') },
+            { color: 'bg-green-500', label: t('Warm-up', 'Calentamiento'), desc: t('RAMP protocol + CARs + breathing. Prepares joints and nervous system.', 'Protocolo RAMP + CARs + respiración. Prepara articulaciones y sistema nervioso.') },
+            { color: 'bg-red-500', label: t('Strength', 'Fuerza'), desc: t('2-3 exercises, protocol changes by week phase. Swap button to adapt.', '2-3 ejercicios, protocolo cambia por fase semanal. Botón de cambio para adaptar.') },
+            { color: 'bg-orange-500', label: t('Conditioning', 'Acondicionamiento'), desc: t('Format and intensity vary by mesocycle phase.', 'Formato e intensidad varían por fase del mesociclo.') },
           ].map((block) => (
             <div key={block.label} className="flex items-start gap-3 p-3 rounded-lg border border-border bg-card">
               <div className={`w-3 h-3 rounded-full ${block.color} mt-0.5 shrink-0`} />
@@ -242,19 +242,19 @@ export default function ProgramPage() {
       {/* Philosophy */}
       <section className="space-y-4 animate-fade-up">
         <h2 className="text-lg font-bold text-foreground">
-          {t('Why this works', 'Por que funciona')}
+          {t('Why this works', '\u00bfPor qué funciona?')}
         </h2>
         <div className="space-y-3 text-sm text-muted leading-relaxed">
           <p>
             {t(
               '7 days a week, no rest days. The mesocycle handles recovery — Week 3 (Conditioning) acts as active recovery with lighter loads and more cardio. Your joints rest while your engine grows.',
-              '7 dias a la semana, sin dias de descanso. El mesociclo gestiona la recuperacion — la Semana 3 (Acondicionamiento) actua como recuperacion activa con cargas ligeras y mas cardio. Tus articulaciones descansan mientras tu motor crece.'
+              '7 días a la semana, sin días de descanso. El mesociclo gestiona la recuperación — la Semana 3 (Acondicionamiento) actúa como recuperación activa con cargas ligeras y más cardio. Tus articulaciones descansan mientras tu motor crece.'
             )}
           </p>
           <p>
             {t(
               'Based on Daily Undulating Periodization (DUP) research, CompTrain/HWPO methodology, and Moesgaard 2022 meta-analysis on periodized training. The same principles used in competitive CrossFit, adapted for home training with minimal equipment.',
-              'Basado en investigacion de Periodizacion Ondulante Diaria (DUP), metodologia CompTrain/HWPO, y meta-analisis de Moesgaard 2022 sobre entrenamiento periodizado. Los mismos principios del CrossFit competitivo, adaptados para entrenar en casa con equipamiento minimo.'
+              'Basado en investigación de Periodización Ondulante Diaria (DUP), metodología CompTrain/HWPO, y metaanálisis de Moesgaard 2022 sobre entrenamiento periodizado. Los mismos principios del CrossFit competitivo, adaptados para entrenar en casa con equipamiento mínimo.'
             )}
           </p>
         </div>

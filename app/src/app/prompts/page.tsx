@@ -36,7 +36,7 @@ export default function PromptsPage() {
   return (
     <div className="space-y-8 max-w-2xl mx-auto">
       <Link href="/about" className="text-accent text-sm hover:underline">
-        {t('Back to about', 'Volver a sobre mi')}
+        {t('Back to about', 'Volver a sobre mí')}
       </Link>
 
       <section className="animate-fade-up">
@@ -46,7 +46,7 @@ export default function PromptsPage() {
         <p className="text-muted text-sm mt-2 leading-relaxed">
           {t(
             'Paste into ChatGPT, Claude, or DeepSeek and get a capable health coach for that domain.',
-            'Pega en ChatGPT, Claude o DeepSeek y consigue un coach de salud competente en ese area.'
+            'Pega en ChatGPT, Claude o DeepSeek y consigue un coach de salud competente en esa área.'
           )}
         </p>
       </section>
@@ -83,7 +83,7 @@ export default function PromptsPage() {
       <p className="text-muted/60 text-xs leading-relaxed">
         {t(
           'These prompts generate general health guidance, not medical advice. If you have a diagnosed medical condition, always consult your healthcare provider.',
-          'Estos prompts generan orientacion general de salud, no consejo medico. Si tienes una condicion medica diagnosticada, consulta siempre a tu profesional de salud.'
+          'Estos prompts generan orientación general de salud, no consejo médico. Si tienes una condición médica diagnosticada, consulta siempre a tu profesional de salud.'
         )}
       </p>
     </div>

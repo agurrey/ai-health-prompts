@@ -19,7 +19,7 @@ interface WodMovement {
 const FORMAT_EXPLANATIONS: Record<string, { en: string; es: string }> = {
   amrap: {
     en: 'AMRAP = As Many Rounds As Possible. Complete the circuit as many times as you can within the time cap. Your score is the total rounds + extra reps.',
-    es: 'AMRAP = Tantas Rondas Como Puedas. Completa el circuito tantas veces como puedas dentro del tiempo. Tu puntuacion son las rondas totales + reps extra.',
+    es: 'AMRAP = Tantas Rondas Como Puedas. Completa el circuito tantas veces como puedas dentro del tiempo. Tu puntuación son las rondas totales + reps extra.',
   },
   emom: {
     en: 'EMOM = Every Minute On the Minute. At the start of each minute, perform the prescribed reps. Rest whatever time remains until the next minute starts.',
@@ -35,15 +35,15 @@ const FORMAT_EXPLANATIONS: Record<string, { en: string; es: string }> = {
   },
   tabata: {
     en: 'Tabata = 20 seconds of all-out work, 10 seconds of rest, repeated for 8 rounds (4 minutes total). Simple but brutal.',
-    es: 'Tabata = 20 segundos de trabajo maximo, 10 segundos de descanso, repetido durante 8 rondas (4 minutos total). Simple pero brutal.',
+    es: 'Tabata = 20 segundos de trabajo máximo, 10 segundos de descanso, repetido durante 8 rondas (4 minutos total). Simple pero brutal.',
   },
   rounds_for_time: {
     en: 'For Time = Complete the prescribed rounds as fast as possible within the time cap. Your score is your finish time.',
-    es: 'Por Tiempo = Completa las rondas prescritas lo mas rapido posible dentro del tiempo limite. Tu puntuacion es tu tiempo.',
+    es: 'Por Tiempo = Completa las rondas prescritas lo más rápido posible dentro del tiempo límite. Tu puntuación es tu tiempo.',
   },
   chipper: {
     en: 'Chipper = Work through a long list of movements in order, one at a time. Chip away at each before moving on. Pace yourself.',
-    es: 'Chipper = Trabaja una lista larga de movimientos en orden, uno a la vez. Ve completando cada uno antes de pasar al siguiente. Dosificate.',
+    es: 'Chipper = Trabaja una lista larga de movimientos en orden, uno a la vez. Ve completando cada uno antes de pasar al siguiente. Dosifícate.',
   },
   couplet: {
     en: 'Couplet = Two movements alternated for rounds. Simple format, high intensity. Push the pace.',
@@ -51,7 +51,7 @@ const FORMAT_EXPLANATIONS: Record<string, { en: string; es: string }> = {
   },
   triplet: {
     en: 'Triplet = Three movements cycled for rounds. Classic CrossFit format. Find a sustainable rhythm.',
-    es: 'Triplet = Tres movimientos en ciclo por rondas. Formato clasico de CrossFit. Encuentra un ritmo sostenible.',
+    es: 'Triplet = Tres movimientos en ciclo por rondas. Formato clásico de CrossFit. Encuentra un ritmo sostenible.',
   },
   interval: {
     en: 'Interval = Work periods followed by rest periods. Go hard during work, recover during rest. Repeat.',
@@ -59,31 +59,31 @@ const FORMAT_EXPLANATIONS: Record<string, { en: string; es: string }> = {
   },
   ladder: {
     en: 'Ladder = Reps increase (or decrease) each round. Start easy, build up. Manage your effort as reps climb.',
-    es: 'Escalera = Las reps aumentan (o disminuyen) cada ronda. Empieza facil, sube. Gestiona tu esfuerzo a medida que suben las reps.',
+    es: 'Escalera = Las reps aumentan (o disminuyen) cada ronda. Empieza fácil, sube. Gestiona tu esfuerzo a medida que suben las reps.',
   },
   pyramid: {
     en: 'Pyramid = Reps go up then back down. Build to the peak, then survive the way back. Pace the ascent.',
-    es: 'Piramide = Las reps suben y luego bajan. Construye hasta el pico, luego sobrevive la bajada. Dosifica la subida.',
+    es: 'Pirámide = Las reps suben y luego bajan. Construye hasta el pico, luego sobrevive la bajada. Dosifica la subida.',
   },
   buy_in_out: {
     en: 'Buy-In/Buy-Out = Complete a set task before and after the main workout. The buy-in earns entry, the buy-out finishes it.',
-    es: 'Buy-In/Buy-Out = Completa una tarea antes y despues del bloque principal. El buy-in te da entrada, el buy-out lo cierra.',
+    es: 'Buy-In/Buy-Out = Completa una tarea antes y después del bloque principal. El buy-in te da entrada, el buy-out lo cierra.',
   },
   death_by: {
     en: 'Death By = Start with 1 rep in minute 1, add 1 rep each minute. Continue until you can\'t complete the reps within the minute.',
-    es: 'Death By = Empieza con 1 rep en el minuto 1, anade 1 rep cada minuto. Continua hasta que no puedas completar las reps dentro del minuto.',
+    es: 'Death By = Empieza con 1 rep en el minuto 1, añade 1 rep cada minuto. Continúa hasta que no puedas completar las reps dentro del minuto.',
   },
   single_movement: {
     en: 'Single Movement = One exercise, maximum effort. Simple, focused, intense. Nothing to hide behind.',
-    es: 'Movimiento Unico = Un ejercicio, esfuerzo maximo. Simple, enfocado, intenso. Sin donde esconderse.',
+    es: 'Movimiento Único = Un ejercicio, esfuerzo máximo. Simple, enfocado, intenso. Sin donde esconderse.',
   },
   double_wod: {
     en: 'Double Session = Two short workouts back to back. Different stimulus each. Recover briefly between them.',
-    es: 'Doble Sesion = Dos entrenamientos cortos seguidos. Estimulo diferente en cada uno. Recupera brevemente entre ellos.',
+    es: 'Doble Sesión = Dos entrenamientos cortos seguidos. Estímulo diferente en cada uno. Recupera brevemente entre ellos.',
   },
   fgb: {
     en: 'Fight Gone Bad = 1 minute at each station, rotate. 1 minute rest between rounds. Score = total reps across all stations.',
-    es: 'Fight Gone Bad = 1 minuto en cada estacion, rota. 1 minuto de descanso entre rondas. Puntuacion = reps totales en todas las estaciones.',
+    es: 'Fight Gone Bad = 1 minuto en cada estación, rota. 1 minuto de descanso entre rondas. Puntuación = reps totales en todas las estaciones.',
   },
 };
 

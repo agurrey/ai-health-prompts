@@ -52,7 +52,7 @@ export default function StreakWidget() {
           <Icon name="flame" size={fireSize} />
         </span>
         <span className="text-streak font-extrabold text-lg leading-none">{current}</span>
-        <span className="text-muted font-semibold">{t('day streak', 'dias seguidos')}</span>
+        <span className="text-muted font-semibold">{t('day streak', 'días seguidos')}</span>
         {total > 0 && (
           <>
             <span className="text-border">|</span>

@@ -51,9 +51,9 @@ function formatLogDate(dateStr: string, lang: string): string {
 }
 
 const BLOCK_MESSAGES: Record<string, { en: string; es: string }> = {
-  warmup: { en: 'Warm-up done!', es: 'Calentamiento hecho!' },
-  strength: { en: 'Strength done!', es: 'Fuerza hecha!' },
-  wod_preview: { en: 'Let\'s go!', es: 'Vamos!' },
+  warmup: { en: 'Warm-up done!', es: '\u00a1Calentamiento hecho!' },
+  strength: { en: 'Strength done!', es: '\u00a1Fuerza hecha!' },
+  wod_preview: { en: 'Let\'s go!', es: '\u00a1Vamos!' },
 };
 
 interface WorkoutDisplayProps {
@@ -588,7 +588,7 @@ function Disclaimer({ t }: { t: (en: string, es: string) => string }) {
     <p className="text-muted/60 text-xs border-t border-border pt-4">
       {t(
         'This is not medical advice. If you experience sharp pain, dizziness, chest pain, or any symptom that concerns you — stop and consult a healthcare professional immediately.',
-        'Esto no es consejo medico. Si experimentas dolor agudo, mareos, dolor en el pecho, o cualquier sintoma preocupante — para y consulta a un profesional de la salud inmediatamente.'
+        'Esto no es consejo médico. Si experimentas dolor agudo, mareos, dolor en el pecho, o cualquier síntoma preocupante — para y consulta a un profesional de la salud inmediatamente.'
       )}
     </p>
   );
